@@ -22,7 +22,7 @@ namespace TicketCheckStation
     {
         public MainWindow()
         {
-            InitializeComponent();           
+            InitializeComponent();         
         }
     }
 }

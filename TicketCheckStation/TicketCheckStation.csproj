@@ -79,9 +79,6 @@
     </Compile>
     <Compile Include="Behavior\WindowBehavior.cs" />
     <Compile Include="Control\ControlAttachProperty.cs" />
-    <Compile Include="Control\IconButton.cs" />
-    <Compile Include="Control\ImageButton.cs" />
-    <Compile Include="Control\TabButton.cs" />
     <Compile Include="Control\WindowButton.cs" />
     <Compile Include="Convertor\CheckedToVisibleConverter.cs" />
     <Compile Include="Entity\BillImage.cs" />
@@ -106,19 +103,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Style\IconButtonStyleDictionary.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Style\MenuAndTreeViewDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Style\ScrollViewerDictionary.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Style\TabButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
