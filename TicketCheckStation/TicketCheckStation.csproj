@@ -78,6 +78,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behavior\WindowBehavior.cs" />
+    <Compile Include="CameraSdk\CHCNetSDK.cs" />
+    <Compile Include="CameraSdk\PlayCtrl.cs" />
     <Compile Include="Control\ControlAttachProperty.cs" />
     <Compile Include="Control\WindowButton.cs" />
     <Compile Include="Convertor\CheckedToVisibleConverter.cs" />
@@ -197,4 +199,13 @@
     <Resource Include="Themes\Img\Icon\yjtp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>@echo start copy HC NET SDK
+if not exist "$(TargetDir)HCNetSDKCom" md "$(TargetDir)HCNetSDKCom";
+@echo 7. made dir HCNetSDKCom successed
+copy "$(ProjectDir)bin\HCNetSDKCom\*.*" "$(TargetDir)\HCNetSDKCom" ;
+@echo 8. copy HC NET SDK dll
+copy "$(ProjectDir)bin\*.dll" "$(TargetDir)"
+@echo 9. copy HC NET SDK completed</PreBuildEvent>
+  </PropertyGroup>
 </Project>
