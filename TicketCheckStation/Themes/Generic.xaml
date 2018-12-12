@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:myui="clr-namespace:MyCustomControlLibrary;assembly=MyCustomControlLibrary"
+                    xmlns:local="clr-namespace:TicketCheckStation">
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/TicketCheckStation;component/Lang/DefaultLanguage.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/TicketCheckStation;component/Style/ValueDictionary.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/TicketCheckStation;component/Style/IconButtonStyleDictionary.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/TicketCheckStation;component/Style/ScrollViewerDictionary.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/TicketCheckStation;component/Style/MenuAndTreeViewDictionary.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/TicketCheckStation;component/Style/WindowStyleDictionary.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/TicketCheckStation;component/Style/TabButtonStyle.xaml"></ResourceDictionary>
+       
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>
