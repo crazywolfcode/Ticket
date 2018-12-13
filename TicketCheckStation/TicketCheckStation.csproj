@@ -63,6 +63,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -79,11 +80,13 @@
     </Compile>
     <Compile Include="Behavior\WindowBehavior.cs" />
     <Compile Include="CameraSdk\CHCNetSDK.cs" />
+    <Compile Include="CameraSdk\CameraHelper.cs" />
     <Compile Include="CameraSdk\PlayCtrl.cs" />
     <Compile Include="Control\ControlAttachProperty.cs" />
     <Compile Include="Control\WindowButton.cs" />
     <Compile Include="Convertor\CheckedToVisibleConverter.cs" />
     <Compile Include="Entity\BillImage.cs" />
+    <Compile Include="Entity\CameraInfo.cs" />
     <Compile Include="Entity\CarInfo.cs" />
     <Compile Include="Entity\CarTraeRecod.cs" />
     <Compile Include="Entity\CommomColumns.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="Entity\Material.cs" />
     <Compile Include="Entity\MaterialCategory.cs" />
     <Compile Include="Entity\MaterialTaxationRecod.cs" />
+    <Compile Include="Entity\model\CameralInfoModel.cs" />
     <Compile Include="Entity\Roles.cs" />
     <Compile Include="Entity\Station.cs" />
     <Compile Include="Entity\TableSync.cs" />

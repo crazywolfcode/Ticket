@@ -53,7 +53,7 @@ using System.Text;
 	 public Int32 hasUpStatus{ get; set; }
 
 	 /// <summary>
-	 /// 注释:0 不需要同步 0要同步 
+	 /// 注释:0 不需要同步 1要同步 
 	 /// 可空:NO
 	 ///默认值:1
 	 /// </summary>

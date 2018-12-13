@@ -13,6 +13,7 @@ namespace TicketCheckStation
     {
         bill_image,
         car_info,
+        camera_info,
         car_trae_recod,
         commom_columns,
         company,
@@ -352,5 +353,22 @@ namespace TicketCheckStation
         status,
         add_user_id,
         add_user_name,
+    }
+
+    /// <summary>
+    ///摄像头信息表
+    /// </summary>
+
+    public enum CameraInfoColumuns
+    {
+        id,
+        ip,
+        port,
+        user_name,
+        password,
+        position,
+        station_id,
+        company_id,
+        no_sync,
     }
 }
