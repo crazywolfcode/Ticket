@@ -4,14 +4,11 @@
                     xmlns:local="clr-namespace:TicketCheckStation">
     
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/TicketCheckStation;component/Lang/DefaultLanguage.xaml"></ResourceDictionary>
+        <!--<ResourceDictionary Source="/TicketCheckStation;component/Lang/DefaultLanguage.xaml"></ResourceDictionary>-->
         <ResourceDictionary Source="/TicketCheckStation;component/Style/ValueDictionary.xaml"></ResourceDictionary>
-        <ResourceDictionary Source="/TicketCheckStation;component/Style/IconButtonStyleDictionary.xaml"></ResourceDictionary>
         <ResourceDictionary Source="/TicketCheckStation;component/Style/ScrollViewerDictionary.xaml"></ResourceDictionary>
         <ResourceDictionary Source="/TicketCheckStation;component/Style/MenuAndTreeViewDictionary.xaml"></ResourceDictionary>
-        <ResourceDictionary Source="/TicketCheckStation;component/Style/WindowStyleDictionary.xaml"></ResourceDictionary>
-        <ResourceDictionary Source="/TicketCheckStation;component/Style/TabButtonStyle.xaml"></ResourceDictionary>
-       
+        <ResourceDictionary Source="/TicketCheckStation;component/Style/WindowStyleDictionary.xaml"></ResourceDictionary>             
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
