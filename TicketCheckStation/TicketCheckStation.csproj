@@ -70,6 +70,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ui\InputWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ui\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -82,6 +86,8 @@
     <Compile Include="CameraSdk\CHCNetSDK.cs" />
     <Compile Include="CameraSdk\CameraHelper.cs" />
     <Compile Include="CameraSdk\PlayCtrl.cs" />
+    <Compile Include="Commom\CommonFunction.cs" />
+    <Compile Include="Commom\Constract.cs" />
     <Compile Include="Control\ControlAttachProperty.cs" />
     <Compile Include="Control\WindowButton.cs" />
     <Compile Include="Convertor\CheckedToVisibleConverter.cs" />
@@ -96,15 +102,22 @@
     <Compile Include="Entity\MaterialCategory.cs" />
     <Compile Include="Entity\MaterialTaxationRecod.cs" />
     <Compile Include="Entity\model\CameralInfoModel.cs" />
+    <Compile Include="Entity\model\CarInfoModel.cs" />
+    <Compile Include="Entity\model\MaterialModel.cs" />
+    <Compile Include="Entity\model\CompanyModel.cs" />
     <Compile Include="Entity\Roles.cs" />
     <Compile Include="Entity\Station.cs" />
     <Compile Include="Entity\TableSync.cs" />
     <Compile Include="Entity\User.cs" />
+    <Compile Include="Entity\Visual\BaseDataClassV.cs" />
     <Compile Include="Entity\WeighingBill.cs" />
     <Compile Include="Enum\commonEnum.cs" />
     <Compile Include="Enum\TableName.cs" />
     <Compile Include="Helper\DatabaseOPtionHelper.cs" />
     <Compile Include="Helper\TemplateHelper.cs" />
+    <Compile Include="ui\InputWindow.xaml.cs">
+      <DependentUpon>InputWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ui\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -159,7 +172,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Command\" />
-    <Folder Include="Commom\" />
     <Folder Include="dll\" />
   </ItemGroup>
   <ItemGroup>
@@ -202,14 +214,12 @@
     <Resource Include="Themes\Img\Icon\transportIcon.png" />
     <Resource Include="Themes\Img\Icon\yjtp.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="event.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>@echo start copy HC NET SDK
-if not exist "$(TargetDir)HCNetSDKCom" md "$(TargetDir)HCNetSDKCom";
-@echo 7. made dir HCNetSDKCom successed
-copy "$(ProjectDir)bin\HCNetSDKCom\*.*" "$(TargetDir)\HCNetSDKCom" ;
-@echo 8. copy HC NET SDK dll
-copy "$(ProjectDir)bin\*.dll" "$(TargetDir)"
-@echo 9. copy HC NET SDK completed</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>

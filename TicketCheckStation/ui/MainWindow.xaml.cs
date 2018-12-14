@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.Threading;
 using System.Windows.Threading;
 using System.Windows.Forms.Integration;
-
+using MyHelper;
 namespace TicketCheckStation
 {
     /// <summary>
@@ -125,6 +125,7 @@ namespace TicketCheckStation
             {
                 mDeviceInfors.Clear();
             }
+            this.Cursor = Cursors.Wait;
             for (int i = 0; i < cameraInfoList.Count; i++)
             {
                 try {
@@ -168,10 +169,67 @@ namespace TicketCheckStation
                     VideoPenal.Children.Add(textBlock);                   
                 }                
             }
+            this.Cursor = Cursors.Arrow;
          }
 
-        private void StorpPreviewCamera() { }
-        private void LogoutCamera() { }
+        private void StorpPreviewCamera() {
+            if (CameraIds != null && CameraIds.Count > 0)
+            {
+                for (int i = 0; i < CameraIds.Count; i++)
+                {
+                    try
+                    {
+                        CameraHelper.stopPreview(CameraIds[i]);
+                    }
+                    catch (Exception e)
+                    {
+                        MyHelper.ConsoleHelper.writeLine("停止预览 " + i + "失败: " + e.Message);
+                    }
+                }
+            }
+        }
+        private void LogoutCamera() {
+            if (CameraIds != null && CameraIds.Count > 0)
+            {
+                for (int i = 0; i < CameraIds.Count; i++)
+                {
+                    try
+                    {
+                        CameraHelper.LoginOutCamera(CameraIds[i]);
+                    }
+                    catch(Exception e)
+                    {
+                       MyHelper.ConsoleHelper.writeLine("退出摄像头"+i+"失败: " +e.Message);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 通道截图
+        /// </summary>
+        protected void CaptureJpeg(String currBillNumber)
+        {
+            string filePath = ConfigurationHelper.GetConfig(ConfigItemName.cameraCaptureFilePath.ToString());
+            if (String.IsNullOrEmpty(filePath))
+            {
+                filePath = System.IO.Path.Combine(FileHelper.GetRunTimeRootPath(), "capture");
+            }
+            String fileName = String.Empty;
+            //根据登陆成功的通过截图
+            for (int i = 0; i < CameraIds.Count; i++)
+            {
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    fileName = Guid.NewGuid() + Constract.CaputureSuffix;
+                }
+                else
+                {
+                    fileName = currBillNumber + "_" + i + "_" + Constract.CaputureSuffix;
+                }
+                String fileNamePath = System.IO.Path.Combine(filePath, fileName);
+                CameraHelper.CaptureJpeg(fileNamePath, CameraIds[i], mDeviceInfors[i].byChanNum);
+            }
+        }
         #endregion
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -188,7 +246,7 @@ namespace TicketCheckStation
         /// <param name="e"></param>
         private void HandleCheckBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            new InputWindow().ShowDialog();
         }
     }
 }

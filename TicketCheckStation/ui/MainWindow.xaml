@@ -200,7 +200,7 @@
                 <TextBlock x:Name="currTimeTb" Text="2018-12-12 00:00:00" FontSize="20" FontWeight="Black" HorizontalAlignment="Center" />
             </StackPanel>
             <StackPanel Width="400" VerticalAlignment="Center">
-                <TextBlock x:Name="WeighingDataTb" Text="0.00" FontSize="34" FontWeight="Black" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="WeighingDataTb" Text="999.99" FontSize="34" FontWeight="Black" HorizontalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
         <!--VideoPenal 视频区域-->

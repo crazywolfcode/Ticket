@@ -1,0 +1,10 @@
+if not exist "$(TargetDir)capture" md "$(TargetDir)capture";
+@echo 2. made dir capture successed
+
+@echo start copy HC NET SDK
+if not exist "$(TargetDir)HCNetSDKCom" md "$(TargetDir)HCNetSDKCom";
+@echo 7. made dir HCNetSDKCom successed
+copy "$(ProjectDir)bin\HCNetSDKCom\*.*" "$(TargetDir)\HCNetSDKCom" ;
+@echo 8. copy HC NET SDK dll
+copy "$(ProjectDir)bin\*.dll" "$(TargetDir)"
+@echo 9. copy HC NET SDK completed

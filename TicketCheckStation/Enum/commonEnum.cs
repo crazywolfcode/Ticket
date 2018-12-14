@@ -16,6 +16,8 @@ namespace TicketCheckStation
         programVersion,
         coryRight,
         dbType,
+        cameraCaptureFilePath,
+        limitTone,
     }
 
 }

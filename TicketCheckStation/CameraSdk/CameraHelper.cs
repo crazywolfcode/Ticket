@@ -240,6 +240,7 @@ namespace TicketCheckStation
                 return false;
             }
         }
+         
         /// <summary>
         /// captureBmp
         /// </summary>

@@ -1,0 +1,134 @@
+﻿<Window x:Class="TicketCheckStation.InputWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TicketCheckStation" ResizeMode="NoResize"
+        xmlns:myui="clr-namespace:MyCustomControlLibrary;assembly=MyCustomControlLibrary"        
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded" ContentRendered="Window_ContentRendered" Closing="Window_Closing"
+        Title="手动验票" Height="400" Width="800" Activated="Window_Activated">
+    <Window.Resources>
+        <Style x:Key="AlertTbStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,4,10,4"/>
+            <Setter Property="Foreground" Value="#777777"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="ValueCbStyle" TargetType="ComboBox">
+            <Setter Property="Foreground" Value="#777777"/>
+            <Setter Property="Width" Value="190"/>
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value=" 0,4,0,4"/>
+            <Setter Property="Height" Value="24"/>
+        </Style>
+        <Style x:Key="ValueTBoxStyle" TargetType="TextBox">
+            <Setter Property="Foreground" Value="#777777"/>
+            <Setter Property="Width" Value="190"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value=" 0,4,0,4"/>
+            <Setter Property="Padding" Value="2,2,0,0"/>
+            <Setter Property="Height" Value="24"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition  />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+       <!--WeihgingBorder -->
+        <Border x:Name="WeihgingBorder" Grid.Row="0" Height="260">
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="13,0">
+                <WrapPanel HorizontalAlignment="Left">
+                    <TextBlock  Style="{StaticResource AlertTbStyle}">磅单编号:</TextBlock>
+                    <TextBlock x:Name="BillNumberTb" Style="{StaticResource AlertTbStyle}">CKTXMY201707190003</TextBlock>
+                    <TextBlock  Style="{StaticResource AlertTbStyle}">单位：吨</TextBlock>
+                </WrapPanel>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">发货公司:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">收货公司:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">货物名称:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">超 限:</TextBlock>
+                    </StackPanel>
+                    <StackPanel>
+                        <ComboBox x:Name="SupplyCb" Style="{StaticResource ValueCbStyle}" MaxDropDownHeight="150" DisplayMemberPath="name"  TextBoxBase.TextChanged="SupplyCb_TextChanged" SelectionChanged="SupplyCb_SelectionChanged"/>
+                        <ComboBox x:Name="ReceiverCompanyCb" Style="{StaticResource ValueCbStyle}" MaxDropDownHeight="150"  DisplayMemberPath="name" TextBoxBase.TextChanged="ReceiverCompanyCb_TextChanged" SelectionChanged="ReceiverCompanyCb_SelectionChanged"/>
+                        <ComboBox x:Name="MaterialNameCb" Style="{StaticResource ValueCbStyle}" MaxDropDownHeight="100" DisplayMemberPath="name" TextBoxBase.TextChanged="MaterialNameCb_TextChanged" SelectionChanged="MaterialNameCb_SelectionChanged"/>
+                        <TextBox x:Name="differenceWeightTbox" Style="{StaticResource ValueTBoxStyle}"  Margin="0" Text="0.00" IsEnabled="False" FontWeight="Bold"  Foreground="Red" FontSize="16"/>
+                    </StackPanel>                
+                    <!--   -->
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Style="{StaticResource AlertTbStyle}">车牌号:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">驾驶员:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">电话:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">应补税费:</TextBlock>
+                    </StackPanel>
+                    <StackPanel>
+                        <ComboBox x:Name="CarNumberCb" Style="{StaticResource ValueCbStyle}" Width="100" MaxDropDownHeight="200"   DisplayMemberPath="carNumber" TextBoxBase.TextChanged="CarNumberCb_TextChanged" SelectionChanged="CarNumberCb_SelectionChanged" />
+                        <TextBox x:Name="DriverTbox" Style="{StaticResource ValueTBoxStyle}" IsEnabled="False" Width="100"/>
+                        <TextBox x:Name="PhoneTbox" Style="{StaticResource ValueTBoxStyle}" IsEnabled="False" Width="100" />
+                        <TextBox x:Name="TaxationMoneyTbox" Style="{StaticResource ValueTBoxStyle}" FontSize="14" FontWeight="Bold" Foreground="Red" Width="100" IsEnabled="False" Text="0"/>
+                    </StackPanel>
+                    <!-- Send  -->
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Style="{StaticResource AlertTbStyle}">原发毛重:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">原发皮重:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">原发净重:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">限定范围:</TextBlock>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBox x:Name="SendGrossWeightTbox" Style="{StaticResource ValueTBoxStyle}" Width="70" InputScope="0.0"  TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="SendTraeWeightTbox" Style="{StaticResource ValueTBoxStyle}"  Width="70" InputScope="0.0"  TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="SendNetWeightTbox" Style="{StaticResource ValueTBoxStyle}"  Width="70"  InputScope="0.0" IsEnabled="False"  TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="LimitTbox" Style="{StaticResource ValueTBoxStyle}" IsEnabled="False" Width="70" Text="0" FontSize="14" Foreground="Red" FontWeight="Bold"/>
+                    </StackPanel>
+
+                    <!-- Received  -->
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Style="{StaticResource AlertTbStyle}">毛重:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">皮重:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">净重:</TextBlock>
+                    </StackPanel>
+                    <StackPanel >
+                        <TextBox x:Name="GrossWeightTbox" Style="{StaticResource ValueTBoxStyle}"  InputScope="0.0" Width="70"  TextChanged="Weight_text_changed" />
+                        <TextBox x:Name="CarTraeWeightTbox" Style="{StaticResource ValueTBoxStyle}" InputScope="0.0"  Width="70"  IsEnabled="False" TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="NetWeightTbox" Style="{StaticResource ValueTBoxStyle}" InputScope="0.0"  Width="70" IsEnabled="False"  TextChanged="Weight_text_changed"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                    <TextBlock Style="{StaticResource AlertTbStyle}" Margin="20,0,0,0">备 注:</TextBlock>
+                    <ComboBox x:Name="RemardCombox" Style="{StaticResource ValueCbStyle}" Margin="13,0,0,0" Width="641" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <!--OptionBorder -->
+        <Border x:Name="OptionBorder" Grid.Row="1" Background="#fafafa">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,4">
+                <myui:IconButton 
+                    x:Name="saveBtn" Click="saveBtn_Click"
+                    VerticalAlignment="Top"
+                    VerticalContentAlignment="Center"
+                    Padding="1"
+                    Icon="&#xe77a;"
+                    IsShowIcon="False"
+                    Margin="10,2,15,0"                                   
+                    BorderBrush="#e0e0e0" 
+                    Foreground="#666"
+                    BorderThickness="1" 
+                    Width="100"
+                    Height="36"                 
+                    CornerRadius="4"                                      
+                    FontWeight="Bold" 
+                    HorizontalAlignment="Center"      
+                    HorizontalContentAlignment="Center"
+                    MouseOverForeground="Black"
+                    MouseOverBackground="White" Content="保 存" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
