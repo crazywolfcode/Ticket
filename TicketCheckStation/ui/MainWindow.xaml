@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TicketCheckStation" ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen" WindowState="Maximized" ContentRendered="Window_ContentRendered"
         xmlns:myui="clr-namespace:MyCustomControlLibrary;assembly=MyCustomControlLibrary"
-        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
+        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_SizeChanged"
         Title="验票系统 v1.0正试版" Height="600" Width="800" MinWidth="900" MinHeight="600">
     <Window.Resources>
         <Style TargetType="MenuItem">
@@ -159,6 +159,20 @@
             <Setter Property="Padding" Value="2,2,0,0"/>
             <Setter Property="Height" Value="24"/>
         </Style>
+        <Style x:Key="rowstyle" TargetType="{x:Type DataGridRow}">
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader" x:Key="DataGridContentHeaderStyle">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment"   Value="Center" />
+            <Setter Property="Height" Value="30"/>
+        </Style>
+        <Style x:Key="rowheaderstyle" TargetType="{x:Type DataGridRowHeader}">
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="FontWeight"    Value="Bold"/>
+            <Setter Property="Width" Value="20"/>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -207,24 +221,61 @@
         
         <StackPanel Grid.Row="2" Background="LightGray">
             <StackPanel  x:Name="VideoPenal"  Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300">
-                <myui:ThreePoingLoading Foreground="White"/>
+                <!--<myui:ThreePoingLoading Foreground="White"/>-->
             </StackPanel>
         </StackPanel>
         <!-- OperationsPenal-->
         <StackPanel Grid.Row="3" x:Name="OperationsPenal" Height="40" Orientation="Horizontal" HorizontalAlignment="Right">
-            <!--<myui:IconButton Background="Gray"  Icon="&#xe64f;" Margin="5,0,0,0" CornerRadius="16,0,0,16" AllowsAnimation="True" Width="70">Info</myui:IconButton>-->
-            <myui:IconButton x:Name="PrintBtn"  Background="LightGray"  Icon="&#xe65b;" CornerRadius="0" AllowsAnimation="False" MouseOverForeground="White" FontWeight="Bold" MouseOverBackground="{StaticResource myBlue}" Content="打印选中"/>
+            <myui:IconButton x:Name="RefreshDataBtn"  Background="LightGray"  Icon="&#xe653;" CornerRadius="0" AllowsAnimation="True" MouseOverForeground="White" FontWeight="Bold" MouseOverBackground="{StaticResource myBlue}" Content="刷新数据" Click="RefreshDataBtn_Click"/>
+            <myui:IconButton x:Name="PrintBtn"  Background="LightGray"  Icon="&#xe65b;" CornerRadius="0" AllowsAnimation="False" MouseOverForeground="White" FontWeight="Bold" MouseOverBackground="{StaticResource myBlue}" Content="打印选中" Click="PrintBtn_Click"/>
             <myui:IconButton x:Name="ReportBtn"  Background="LightGray"  Icon="&#xe6df;" CornerRadius="0" AllowsAnimation="False" MouseOverForeground="White" FontWeight="Bold" MouseOverBackground="{StaticResource myBlue}" Content="历史数据"/>
             <myui:IconButton x:Name="HandleReaderCardBtn"  Background="LightGray"  Icon="&#xe936;" Width="80" AllowsAnimation="False" MouseOverForeground="White" FontWeight="Bold" MouseOverBackground="{StaticResource myBlue}" Content="读卡"/>
             <myui:IconButton x:Name="HandleCheckBtn"  Background="LightGray"  Icon="&#xe8d6;" CornerRadius="0" AllowsAnimation="True" MouseOverForeground="White" FontWeight="Bold" MouseOverBackground="{StaticResource myBlue}" Content="手动验票" Click="HandleCheckBtn_Click"/>
             <!--<myui:IconButton x:Name="ErrorButton" Background="Gray"  Icon="&#xe647;" CornerRadius="0,16,16,0" AllowsAnimation="True" Width="70"  >Error</myui:IconButton>-->
         </StackPanel>
 
-        <!--数据区 Today-->
-        <StackPanel x:Name="dataPenal" Grid.Row="5" Orientation="Horizontal" Background="#efefef">
-        
-        </StackPanel>
-
+        <!--数据区 Today Width="{Binding ElementName=dataPenal,Path=ActualWidth}" -->
+        <DataGrid x:Name="TodayDataGrid"  Grid.Row="5"                      
+                      LoadingRow="DataGrid_LoadingRow" 
+                      MouseDoubleClick="DataGrid_MouseDoubleClick" 
+                      IsReadOnly="True" 
+                      SelectionUnit="FullRow" 
+                      SelectionMode="Single"  
+                      AutoGenerateColumns="False" 
+                      GridLinesVisibility="Horizontal" 
+                      HorizontalGridLinesBrush="LightGray" 
+                      BorderThickness="1" Style="{x:Null}"
+                      BorderBrush="LightGray" 
+                      CanUserAddRows="False"   
+                      RowStyle="{StaticResource rowstyle}" 
+                      RowHeaderStyle="{StaticResource rowheaderstyle}"  
+                      HorizontalScrollBarVisibility="Auto" 
+                      VerticalScrollBarVisibility="Disabled" 
+                      ScrollViewer.IsDeferredScrollingEnabled="True" 
+                      ColumnHeaderStyle="{StaticResource DataGridContentHeaderStyle}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="编号"  Binding="{Binding number}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="发货公司"  Binding="{Binding sendCompany}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="收货公司"  Binding="{Binding receiveCompany}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="物资名称"  Binding="{Binding  materialName}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="车牌号"  Binding="{Binding  carNumber}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="驾驶员"  Binding="{Binding  driver}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="电话"  Binding="{Binding  phone}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="发货毛重" Binding="{Binding sendGrossWeight}"  />
+                    <DataGridTextColumn Header="发货皮重" Binding="{Binding sendTraeWeight}"  />
+                    <DataGridTextColumn Header="发货净重" Binding="{Binding sendNetWeight}"  />
+                    <DataGridTextColumn Header="验票毛重" Binding="{Binding grossWeight}"  />
+                    <DataGridTextColumn Header="车辆皮重" Binding="{Binding carTraeWeight}"  />
+                    <DataGridTextColumn Header="验票净重" Binding="{Binding netWeight}"  />
+                    <DataGridTextColumn Header="超限吨位" Binding="{Binding overtopWeight }"  />
+                <DataGridTextColumn Header="应补税款" Binding="{Binding overtopMoney,StringFormat={}{0:c} ,ConverterCulture=zh-CN}"  />
+                    <DataGridTextColumn Header="总税款" Binding="{Binding totalTaxstionMoney,StringFormat={}{0:c},ConverterCulture=zh-CN}"  />
+                    <DataGridTextColumn Header="过磅员" Binding="{Binding addUserName}"  />
+                <DataGridTextColumn Header="时间" Binding="{Binding addTime,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                <DataGridTextColumn Header="备注" Binding="{Binding remark}" />
+                </DataGrid.Columns>
+            </DataGrid>
+       
         <!--提示区-->
         <StackPanel Grid.Row="6">
             <StatusBar Height="28" Background="{DynamicResource myBlueDrak}" Foreground="White" HorizontalContentAlignment="Center">

@@ -30,17 +30,24 @@ namespace TicketCheckStation
 
         public MainWindow()
         {
-            InitializeComponent();         
+            InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StartClock();
-           
+            System.Windows.Controls.Primitives.CalendarItem calendar = new System.Windows.Controls.Primitives.CalendarItem();
         }
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             Showcameral();
+
+            LoadData();
+        }
+
+      public void  LoadData(){
+            List<WeighingBill> list = WeighingBillModel.GetTodayData();
+            this.TodayDataGrid.ItemsSource = list;
         }
 
         #region 时钟
@@ -72,9 +79,11 @@ namespace TicketCheckStation
         private List<CHCNetSDK.NET_DVR_DEVICEINFO_V30> mDeviceInfors;
         private List<System.Windows.Forms.PictureBox> mPictureBoxs;
         private void Showcameral() {
-            int camerialWidth = 300;
-            int camerialHeight = 300;
             cameraInfoList = new CameralInfoModel().GetList(App.mStation.id);
+            double width = this.ActualWidth;
+            double singleWidth = Math.Floor(width / cameraInfoList.Count);
+            int camerialWidth =Convert.ToInt32( singleWidth);
+            int camerialHeight = 300;          
             VideoPenal.Children.Clear();
             if (cameraInfoList.Count <= 0)
             {
@@ -199,7 +208,7 @@ namespace TicketCheckStation
                     }
                     catch(Exception e)
                     {
-                       MyHelper.ConsoleHelper.writeLine("退出摄像头"+i+"失败: " +e.Message);
+                       ConsoleHelper.writeLine("退出摄像头"+i+"失败: " +e.Message);
                     }
                 }
             }
@@ -209,7 +218,7 @@ namespace TicketCheckStation
         /// </summary>
         protected void CaptureJpeg(String currBillNumber)
         {
-            string filePath = ConfigurationHelper.GetConfig(ConfigItemName.cameraCaptureFilePath.ToString());
+            string filePath = ConfigurationHelper.GetConfig(ConfigItemName.CameraCaptureFilePath.ToString());
             if (String.IsNullOrEmpty(filePath))
             {
                 filePath = System.IO.Path.Combine(FileHelper.GetRunTimeRootPath(), "capture");
@@ -227,7 +236,21 @@ namespace TicketCheckStation
                     fileName = currBillNumber + "_" + i + "_" + Constract.CaputureSuffix;
                 }
                 String fileNamePath = System.IO.Path.Combine(filePath, fileName);
-                CameraHelper.CaptureJpeg(fileNamePath, CameraIds[i], mDeviceInfors[i].byChanNum);
+             bool res =   CameraHelper.CaptureJpeg(fileNamePath, CameraIds[i], mDeviceInfors[i].byChanNum);
+                if (res) {                  
+                    BillImage im = new BillImage() {
+                        id = Guid.NewGuid().ToString(),
+                        stationId = App.mStation.id,
+                        stationName = App.mStation.name,
+                        addUserId = App.currentUser.id,
+                        addUserName = App.currentUser.name,
+                        addTime = DateTime.Now,
+                        billNumber = currBillNumber,
+                        address = filePath+"/"+fileName,
+                        positon = i,
+                    };
+                    DatabaseOPtionHelper.GetInstance().insert(im);
+                }
             }
         }
         #endregion
@@ -246,7 +269,62 @@ namespace TicketCheckStation
         /// <param name="e"></param>
         private void HandleCheckBtn_Click(object sender, RoutedEventArgs e)
         {
-            new InputWindow().ShowDialog();
+            new InputWindow() { captureImg = new  Action<string>(CaptureJpeg) ,Owner = this}.ShowDialog();
         }
+
+        private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = e.Row.GetIndex() + 1;
+            WeighingBill bill =(WeighingBill) e.Row.DataContext;
+
+            if (bill.isReceiveMoney == 0 && bill.overtopMoney >0)
+            {
+                e.Row.Foreground = Brushes.Red;
+            }
+            else if (bill.isReceiveMoney == 1)
+            {
+                e.Row.Foreground = Brushes.Green;
+            }
+            else {
+                e.Row.Foreground = Brushes.Black;
+            }
+        }
+
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void RefreshDataBtn_Click(object sender, RoutedEventArgs e)
+        {
+            LoadData();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (this.IsLoaded == false) {
+                return;
+            }
+           double width = this.ActualWidth;
+            double singleWidth = Math.Floor(width / mPictureBoxs.Count);
+            for (int i = 0; i < mPictureBoxs.Count; i++)
+            {
+                mPictureBoxs[i].Width = Convert.ToInt32(singleWidth); 
+            }
+        }
+        /// <summary>
+        /// 打印选中
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PrintBtn_Click(object sender, RoutedEventArgs e)
+        {
+         WeighingBill bill =(WeighingBill)  this.TodayDataGrid.SelectedItem;
+            if (bill == null) {
+                return;
+            }
+            new PrintBillW(bill).ShowDialog();
+        }
+
     }
 }

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TicketCheckStation" ResizeMode="NoResize"
+        xmlns:local="clr-namespace:TicketCheckStation" ResizeMode="NoResize" WindowStyle="None"
         xmlns:myui="clr-namespace:MyCustomControlLibrary;assembly=MyCustomControlLibrary"        
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded" ContentRendered="Window_ContentRendered" Closing="Window_Closing"
@@ -37,11 +37,31 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition  Height="65"/>
             <RowDefinition  />
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-       <!--WeihgingBorder -->
-        <Border x:Name="WeihgingBorder" Grid.Row="0" Height="260">
+        <Border Grid.Row="0"  x:Name="headerBorder" MouseMove="headerBorder_MouseMove"  Background="{DynamicResource E4}">
+            <StackPanel Orientation="Horizontal" Background="Transparent" MouseMove="headerBorder_MouseMove">
+                <Image Source="/TicketCheckStation;component/aislogo_48.ico" Width="48" Height="48" HorizontalAlignment="Left" Margin="10"></Image>
+                <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" Text="手动验票" VerticalAlignment="Center" FontSize="20" FontWeight="Black" Foreground="#787972"></TextBlock>
+            </StackPanel>
+        </Border>
+        <!--关闭按钮-->
+        <myui:ImageButton Grid.Row="0"  BorderBrush="{x:Null}" Width="27" Height="22"  Margin="0,4,4,0" Content="" x:Name="CloseBtn" HorizontalAlignment="Right" VerticalAlignment="Top"   Click="CloseBtn_Click">
+            <myui:ImageButton.MyMoverBrush>
+                <ImageBrush ImageSource="/TicketCheckStation;component/Themes/Img/Button/xm.png"/>
+            </myui:ImageButton.MyMoverBrush>
+            <myui:ImageButton.MyEnterBrush>
+                <ImageBrush ImageSource="/TicketCheckStation;component/Themes/Img/Button/xe.png"/>
+            </myui:ImageButton.MyEnterBrush>
+            <myui:ImageButton.Background>
+                <ImageBrush ImageSource="/TicketCheckStation;component/Themes/Img/Button/xn.png" TileMode="FlipXY"/>
+            </myui:ImageButton.Background>
+        </myui:ImageButton>
+
+        <!--WeihgingBorder -->
+        <Border x:Name="WeihgingBorder" Grid.Row="1" Height="260">
             <StackPanel Grid.Row="1" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="13,0">
                 <WrapPanel HorizontalAlignment="Left">
                     <TextBlock  Style="{StaticResource AlertTbStyle}">磅单编号:</TextBlock>
@@ -82,9 +102,9 @@
                         <TextBlock Style="{StaticResource AlertTbStyle}">限定范围:</TextBlock>
                     </StackPanel>
                     <StackPanel>
-                        <TextBox x:Name="SendGrossWeightTbox" Style="{StaticResource ValueTBoxStyle}" Width="70" InputScope="0.0"  TextChanged="Weight_text_changed"/>
-                        <TextBox x:Name="SendTraeWeightTbox" Style="{StaticResource ValueTBoxStyle}"  Width="70" InputScope="0.0"  TextChanged="Weight_text_changed"/>
-                        <TextBox x:Name="SendNetWeightTbox" Style="{StaticResource ValueTBoxStyle}"  Width="70"  InputScope="0.0" IsEnabled="False"  TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="SendGrossWeightTbox" Style="{StaticResource ValueTBoxStyle}" Width="70" Text="0" InputScope="Digits"  TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="SendTraeWeightTbox" Style="{StaticResource ValueTBoxStyle}"  Width="70" Text="0" InputScope="Digits"  TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="SendNetWeightTbox" Style="{StaticResource ValueTBoxStyle}"  Width="70" Text="0" InputScope="Digits" IsEnabled="False"  TextChanged="Weight_text_changed"/>
                         <TextBox x:Name="LimitTbox" Style="{StaticResource ValueTBoxStyle}" IsEnabled="False" Width="70" Text="0" FontSize="14" Foreground="Red" FontWeight="Bold"/>
                     </StackPanel>
 
@@ -93,21 +113,23 @@
                         <TextBlock Style="{StaticResource AlertTbStyle}">毛重:</TextBlock>
                         <TextBlock Style="{StaticResource AlertTbStyle}">皮重:</TextBlock>
                         <TextBlock Style="{StaticResource AlertTbStyle}">净重:</TextBlock>
+                        <TextBlock Style="{StaticResource AlertTbStyle}">税价:</TextBlock>
                     </StackPanel>
                     <StackPanel >
-                        <TextBox x:Name="GrossWeightTbox" Style="{StaticResource ValueTBoxStyle}"  InputScope="0.0" Width="70"  TextChanged="Weight_text_changed" />
-                        <TextBox x:Name="CarTraeWeightTbox" Style="{StaticResource ValueTBoxStyle}" InputScope="0.0"  Width="70"  IsEnabled="False" TextChanged="Weight_text_changed"/>
-                        <TextBox x:Name="NetWeightTbox" Style="{StaticResource ValueTBoxStyle}" InputScope="0.0"  Width="70" IsEnabled="False"  TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="GrossWeightTbox" Style="{StaticResource ValueTBoxStyle}" Text="0"  InputScope="Digits" Width="70"  TextChanged="Weight_text_changed" />
+                        <TextBox x:Name="CarTraeWeightTbox" Style="{StaticResource ValueTBoxStyle}" Text="0" InputScope="Digits"  Width="70"  IsEnabled="False" TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="NetWeightTbox" Style="{StaticResource ValueTBoxStyle}" InputScope="Digits"  Width="70" IsEnabled="False"  TextChanged="Weight_text_changed"/>
+                        <TextBox x:Name="taxationPriceTbox" Style="{StaticResource ValueTBoxStyle}" InputScope="Digits"  Width="70" IsEnabled="False"  />
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                     <TextBlock Style="{StaticResource AlertTbStyle}" Margin="20,0,0,0">备 注:</TextBlock>
                     <ComboBox x:Name="RemardCombox" Style="{StaticResource ValueCbStyle}" Margin="13,0,0,0" Width="641" />
-                </StackPanel>
+                </StackPanel>               
             </StackPanel>
         </Border>
         <!--OptionBorder -->
-        <Border x:Name="OptionBorder" Grid.Row="1" Background="#fafafa">
+        <Border x:Name="OptionBorder" Grid.Row="2" Background="#fafafa">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,4">
                 <myui:IconButton 
                     x:Name="saveBtn" Click="saveBtn_Click"

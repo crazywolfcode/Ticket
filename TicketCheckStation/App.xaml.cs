@@ -26,7 +26,7 @@ namespace TicketCheckStation
         #endregion
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            mStation = new Station() { id = "047ee76b-314c-45cd-9216-f1238235d86c", name = "验票一站" };
+            mStation = new Station() { id = "047ee76b-314c-45cd-9216-f1238235d86c", name = "验票一站",nameFirstCase="YPYZ" };
 
             currentUser = new User() { id = "ea2cd14c-35f0-450894cb-7f126ed8e5a1", name = "陈龙飞" };
             new MainWindow().Show();

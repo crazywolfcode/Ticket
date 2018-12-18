@@ -50,6 +50,8 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,6 +72,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Convertor\PrientTimesboolConverter.cs" />
+    <Compile Include="Convertor\PrientTimesNowConverter.cs" />
+    <Compile Include="Convertor\PrientTimesStringConverter.cs" />
+    <Compile Include="Entity\model\WeighingBillModel.cs" />
+    <Compile Include="Helper\BitmapHelper.cs" />
+    <Compile Include="ui\PrintBillW.xaml.cs" />
     <Page Include="ui\InputWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -139,6 +147,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\PrintBillW.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -216,6 +228,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="event.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="aislogo.ico" />
+    <Resource Include="aislogo_48.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

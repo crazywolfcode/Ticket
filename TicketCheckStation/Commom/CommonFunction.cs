@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using MyCustomControlLibrary;
 
 namespace TicketCheckStation
 {
@@ -112,9 +114,61 @@ namespace TicketCheckStation
         /// <returns></returns>
         public static String GetWeighingNumber( bool noaml = true, String ExtStr = null)
         {
-            return "FYYPZ201801010001";
+            String date = MyHelper.DateTimeHelper.getCurrentDateTime(MyHelper.DateTimeHelper.DateFormat);
+            String oldDate = MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.BillNumberDate.ToString());
+            if (!date.Equals(oldDate))
+            {            
+                MyHelper.ConfigurationHelper.SetConfig(ConfigItemName.BillNumberDate.ToString(), date);
+                MyHelper.ConfigurationHelper.SetConfig(ConfigItemName.BillNumberSort.ToString(), "1");
+            }
+            string oldSort = MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.BillNumberSort.ToString());
+            switch (oldSort.Length) {
+                case 1:
+                    oldSort = "000" + oldSort;
+                    break;
+                case 2:
+                    oldSort = "00" + oldSort;
+                    break;
+                case 3:
+                    oldSort = "0" + oldSort;
+                    break;
+            }
+            return App.mStation.nameFirstCase.ToUpper() + date.Replace("-","") + oldSort;
         }
 
+        public static void AddBillNumberSort() {
+            int Sort = Convert.ToInt32(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.BillNumberSort.ToString()));
+            MyHelper.ConfigurationHelper.SetConfig(ConfigItemName.BillNumberSort.ToString(), (Sort + 1).ToString());
+        }
+
+        #region 显示提示窗口
+
+        /// <summary>
+        /// 显示提示窗口
+        /// </summary>
+        /// <param name="content">提示内容</param>
+        /// <param name="Title">标题</param>
+        ///   /// <param name="orientation">方向</param>
+        public static void ShowAlert(String content, String Title = "提示", Orientation orientation = Orientation.Horizontal)
+        {
+            MMessageBox.GetInstance().ShowBox(content, Title, MMessageBox.ButtonType.Yes, MMessageBox.IconType.Info, orientation,"好");
+        }
+
+        public static void ShowSuccessAlert(String content, String Title = "提示", Orientation orientation = Orientation.Horizontal)
+        {
+            MMessageBox.GetInstance().ShowBox(content, Title, MMessageBox.ButtonType.Yes, MMessageBox.IconType.success, orientation,"好");
+        }
+
+        public static void ShowErrorAlert(String content, String Title = "错误", Orientation orientation = Orientation.Horizontal)
+        {
+            MMessageBox.GetInstance().ShowBox(content, Title, MMessageBox.ButtonType.No, MMessageBox.IconType.success, orientation);
+        }
+        public static MMessageBox.Result ShowAlertResult()
+        {
+            return MMessageBox.GetInstance().ShowBox("保存成功 ! 要继续过磅吗？", "恭喜", MMessageBox.ButtonType.YesNo, MMessageBox.IconType.success, Orientation.Vertical, "是");
+        }
+
+        #endregion
 
         /// <summary>
         /// 设置当前显示控制的解释器
