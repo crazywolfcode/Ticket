@@ -17,5 +17,14 @@ namespace TicketCheckStation
             list = DatabaseOPtionHelper.GetInstance().select<WeighingBill>(sql);
             return list;
         }
+
+        public static List<WeighingBill> searchData(string condition)
+        {
+            List<WeighingBill> list = new List<WeighingBill>();          
+            String order = WeighingBillColumns.add_time.ToString() + " asc";
+            String sql = DatabaseOPtionHelper.GetInstance().getSelectSql(TableName.weighing_bill.ToString(), null, condition, null, null, order);
+            list = DatabaseOPtionHelper.GetInstance().select<WeighingBill>(sql);
+            return list;
+        }
     }
 }

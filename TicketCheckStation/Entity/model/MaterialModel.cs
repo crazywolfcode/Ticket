@@ -21,6 +21,6 @@ namespace TicketCheckStation
                 List<Material> list = DatabaseOPtionHelper.GetInstance().select<Material>(sql);
                 return list;
             }
-        }
+        }   
     }
 }

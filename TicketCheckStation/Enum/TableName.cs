@@ -312,6 +312,7 @@ namespace TicketCheckStation
     public enum WeighingBillColumns
     {
         id,
+        number,
         station_id,
         station_name,
         send_company,
@@ -332,7 +333,9 @@ namespace TicketCheckStation
         send_gross_weight,
         send_trae_weight,
         send_net_weight,
+        gross_weight,
         car_trae_weight,
+        net_weight,
         limit_weight,
         overtop_weight,
         overtop_money,
@@ -353,6 +356,11 @@ namespace TicketCheckStation
         status,
         add_user_id,
         add_user_name,
+        is_checked,
+        checked_time,
+        print_frequency,
+        print_Time,
+        total_taxstion_money,
     }
 
     /// <summary>

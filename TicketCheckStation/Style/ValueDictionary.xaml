@@ -45,4 +45,45 @@
     <SolidColorBrush x:Key="ScrollBarForeround" Color="#877F7F"></SolidColorBrush>
     <SolidColorBrush x:Key="ScrollBarBackground" Color="#3E3E42"></SolidColorBrush>
 
+    <Style x:Key="AlertTbStyle" TargetType="TextBlock">
+        <Setter Property="TextAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="10,2,10,2"/>
+        <Setter Property="Padding" Value="2,1,2,2"/>
+        <Setter Property="Foreground" Value="#777777"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Height" Value="22"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="ValueCbStyle" TargetType="ComboBox">
+        <Setter Property="Foreground" Value="#777777"/>
+        <Setter Property="Width" Value="180"/>
+        <Setter Property="IsEditable" Value="True"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value=" 0,2,0,2"/>
+        <Setter Property="Height" Value="24"/>
+    </Style>
+    <Style x:Key="ValueTBoxStyle" TargetType="TextBox">
+        <Setter Property="Foreground" Value="#777777"/>
+        <Setter Property="Width" Value="180"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value=" 0,2,0,2"/>
+        <Setter Property="Padding" Value="2,2,0,0"/>
+        <Setter Property="Height" Value="24"/>
+    </Style>
+    <Style x:Key="rowstyle" TargetType="{x:Type DataGridRow}">
+        <Setter Property="Height" Value="22"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+    <Style TargetType="DataGridColumnHeader" x:Key="DataGridContentHeaderStyle">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment"   Value="Center" />
+        <Setter Property="Height" Value="30"/>
+    </Style>
+    <Style x:Key="rowheaderstyle" TargetType="{x:Type DataGridRowHeader}">
+        <Setter Property="Padding" Value="3"/>
+        <Setter Property="FontWeight"    Value="Bold"/>
+        <Setter Property="Width" Value="20"/>
+    </Style>
+    <local:BillStatusConverter x:Key="billStatusConverter"/>
 </ResourceDictionary>

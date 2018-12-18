@@ -292,7 +292,7 @@ namespace TicketCheckStation
 
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            //TODO
         }
 
         private void RefreshDataBtn_Click(object sender, RoutedEventArgs e)
@@ -325,6 +325,20 @@ namespace TicketCheckStation
             }
             new PrintBillW(bill).ShowDialog();
         }
+        /// <summary>
+        /// 报表
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ReportBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new ReportWindow() {Owner = this }.ShowDialog();
+        }
 
+        private void LogoutBtn_Click(object sender, RoutedEventArgs e)
+        {
+           //TODO login
+            this.Close();
+        }
     }
 }

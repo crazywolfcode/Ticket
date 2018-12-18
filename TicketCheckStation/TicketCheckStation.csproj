@@ -73,11 +73,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Convertor\PrientTimesboolConverter.cs" />
+    <Compile Include="Convertor\BillStatusConverter.cs" />
     <Compile Include="Convertor\PrientTimesNowConverter.cs" />
     <Compile Include="Convertor\PrientTimesStringConverter.cs" />
     <Compile Include="Entity\model\WeighingBillModel.cs" />
     <Compile Include="Helper\BitmapHelper.cs" />
     <Compile Include="ui\PrintBillW.xaml.cs" />
+    <Compile Include="ui\ReportWindow.xaml.cs">
+      <DependentUpon>ReportWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="ui\InputWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -153,6 +157,10 @@
     <Page Include="ui\PrintBillW.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\ReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
