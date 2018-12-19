@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -46,6 +47,24 @@ namespace TicketCheckStation
 
             mStation = StationModel.SelectById(stationId);
 
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            String assimblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name.ToString();
+ 
+            bool createNew=true;
+            EventWaitHandle ProgramStarted = new EventWaitHandle(false, EventResetMode.AutoReset, assimblyName,out createNew);
+
+
+            if (!createNew)
+            {
+                MyCustomControlLibrary.MMessageBox.GetInstance().ShowBox("该程序已经在运行中，不能重复创建！", "提示", MyCustomControlLibrary.MMessageBox.ButtonType.Yes, MyCustomControlLibrary.MMessageBox.IconType.warring,System.Windows.Controls.Orientation.Vertical, "好");
+                App.Current.Shutdown();
+                Environment.Exit(0);
+            }
+  
+            base.OnStartup(e);
         }
     }
 }
