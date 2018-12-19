@@ -271,7 +271,14 @@ namespace TicketCheckStation
         /// <param name="e"></param>
         private void HandleCheckBtn_Click(object sender, RoutedEventArgs e)
         {
-            new InputWindow() { captureImg = new  Action<string>(CaptureJpeg) ,Owner = this}.ShowDialog();
+            if (App.currentUser.roleLevel == (int)RoleLevelType.YPY || App.currentUser.roleLevel == (int)RoleLevelType.SHY)
+            {
+                new InputWindow() { captureImg = new Action<string>(CaptureJpeg), Owner = this }.ShowDialog();
+            }
+            else {
+                MyCustomControlLibrary.MMessageBox.GetInstance().ShowBox("无权限操作！", "提示", MyCustomControlLibrary.MMessageBox.ButtonType.Yes, MyCustomControlLibrary.MMessageBox.IconType.warring, Orientation.Horizontal, "好");
+                return;
+            }            
         }
 
         private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
