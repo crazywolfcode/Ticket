@@ -543,7 +543,15 @@ namespace TicketCheckStation
             {
                 mMaterial = this.MaterialNameCb.SelectedItem as Material;
                 this.taxationPriceTbox.Text = mMaterial.currTaxation.ToString();
-                this.LimitTbox.Text = mMaterial.limitTone.ToString();
+                if (ConfigurationHelper.GetConfig(ConfigItemName.IsUnifeidLimitTone.ToString()).Equals("1"))
+                {
+                    this.LimitTbox.Text =ConfigurationHelper.GetConfig(ConfigItemName.limitTone.ToString());
+                }
+                else
+                {
+                    this.LimitTbox.Text = mMaterial.limitTone.ToString();
+                }
+              
             }
         }
         #endregion
@@ -661,8 +669,14 @@ namespace TicketCheckStation
             Double netWeight = 0.0;
             Double overStopWeight = 0.0;
             Double totalMoney = 0.0;
-            //Double limitTone = Convert.ToDouble(ConfigurationHelper.GetConfig(ConfigItemName.limitTone.ToString()));
-            Double limitTone = mMaterial.limitTone;
+            Double limitTone = 0.0;
+            if (ConfigurationHelper.GetConfig(ConfigItemName.IsUnifeidLimitTone.ToString()).Equals("1"))
+            {
+                limitTone = Convert.ToDouble(ConfigurationHelper.GetConfig(ConfigItemName.limitTone.ToString()));
+            }
+            else {
+                limitTone = mMaterial.limitTone;
+            }            
             sendGross = Convert.ToDouble(this.SendGrossWeightTbox.Text.Trim());
             sendTrae = Convert.ToDouble(this.SendTraeWeightTbox.Text.Trim());
             gross = Convert.ToDouble(this.GrossWeightTbox.Text.Trim());

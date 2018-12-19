@@ -76,12 +76,24 @@
     <Compile Include="Convertor\BillStatusConverter.cs" />
     <Compile Include="Convertor\PrientTimesNowConverter.cs" />
     <Compile Include="Convertor\PrientTimesStringConverter.cs" />
+    <Compile Include="Entity\model\StationModel.cs" />
+    <Compile Include="Entity\model\UserModel.cs" />
     <Compile Include="Entity\model\WeighingBillModel.cs" />
+    <Compile Include="Entity\Visual\HostoryUser.cs" />
     <Compile Include="Helper\BitmapHelper.cs" />
+    <Compile Include="ui\AboutW.xaml.cs" />
     <Compile Include="ui\PrintBillW.xaml.cs" />
     <Compile Include="ui\ReportWindow.xaml.cs">
       <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ui\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ui\ConnectionWindow.xaml.cs" />
+    <Page Include="ui\AboutW.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ui\InputWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -162,6 +174,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ui\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ui\ConnectionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -240,6 +260,9 @@
   <ItemGroup>
     <Resource Include="aislogo.ico" />
     <Resource Include="aislogo_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -68,24 +68,26 @@ using System.Text;
 
 	 public String roleId{ get; set; }
 
-	 /// <summary>
-	 /// 可空:YES
-	 /// </summary>
+        /// <summary>
+        /// 可空:YES
+        /// </summary>
 
-	 public String roleName{ get; set; }
+        public String roleName { get; set; }
+        /// <summary>
+        /// 角色级别 0 验票员 1 审核员 2 监管员 3系统作者
+        /// </summary>
 
-	 /// <summary>
-	 /// 注释:所属站点级别：0验票站，1县组监管中心，2市级 3省级 4国家
-	 /// 可空:YES
-	 /// </summary>
+        public Int32 roleLevel { get; set; }
 
-	 public String pwd{ get; set; }
+        
+     public String pwd{ get; set; }
 
-	 /// <summary>
-	 /// 可空:YES
-	 /// </summary>
+        /// <summary>
+        /// 注释:所属站点级别：0验票站，1县组监管中心，2市级 3省级 4国家
+        /// 可空:YES
+        /// </summary>
 
-	 public Int32 stationLevelType{ get; set; }
+        public Int32 stationLevelType{ get; set; }
 
 	 /// <summary>
 	 /// 注释:备注信息
@@ -159,6 +161,7 @@ using System.Text;
 	 /// </summary>
 
 	 public String addUserName{ get; set; }
-
-	 }
+	 public String stationName { get; set; }
+	 public String stationId { get; set; }        
+    }
 }

@@ -36,7 +36,9 @@ namespace TicketCheckStation
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StartClock();
-            System.Windows.Controls.Primitives.CalendarItem calendar = new System.Windows.Controls.Primitives.CalendarItem();
+
+            this.CurrUserBtn.Content = App.currentUser.name;
+            this.RoleNameTb.Text = App.currentUser.roleName;
         }
         private void Window_ContentRendered(object sender, EventArgs e)
         {
@@ -337,8 +339,29 @@ namespace TicketCheckStation
 
         private void LogoutBtn_Click(object sender, RoutedEventArgs e)
         {
-           //TODO login
+            new LoginWindow() { IsChangeAccount =true}.Show();
             this.Close();
+        }
+        /// <summary>
+        ///  MenuItem_Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            if (item == null) {
+                return;
+            }
+            switch (item.Name) {
+                case "About":
+                    new AboutW().ShowDialog();
+                    break;
+                case "ConnMe":
+                    new ConnectionWindow().ShowDialog();
+                    break;
+
+            }
         }
     }
 }

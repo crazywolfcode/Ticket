@@ -8,6 +8,7 @@ namespace TicketCheckStation
 {
     public enum ConfigItemName
     {
+        CurrStationId,
         //connectionStrings
         appSettings,
         connectionStrings,
@@ -24,10 +25,18 @@ namespace TicketCheckStation
         PrintTitle,//磅单打印的标题
         autoPrintSecend,//自动开始打印的秒数
         autoPrint,//是否自动开始打印
+        IsUnifeidLimitTone,//统限定的吨位
+        limitTone,
     }
 
 
     public enum ReceiveMoneyType {
         No,Yes,NotNeed            
+    }
+
+    //角色级别 0 验票员 1 审核员 2 监管员 3系统作者
+    public enum RoleLevelType
+    {
+        YPY, SHY, JGY,XTZZ
     }
 }

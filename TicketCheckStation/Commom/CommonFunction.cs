@@ -196,5 +196,26 @@ namespace TicketCheckStation
         //    }
         //    return formarter;
         //}
+        //角色级别 0 验票员 1 审核员 2 监管员 3系统作者
+        public static string GetRoleName(RoleLevelType type) {
+            int temp = (int)type;
+            String res = "";
+            switch (temp)
+            {
+                case 0:
+                    res = "验票员";
+                    break;
+                case 1:
+                    res = "审核员";
+                    break;
+                case 2:
+                    res = "监管员";
+                    break;
+                case 3:
+                    res = "系统作者";
+                    break;         
+            }
+            return res;
+        }
     }
 }

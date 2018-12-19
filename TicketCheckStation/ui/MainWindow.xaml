@@ -7,7 +7,7 @@
         WindowStartupLocation="CenterScreen" WindowState="Maximized" ContentRendered="Window_ContentRendered"
         xmlns:myui="clr-namespace:MyCustomControlLibrary;assembly=MyCustomControlLibrary"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_SizeChanged"
-        Title="验票系统 v1.0正试版" Height="600" Width="800" MinWidth="900" MinHeight="600">
+        Title="煤炭运煤监管系统 v1.0.1正试版" Height="600" Width="800" MinWidth="900" MinHeight="600">
     <Window.Resources>
         <Style TargetType="MenuItem">
             <Setter Property="Foreground" Value="White"/>
@@ -159,11 +159,13 @@
                     <MenuItem Header="11"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="班助(H)" >
-                    <MenuItem Header="11"></MenuItem>
+                    <MenuItem Header="关于软件" Icon="&#xe668;" x:Name="About"  Click="MenuItem_Click" ></MenuItem>
+                    <MenuItem Header="联系方试" Icon="&#xe8be;" x:Name="ConnMe"  Click="MenuItem_Click"></MenuItem>
                 </MenuItem>
             </Menu>
             <WrapPanel  Margin="0,0,2,0" HorizontalAlignment="Right">
-                <myui:IconButton x:Name="CurrUserBtn" Content="陈龙飞" Icon="&#xf031c;" IconSize="18" FontSize="14" FontWeight="Bold" IsTransparency="True" Width="80" IconMargin="8,2,4,0" MouseOverBackground="White" MouseOverForeground="#3ca9fe" ToolTip="当前用户"/>
+                <myui:IconButton x:Name="CurrUserBtn" Content="陈龙飞" Icon="&#xf031c;" IconSize="18" FontSize="14" FontWeight="Bold" IsTransparency="True" Width="120" IconMargin="8,2,4,0" MouseOverBackground="White" MouseOverForeground="#3ca9fe" ToolTip="当前用户"/>
+                <TextBlock x:Name="RoleNameTb" Text="系统管理员" VerticalAlignment="Bottom" Margin="6,0,12,2" Foreground="White"/>
                 <myui:IconButton x:Name="LogoutBtn" Icon="&#xe893;" IsTransparency="True" Width="28" Height="30" IconSize="20" IsShowIcon="True" MouseOverBackground="White" MouseOverForeground="#3ca9fe" ToolTip="退出" Click="LogoutBtn_Click" />
             </WrapPanel>
         </DockPanel>
@@ -213,29 +215,29 @@
                       ScrollViewer.IsDeferredScrollingEnabled="True" 
                       ColumnHeaderStyle="{StaticResource DataGridContentHeaderStyle}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="编号"  Binding="{Binding number}" ></DataGridTextColumn>
-                    <DataGridTextColumn Header="发货公司"  Binding="{Binding sendCompany}" ></DataGridTextColumn>
-                    <DataGridTextColumn Header="收货公司"  Binding="{Binding receiveCompany}" ></DataGridTextColumn>
-                    <DataGridTextColumn Header="物资名称"  Binding="{Binding  materialName}" ></DataGridTextColumn>
-                    <DataGridTextColumn Header="车牌号"  Binding="{Binding  carNumber}" ></DataGridTextColumn>
-                    <DataGridTextColumn Header="驾驶员"  Binding="{Binding  driver}" ></DataGridTextColumn>
-                    <DataGridTextColumn Header="电话"  Binding="{Binding  phone}" ></DataGridTextColumn>
-                    <DataGridTextColumn Header="发货毛重" Binding="{Binding sendGrossWeight}"  />
-                    <DataGridTextColumn Header="发货皮重" Binding="{Binding sendTraeWeight}"  />
-                    <DataGridTextColumn Header="发货净重" Binding="{Binding sendNetWeight}"  />
-                    <DataGridTextColumn Header="验票毛重" Binding="{Binding grossWeight}"  />
-                    <DataGridTextColumn Header="车辆皮重" Binding="{Binding carTraeWeight}"  />
-                    <DataGridTextColumn Header="验票净重" Binding="{Binding netWeight}"  />
-                    <DataGridTextColumn Header="超限吨位" Binding="{Binding overtopWeight }"  />
-                    <DataGridTextColumn Header="应补税款" Binding="{Binding overtopMoney,StringFormat={}{0:c} ,ConverterCulture=zh-CN}"  />
-                    <DataGridTextColumn Header="总税款" Binding="{Binding totalTaxstionMoney,StringFormat={}{0:c},ConverterCulture=zh-CN}"  />
-                    <DataGridTextColumn Header="过磅员" Binding="{Binding addUserName}"  />
-                    <DataGridTextColumn Header="审核员" Binding="{Binding checkUserName}"  />
-                    <DataGridTextColumn Header="状态" Binding="{Binding Converter={StaticResource billStatusConverter}}"  />
-                    <DataGridTextColumn Header="时间" Binding="{Binding addTime,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                    <DataGridTextColumn Header="备注" Binding="{Binding remark}" />
-                 </DataGrid.Columns>
-            </DataGrid>
+                <DataGridTextColumn Header="编号"  Binding="{Binding number}" />
+                <DataGridTextColumn Header="发货公司"  Binding="{Binding sendCompany}" />
+                <DataGridTextColumn Header="收货公司"  Binding="{Binding receiveCompany}"/>
+                <DataGridTextColumn Header="物资名称"  Binding="{Binding  materialName}" />
+                <DataGridTextColumn Header="车牌号"  Binding="{Binding  carNumber}" />
+                <DataGridTextColumn Header="驾驶员"  Binding="{Binding  driver}" />
+                <DataGridTextColumn Header="电话"  Binding="{Binding  phone}" />
+                <DataGridTextColumn Header="发货毛重" Binding="{Binding sendGrossWeight}"  />
+                <DataGridTextColumn Header="发货皮重" Binding="{Binding sendTraeWeight}"  />
+                <DataGridTextColumn Header="发货净重" Binding="{Binding sendNetWeight}"  />
+                <DataGridTextColumn Header="验票毛重" Binding="{Binding grossWeight}"  />
+                <DataGridTextColumn Header="车辆皮重" Binding="{Binding carTraeWeight}"  />
+                <DataGridTextColumn Header="验票净重" Binding="{Binding netWeight}"  />
+                <DataGridTextColumn Header="超限吨位" Binding="{Binding overtopWeight }"  />
+                <DataGridTextColumn Header="应补税款" Binding="{Binding overtopMoney,StringFormat={}{0:c} ,ConverterCulture=zh-CN}"  />
+                <DataGridTextColumn Header="总税款" Binding="{Binding totalTaxstionMoney,StringFormat={}{0:c},ConverterCulture=zh-CN}"  />
+                <DataGridTextColumn Header="过磅员" Binding="{Binding addUserName}"  />
+                <DataGridTextColumn Header="审核员" Binding="{Binding checkUserName}"  />
+                <DataGridTextColumn Header="状态" Binding="{Binding Converter={StaticResource billStatusConverter}}"  />
+                <DataGridTextColumn Header="时间" Binding="{Binding addTime,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                <DataGridTextColumn Header="备注" Binding="{Binding remark}" />
+             </DataGrid.Columns>
+          </DataGrid>
        
         <!--提示区-->
         <StackPanel Grid.Row="6">

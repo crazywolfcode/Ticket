@@ -8,6 +8,9 @@ namespace TicketCheckStation
 {
     class Constract
     {
+        public static string TempPath = System.IO.Path.Combine(MyHelper.FileHelper.GetRunTimeRootPath(), "temp");
+        public static string HUserFilePath = TempPath + "\\" + "horstoryuser.xml";
+
         public static readonly string defaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         public static readonly string DateFormat = "yyyy-MM-dd";
 
