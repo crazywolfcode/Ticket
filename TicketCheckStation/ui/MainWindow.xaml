@@ -241,9 +241,12 @@
        
         <!--提示区-->
         <StackPanel Grid.Row="6">
-            <StatusBar Height="28" Background="{DynamicResource myBlueDrak}" Foreground="White" HorizontalContentAlignment="Center">
+            <StatusBar Height="28" Background="{DynamicResource myBlueDrak}" Foreground="White" HorizontalContentAlignment="Center" x:Name="StatusBarSb">
                 <StatusBarItem>
                     <TextBlock Text="StatusBar"/>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <TextBlock x:Name="AlertBarItemTb" />
                 </StatusBarItem>
             </StatusBar>
         </StackPanel>

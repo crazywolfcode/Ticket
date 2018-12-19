@@ -16,6 +16,7 @@ using System.Threading;
 using System.Windows.Threading;
 using System.Windows.Forms.Integration;
 using MyHelper;
+using ScaleDataInterpreter;
 namespace TicketCheckStation
 {
     /// <summary>
@@ -25,6 +26,9 @@ namespace TicketCheckStation
     {
         #region variable area
         DispatcherTimer mDispatcherTimer;
+        DispatcherTimer ReaderDataDispatcherTimer;
+        protected IScaleDataInterpreter mScaleDataInterpreter;
+        private System.IO.Ports.SerialPort mSerialPort;
         #endregion
 
 
@@ -42,20 +46,70 @@ namespace TicketCheckStation
         }
         private void Window_ContentRendered(object sender, EventArgs e)
         {
+            ReaderWeight();
+
             Showcameral();
 
             LoadData();
         }
+        #region 读取磅称数据
+        /// <summary>
+        /// 读取磅称数据
+        /// </summary>
+        private void ReaderWeight()
+        {
+            int ScaleBrandType = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.ScaleBrandType.ToString()));
+            mSerialPort = new System.IO.Ports.SerialPort()
+            {
+                PortName = ConfigurationHelper.GetConfig(ConfigItemName.Com.ToString()),
+                BaudRate = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.BaudRate.ToString())),
+                Parity = System.IO.Ports.Parity.None,
+                DataBits = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.DataBits.ToString())),
+                Encoding = Encoding.UTF8
+            };
+            mScaleDataInterpreter = DataInterpreter.GetDataInterpreter(ScaleBrandType, mSerialPort);
+            ReaderDataDispatcherTimer = new DispatcherTimer()
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            ReaderDataDispatcherTimer.Tick += ReaderDataDispatcherTimer_Tick;
+            ReaderDataDispatcherTimer.Start();
+        }
 
-      public void  LoadData(){
+        private void ReaderDataDispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            ScaleDataResult result = mScaleDataInterpreter.ReadValue();
+            if (result.ErrCode == 0)
+            {
+                String value = Properties.Settings.Default.WeihgingValue;
+                if (value.Equals(result.Value.ToString()))
+                {
+                    return;
+                }
+                else
+                {
+                    Properties.Settings.Default.WeihgingValue = result.Value.ToString();
+                    this.WeighingDataTb.Text = result.Value.ToString();
+                }
+            }
+            else
+            {
+                Warning(result.Msg);
+            }
+        }
+        #endregion
+        public void LoadData()
+        {
             List<WeighingBill> list = WeighingBillModel.GetTodayData();
             this.TodayDataGrid.ItemsSource = list;
         }
 
         #region 时钟
-        private void StartClock() {
-            mDispatcherTimer = new DispatcherTimer() {
-                Interval = new TimeSpan(0,0,1),                
+        private void StartClock()
+        {
+            mDispatcherTimer = new DispatcherTimer()
+            {
+                Interval = new TimeSpan(0, 0, 1),
             };
             mDispatcherTimer.Tick += MDispatcherTimer_Tick;
             mDispatcherTimer.Start();
@@ -77,15 +131,16 @@ namespace TicketCheckStation
 
         #region cameral info
         private List<CameraInfo> cameraInfoList;
-        private  List<int> CameraIds;
+        private List<int> CameraIds;
         private List<CHCNetSDK.NET_DVR_DEVICEINFO_V30> mDeviceInfors;
         private List<System.Windows.Forms.PictureBox> mPictureBoxs;
-        private void Showcameral() {
+        private void Showcameral()
+        {
             cameraInfoList = new CameralInfoModel().GetList(App.mStation.id);
             double width = this.ActualWidth;
             double singleWidth = Math.Floor(width / cameraInfoList.Count);
-            int camerialWidth =Convert.ToInt32( singleWidth);
-            int camerialHeight = 300;          
+            int camerialWidth = Convert.ToInt32(singleWidth);
+            int camerialHeight = 300;
             VideoPenal.Children.Clear();
             if (cameraInfoList.Count <= 0)
             {
@@ -115,7 +170,8 @@ namespace TicketCheckStation
             {
                 CameraIds = new List<int>();
             }
-            else {
+            else
+            {
                 StorpPreviewCamera();
                 LogoutCamera();
                 CameraIds.Clear();
@@ -139,21 +195,24 @@ namespace TicketCheckStation
             this.Cursor = Cursors.Wait;
             for (int i = 0; i < cameraInfoList.Count; i++)
             {
-                try {
+                try
+                {
                     CameraInfo camera = cameraInfoList[i];
                     WindowsFormsHost formsHost = new WindowsFormsHost();
                     System.Windows.Forms.PictureBox pictureBox;
-                     pictureBox = new System.Windows.Forms.PictureBox() {
+                    pictureBox = new System.Windows.Forms.PictureBox()
+                    {
                         Name = $"pictureBox{i}",
                         Width = camerialWidth,
-                        Height =camerialHeight
+                        Height = camerialHeight
                     };
                     mPictureBoxs.Add(pictureBox);
                     CHCNetSDK.NET_DVR_DEVICEINFO_V30 devieInfo = new CHCNetSDK.NET_DVR_DEVICEINFO_V30();
 
                     //login
-                    int cameraid = CameraHelper.loginCamera(camera.ip, camera.port, camera.userName, camera.password,ref devieInfo);
-                    if (cameraid <= -1) {
+                    int cameraid = CameraHelper.loginCamera(camera.ip, camera.port, camera.userName, camera.password, ref devieInfo);
+                    if (cameraid <= -1)
+                    {
                         throw new Exception("登录摄像头失败");
                     }
                     CameraIds.Add(cameraid);
@@ -165,7 +224,9 @@ namespace TicketCheckStation
                     bool res = CameraHelper.Preview(ref pictureBox, ChanNum, cameraid, streamType);
                     formsHost.Child = pictureBox;
                     VideoPenal.Children.Add(formsHost);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     TextBlock textBlock = new TextBlock
                     {
                         Width = camerialWidth,
@@ -173,17 +234,18 @@ namespace TicketCheckStation
                         TextAlignment = TextAlignment.Center,
                         HorizontalAlignment = HorizontalAlignment.Center,
                         VerticalAlignment = VerticalAlignment.Center,
-                        Text = "视频加载失败: "+e.Message,
+                        Text = "视频加载失败: " + e.Message,
                         FontSize = 16,
                         Foreground = Brushes.Red
                     };
-                    VideoPenal.Children.Add(textBlock);                   
-                }                
+                    VideoPenal.Children.Add(textBlock);
+                }
             }
             this.Cursor = Cursors.Arrow;
-         }
+        }
 
-        private void StorpPreviewCamera() {
+        private void StorpPreviewCamera()
+        {
             if (CameraIds != null && CameraIds.Count > 0)
             {
                 for (int i = 0; i < CameraIds.Count; i++)
@@ -199,7 +261,8 @@ namespace TicketCheckStation
                 }
             }
         }
-        private void LogoutCamera() {
+        private void LogoutCamera()
+        {
             if (CameraIds != null && CameraIds.Count > 0)
             {
                 for (int i = 0; i < CameraIds.Count; i++)
@@ -208,9 +271,9 @@ namespace TicketCheckStation
                     {
                         CameraHelper.LoginOutCamera(CameraIds[i]);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
-                       ConsoleHelper.writeLine("退出摄像头"+i+"失败: " +e.Message);
+                        ConsoleHelper.writeLine("退出摄像头" + i + "失败: " + e.Message);
                     }
                 }
             }
@@ -238,9 +301,11 @@ namespace TicketCheckStation
                     fileName = currBillNumber + "_" + i + "_" + Constract.CaputureSuffix;
                 }
                 String fileNamePath = System.IO.Path.Combine(filePath, fileName);
-             bool res =   CameraHelper.CaptureJpeg(fileNamePath, CameraIds[i], mDeviceInfors[i].byChanNum);
-                if (res) {                  
-                    BillImage im = new BillImage() {
+                bool res = CameraHelper.CaptureJpeg(fileNamePath, CameraIds[i], mDeviceInfors[i].byChanNum);
+                if (res)
+                {
+                    BillImage im = new BillImage()
+                    {
                         id = Guid.NewGuid().ToString(),
                         stationId = App.mStation.id,
                         stationName = App.mStation.name,
@@ -248,7 +313,7 @@ namespace TicketCheckStation
                         addUserName = App.currentUser.name,
                         addTime = DateTime.Now,
                         billNumber = currBillNumber,
-                        address = filePath+"/"+fileName,
+                        address = filePath + "/" + fileName,
                         positon = i,
                     };
                     DatabaseOPtionHelper.GetInstance().insert(im);
@@ -259,9 +324,23 @@ namespace TicketCheckStation
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (mDispatcherTimer != null) {
+            if (mDispatcherTimer != null)
+            {
                 mDispatcherTimer.Stop();
             }
+            if (ReaderDataDispatcherTimer != null)
+            {
+                ReaderDataDispatcherTimer.Stop();
+            }
+            try
+            {
+                if (mSerialPort != null)
+                {
+                    mSerialPort.Close();
+                    mSerialPort.Dispose();
+                }
+            }
+            catch { }
             try { CHCNetSDK.NET_DVR_Cleanup(); } catch { }
         }
         /// <summary>
@@ -275,18 +354,19 @@ namespace TicketCheckStation
             {
                 new InputWindow() { captureImg = new Action<string>(CaptureJpeg), Owner = this }.ShowDialog();
             }
-            else {
+            else
+            {
                 MyCustomControlLibrary.MMessageBox.GetInstance().ShowBox("无权限操作！", "提示", MyCustomControlLibrary.MMessageBox.ButtonType.Yes, MyCustomControlLibrary.MMessageBox.IconType.warring, Orientation.Horizontal, "好");
                 return;
-            }            
+            }
         }
 
         private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             e.Row.Header = e.Row.GetIndex() + 1;
-            WeighingBill bill =(WeighingBill) e.Row.DataContext;
+            WeighingBill bill = (WeighingBill)e.Row.DataContext;
 
-            if (bill.isReceiveMoney == 0 && bill.overtopMoney >0)
+            if (bill.isReceiveMoney == 0 && bill.overtopMoney > 0)
             {
                 e.Row.Foreground = Brushes.Red;
             }
@@ -294,7 +374,8 @@ namespace TicketCheckStation
             {
                 e.Row.Foreground = Brushes.Green;
             }
-            else {
+            else
+            {
                 e.Row.Foreground = Brushes.Black;
             }
         }
@@ -311,14 +392,15 @@ namespace TicketCheckStation
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (this.IsLoaded == false) {
+            if (this.IsLoaded == false)
+            {
                 return;
             }
-           double width = this.ActualWidth;
+            double width = this.ActualWidth;
             double singleWidth = Math.Floor(width / mPictureBoxs.Count);
             for (int i = 0; i < mPictureBoxs.Count; i++)
             {
-                mPictureBoxs[i].Width = Convert.ToInt32(singleWidth); 
+                mPictureBoxs[i].Width = Convert.ToInt32(singleWidth);
             }
         }
         /// <summary>
@@ -328,8 +410,9 @@ namespace TicketCheckStation
         /// <param name="e"></param>
         private void PrintBtn_Click(object sender, RoutedEventArgs e)
         {
-         WeighingBill bill =(WeighingBill)  this.TodayDataGrid.SelectedItem;
-            if (bill == null) {
+            WeighingBill bill = (WeighingBill)this.TodayDataGrid.SelectedItem;
+            if (bill == null)
+            {
                 return;
             }
             new PrintBillW(bill).ShowDialog();
@@ -341,12 +424,12 @@ namespace TicketCheckStation
         /// <param name="e"></param>
         private void ReportBtn_Click(object sender, RoutedEventArgs e)
         {
-            new ReportWindow() {Owner = this }.ShowDialog();
+            new ReportWindow() { Owner = this }.ShowDialog();
         }
 
         private void LogoutBtn_Click(object sender, RoutedEventArgs e)
         {
-            new LoginWindow() { IsChangeAccount =true}.Show();
+            new LoginWindow() { IsChangeAccount = true }.Show();
             this.Close();
         }
         /// <summary>
@@ -357,10 +440,12 @@ namespace TicketCheckStation
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             MenuItem item = sender as MenuItem;
-            if (item == null) {
+            if (item == null)
+            {
                 return;
             }
-            switch (item.Name) {
+            switch (item.Name)
+            {
                 case "About":
                     new AboutW().ShowDialog();
                     break;
@@ -370,5 +455,42 @@ namespace TicketCheckStation
 
             }
         }
+
+        #region status Bar
+        /// <summary>
+        /// 警告信息提示（一直提示）
+        /// </summary>
+        /// <param name="message">提示信息</param>
+        private void Alert(string message)
+        {
+            // #FF68217A
+            this.StatusBarSb.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x21, 0x2A));
+            AlertBarItemTb.Text = message;
+        }
+
+        /// <summary>
+        /// 普通状态信息提示
+        /// </summary>
+        /// <param name="message">提示信息</param>
+        private void Information(string message)
+        {
+            // #FFCA5100 警告
+            this.StatusBarSb.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCA, 0x51, 0x00));
+            AlertBarItemTb.Text = message;
+        }
+
+        /// <summary>
+        /// 警告状态信息提示
+        /// </summary>
+        /// <param name="message">提示信息</param>
+        private void Warning(string message)
+        {
+            // #FFCA5100 警告
+            this.StatusBarSb.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCA, 0x51, 0x00));
+            AlertBarItemTb.Text = message;
+        }
+
+        #endregion
+
     }
 }

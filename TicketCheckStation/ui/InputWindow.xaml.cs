@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using MyCustomControlLibrary;
 using System.Text;
 using System.Windows.Input;
+using ScaleDataInterpreter;
+using System.Windows.Threading;
 
 namespace TicketCheckStation
 {
@@ -16,8 +18,8 @@ namespace TicketCheckStation
     /// </summary>
     public partial class InputWindow : Window
     {
-        public Action<string> captureImg { get; set; }
-
+        public Action<string> captureImg { get; set; }        
+        private DispatcherTimer ReaderDataDispatcherTimer;
         private WeighingBill mWeighingBill;
         private String currBillNumber;
         private bool IsInsert = true;
@@ -33,7 +35,7 @@ namespace TicketCheckStation
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             currBillNumber = CommonFunction.GetWeighingNumber();
-            this.BillNumberTb.Text = currBillNumber;
+            this.BillNumberTb.Text = currBillNumber;            
             if (IsReadCard)
             {
                 if (mWeighingBill == null)
@@ -62,9 +64,7 @@ namespace TicketCheckStation
                 SetCarDefaultSource(this.CarNumberCb);
                 SetRemarkDefaultSource(this.RemardCombox);
                 //mWeighing bill is null is Insert New else  is modenfy bill 
-
                 BuildCurrWeighingBill();
-
             }
         }
 
@@ -100,17 +100,45 @@ namespace TicketCheckStation
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
-        {
-            //  List<String> list = new List<string>() {"富源县天鑫煤业有限公司","富源县老厂镇宏发煤矿","富源县十八连山镇雄达煤矿","兴义市云黔工贸有限责任公司","黔西南州兴义兴富煤矿","富源县老厂乡恒达煤矿","贵州黔能机电设备有限公司" };
-            //  this.SupplyCb.ItemsSource = list;
+        {       
+            ReaderWeight();
         }
+
+        #region Reader Weight
+        private void ReaderWeight()
+        {            
+            ReaderDataDispatcherTimer = new DispatcherTimer()
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            ReaderDataDispatcherTimer.Tick += ReaderDataDispatcherTimer_Tick;
+            ReaderDataDispatcherTimer.Start();
+        }
+
+        private void ReaderDataDispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            String value = this.GrossWeightTbox.Text;
+            String RealValue = Properties.Settings.Default.WeihgingValue;
+            if (RealValue.Equals(value))
+            {
+                return;
+            }
+            else {
+                this.GrossWeightTbox.Text = RealValue;
+            }
+        }
+        #endregion
 
         private void Window_Activated(object sender, EventArgs e)
         {
-
+            
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (ReaderDataDispatcherTimer != null)
+            {
+                ReaderDataDispatcherTimer.Stop();
+            }
         }
 
         #region Window Default Event
@@ -141,6 +169,7 @@ namespace TicketCheckStation
             }
         }
         #endregion
+
         private void ZhuaTu()
         {
             ParameterizedThreadStart threadStart = new ParameterizedThreadStart(delegate

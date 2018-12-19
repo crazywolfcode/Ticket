@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 using MyCustomControlLibrary;
 
 namespace TicketCheckStation
@@ -170,32 +172,6 @@ namespace TicketCheckStation
 
         #endregion
 
-        /// <summary>
-        /// 设置当前显示控制的解释器
-        /// </summary>
-        //public static IScaleDataInterpreter SetInterpreter(int brandType)
-        //{
-        //    IScaleDataInterpreter formarter;
-        //    switch (brandType)
-        //    {
-        //        case (int)ScaleBrandType.YH:
-        //            formarter = new YaoHuanDataInterpreter();
-        //            break;
-        //        case (int)ScaleBrandType.LBKL:
-        //            formarter = new LBKLDataInterpreter();
-        //            break;
-        //        case (int)ScaleBrandType.TLD:
-        //            formarter = new TLDDataInterpreter();
-        //            break;
-        //        case (int)ScaleBrandType.SDLS:
-        //            formarter = new SDLSDataInterpreter();
-        //            break;
-        //        default:
-        //            formarter = new NotSuporInterprete();
-        //            break;
-        //    }
-        //    return formarter;
-        //}
         //角色级别 0 验票员 1 审核员 2 监管员 3系统作者
         public static string GetRoleName(RoleLevelType type) {
             int temp = (int)type;
@@ -217,5 +193,6 @@ namespace TicketCheckStation
             }
             return res;
         }
+        
     }
 }

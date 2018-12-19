@@ -44,6 +44,9 @@
     <Reference Include="MyLoadingLib">
       <HintPath>D:\WorkSpace\VisualStudio\WPF\MyLoadingLib\MyLoadingLib\bin\Debug\MyLoadingLib.dll</HintPath>
     </Reference>
+    <Reference Include="ScaleDataInterpreter">
+      <HintPath>..\..\WorkSpace\VisualStudio\WPF\IntentConnectWeighing\ScaleDataInterpreter\bin\Debug\ScaleDataInterpreter.dll</HintPath>
+    </Reference>
     <Reference Include="SqlDao">
       <HintPath>D:\WorkSpace\VisualStudio\libary\SqlDao\SqlDao\bin\Debug\SqlDao.dll</HintPath>
     </Reference>

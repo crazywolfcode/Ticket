@@ -9,6 +9,11 @@ namespace TicketCheckStation
     public enum ConfigItemName
     {
         CurrStationId,
+        ScaleBrandType,
+        ScaleSeries,
+        Com,
+        BaudRate,
+        DataBits,
         //connectionStrings
         appSettings,
         connectionStrings,
