@@ -81,6 +81,8 @@ namespace TicketCheckStation
             ScaleDataResult result = mScaleDataInterpreter.ReadValue();
             if (result.ErrCode == 0)
             {
+                this.OnePointLoading.Visibility = Visibility.Visible;
+                Information(result.Msg);
                 String value = Properties.Settings.Default.WeihgingValue;
                 if (value.Equals(result.Value.ToString()))
                 {
@@ -94,7 +96,13 @@ namespace TicketCheckStation
             }
             else
             {
-                Warning(result.Msg);
+                if (result.Value < 0)
+                {
+                    Warning(result.Msg);
+                }
+                else {
+                    Alert(result.Msg);
+                }                
             }
         }
         #endregion
@@ -474,8 +482,7 @@ namespace TicketCheckStation
         /// <param name="message">提示信息</param>
         private void Information(string message)
         {
-            // #FFCA5100 警告
-            this.StatusBarSb.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCA, 0x51, 0x00));
+            this.StatusBarSb.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x7a, 0xcc));
             AlertBarItemTb.Text = message;
         }
 

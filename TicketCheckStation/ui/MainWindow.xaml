@@ -246,7 +246,10 @@
                     <TextBlock Text="StatusBar"/>
                 </StatusBarItem>
                 <StatusBarItem>
-                    <TextBlock x:Name="AlertBarItemTb" />
+                    <WrapPanel >
+                        <myui:OnePointLoading x:Name="OnePointLoading" Visibility="Hidden" Height="21" local:ControlAttachProperty.IconSize="12" ToolTip="磅称数据读取中..."/>
+                        <TextBlock x:Name="AlertBarItemTb" ToolTip="磅称数据读取状态" VerticalAlignment="Center" />
+                    </WrapPanel>
                 </StatusBarItem>
             </StatusBar>
         </StackPanel>
