@@ -76,6 +76,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Convertor\UpStatusConverter.cs" />
+    <Compile Include="Convertor\CashBtnVisbilityConvetter.cs" />
     <Compile Include="Convertor\PrientTimesboolConverter.cs" />
     <Compile Include="Convertor\BillStatusConverter.cs" />
     <Compile Include="Convertor\PrientTimesNowConverter.cs" />

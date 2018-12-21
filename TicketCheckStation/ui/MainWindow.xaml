@@ -7,8 +7,11 @@
         WindowStartupLocation="CenterScreen" WindowState="Maximized" ContentRendered="Window_ContentRendered"
         xmlns:myui="clr-namespace:MyCustomControlLibrary;assembly=MyCustomControlLibrary"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_SizeChanged"
-        Title="煤炭运煤监管系统 v1.0.1正试版" Height="600" Width="800" MinWidth="900" MinHeight="600">
+        Title="煤炭运煤监管系统 v1.0.1正试版" 
+        Height="600" Width="800" MinWidth="900" MinHeight="600">
     <Window.Resources>
+        <local:UpStatusConverter x:Key="upStatusConverter"/>
+        <local:CashBtnVisbilityConvetter x:Key="cashBtnVisbilityConvetter"/>
         <Style TargetType="MenuItem">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#3ca9fe"/>
@@ -147,10 +150,12 @@
         <DockPanel Background="#3ca9fe" >
             <Menu Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" >
                 <MenuItem Header="设置" VerticalContentAlignment="Center"  Background="#3ca9fe">
-                    <MenuItem Header="11"></MenuItem>
+                    <MenuItem Header="基本设置" Icon="&#xe650;" x:Name="BaseSettingMI"  Click="MenuItem_Click"/>
+                    <MenuItem Header="高级设置" Icon="&#xe688;" x:Name="HeithtSettintMI"  Click="MenuItem_Click"/>
+                    <MenuItem Header="系统设置" Icon="&#xe668;" x:Name="SystemSettintMI"  Click="MenuItem_Click"/>
                 </MenuItem>
-                <MenuItem Header="编辑" >
-                    <MenuItem Header="11" Icon="&#xe668;"></MenuItem>
+                <MenuItem Header="管理" >
+                    <MenuItem Header="用户管理" Icon="&#xf031c;" x:Name="UserManagerMI"   Click="MenuItem_Click"/>
                     <MenuItem Header="11" InputGestureText="a"></MenuItem>
                     <MenuItem Header="11" >
                         <MenuItem Header="22"></MenuItem>
@@ -159,8 +164,8 @@
                     <MenuItem Header="11"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="班助(H)" >
-                    <MenuItem Header="关于软件" Icon="&#xe668;" x:Name="About"  Click="MenuItem_Click" ></MenuItem>
-                    <MenuItem Header="联系方试" Icon="&#xe8be;" x:Name="ConnMe"  Click="MenuItem_Click"></MenuItem>
+                    <MenuItem Header="关于软件" Icon="&#xe668;" x:Name="AboutMI"  Click="MenuItem_Click"/>
+                    <MenuItem Header="联系方试" Icon="&#xe8be;" x:Name="ConnMeMI"  Click="MenuItem_Click"/>
                 </MenuItem>
             </Menu>
             <WrapPanel  Margin="0,0,2,0" HorizontalAlignment="Right">
@@ -196,8 +201,8 @@
         </StackPanel>
 
         <!--数据区 Today Width="{Binding ElementName=dataPenal,Path=ActualWidth}" -->
-        <DataGrid x:Name="TodayDataGrid"  Grid.Row="5"                      
-                      LoadingRow="DataGrid_LoadingRow" 
+        <DataGrid x:Name="TodayDataGrid"  Grid.Row="5"           
+                      LoadingRow="DataGrid_LoadingRow"            
                       MouseDoubleClick="DataGrid_MouseDoubleClick" 
                       IsReadOnly="True" 
                       SelectionUnit="FullRow" 
@@ -235,8 +240,19 @@
                 <DataGridTextColumn Header="审核员" Binding="{Binding checkUserName}"  />
                 <DataGridTextColumn Header="状态" Binding="{Binding Converter={StaticResource billStatusConverter}}"  />
                 <DataGridTextColumn Header="时间" Binding="{Binding addTime,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                <DataGridTextColumn Header="上传" Binding="{Binding isUp,Converter={StaticResource upStatusConverter}}"/>
                 <DataGridTextColumn Header="备注" Binding="{Binding remark}" />
-             </DataGrid.Columns>
+                <DataGridTemplateColumn Header="操作" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <myui:IconButton Icon="&#xe898;" IsTransparency="False" IsShowIcon="True" IconSize="22" ToolTip="收税" Width="30"  x:Name="CashBtn"
+                                             Background="White" IconMargin="0,-11,0,0" Margin="2,0,0,0" Visibility="{Binding ElementName=CashBtn, Path=Tag, Converter={StaticResource cashBtnVisbilityConvetter}}"
+                                             MouseOverBackground="#3ca9fe" Foreground="#3ca9fe" MouseOverForeground="White"
+                                             Tag="{Binding}" Click="cashBtn_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
           </DataGrid>
        
         <!--提示区-->
@@ -250,6 +266,13 @@
                         <myui:OnePointLoading x:Name="OnePointLoading" Visibility="Hidden" Height="21" local:ControlAttachProperty.IconSize="12" ToolTip="磅称数据读取中..."/>
                         <TextBlock x:Name="AlertBarItemTb" ToolTip="磅称数据读取状态" VerticalAlignment="Center" />
                     </WrapPanel>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right" Margin="4,0,14,0">
+                    <StackPanel Orientation="Horizontal">
+                        <myui:IconButton x:Name="NoUpSBI" Icon="&#xe631;" ToolTip="未上传" Content="0" IconSize="22" IconMargin="4,-4,4,0" Width="60" FontWeight="Heavy" Foreground="White" IsTransparency="True" />
+                        <myui:IconButton x:Name="NomalSBI" Icon="&#xe718;" ToolTip="正常" Content="0" IconSize="24" IconMargin="4,-4,4,0" Width="60" FontWeight="Heavy" Foreground="White" IsTransparency="True" />
+                        <myui:IconButton x:Name="NoCashSBI" Icon="&#xe8a6;" ToolTip="未补税" Content="0" IconSize="22" IconMargin="4,-4,4,0" Width="60" FontWeight="Heavy" Foreground="White" IsTransparency="True" />
+                    </StackPanel>
                 </StatusBarItem>
             </StatusBar>
         </StackPanel>

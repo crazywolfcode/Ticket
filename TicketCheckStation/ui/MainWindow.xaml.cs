@@ -1,22 +1,14 @@
-﻿using System;
+﻿using MyHelper;
+using ScaleDataInterpreter;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Threading;
 using System.Windows.Threading;
-using System.Windows.Forms.Integration;
-using MyHelper;
-using ScaleDataInterpreter;
 namespace TicketCheckStation
 {
     /// <summary>
@@ -29,6 +21,9 @@ namespace TicketCheckStation
         DispatcherTimer ReaderDataDispatcherTimer;
         protected IScaleDataInterpreter mScaleDataInterpreter;
         private System.IO.Ports.SerialPort mSerialPort;
+        private int NoCashCount = 0;
+        private int NomalDataCount = 0;
+        private int NoUpDataCount = 0;
         #endregion
 
 
@@ -51,6 +46,7 @@ namespace TicketCheckStation
             Showcameral();
 
             LoadData();
+
         }
         #region 读取磅称数据
         /// <summary>
@@ -106,8 +102,12 @@ namespace TicketCheckStation
             }
         }
         #endregion
+
         public void LoadData()
         {
+            NoCashCount = 0;
+            NoUpDataCount = 0;
+            NomalDataCount = 0;
             List<WeighingBill> list = WeighingBillModel.GetTodayData();
             this.TodayDataGrid.ItemsSource = list;
         }
@@ -368,23 +368,39 @@ namespace TicketCheckStation
                 return;
             }
         }
-
+        #region datagrid
+        private void setDataCount()
+        {
+            this.NoCashSBI.Content = NoCashCount.ToString();
+            this.NomalSBI.Content = NomalDataCount.ToString();
+            this.NoUpSBI.Content = NoUpDataCount.ToString();
+        }
         private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             e.Row.Header = e.Row.GetIndex() + 1;
             WeighingBill bill = (WeighingBill)e.Row.DataContext;
-
+            if (bill.isUp == 0) {
+                NoUpDataCount ++;
+            }            
             if (bill.isReceiveMoney == 0 && bill.overtopMoney > 0)
             {
                 e.Row.Foreground = Brushes.Red;
+                NoCashCount++;
             }
-            else if (bill.isReceiveMoney == 1)
-            {
-                e.Row.Foreground = Brushes.Green;
+            else {
+                NomalDataCount++;
+                if (bill.isReceiveMoney == 1)
+                {
+                    e.Row.Foreground = Brushes.Green;
+                }
+                else
+                {
+                    e.Row.Foreground = Brushes.Black;
+                }
             }
-            else
+            if(e.Row.GetIndex ().Equals( TodayDataGrid.Items.Count-1))
             {
-                e.Row.Foreground = Brushes.Black;
+                setDataCount();
             }
         }
 
@@ -392,7 +408,13 @@ namespace TicketCheckStation
         {
             //TODO
         }
-
+        private void cashBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MyCustomControlLibrary.IconButton button = sender as MyCustomControlLibrary.IconButton;
+            WeighingBill bill = button.Tag as WeighingBill;
+            MessageBox.Show(bill.carNumber + bill.overtopMoney.ToString());
+        }
+        #endregion
         private void RefreshDataBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadData();
@@ -454,13 +476,25 @@ namespace TicketCheckStation
             }
             switch (item.Name)
             {
-                case "About":
+                case "BaseSettingMI":
+                   
+                    break;
+                case "HeithtSettintMI":
+
+                    break;
+                case "SystemSettintMI":
+
+                    break;
+                case "UserManagerMI":
+
+                    break;
+                case "AboutMI":
                     new AboutW().ShowDialog();
                     break;
-                case "ConnMe":
+                case "ConnMeMI":
                     new ConnectionWindow().ShowDialog();
                     break;
-
+                    
             }
         }
 
@@ -499,5 +533,8 @@ namespace TicketCheckStation
 
         #endregion
 
+
+
+      
     }
 }
