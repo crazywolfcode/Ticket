@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:TicketCheckStation" ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen" WindowState="Maximized" ContentRendered="Window_ContentRendered"
         xmlns:myui="clr-namespace:MyCustomControlLibrary;assembly=MyCustomControlLibrary"
+        Icon="/TicketCheckStation;component/aislogo_48.ico"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_SizeChanged"
         Title="煤炭运煤监管系统 v1.0.1正试版" 
         Height="600" Width="800" MinWidth="900" MinHeight="600">

@@ -29,6 +29,7 @@ namespace TicketCheckStation
 
         public MainWindow()
         {
+            App.Current.MainWindow = this;
             InitializeComponent();
         }
 
