@@ -1,6 +1,8 @@
 ﻿using MyCustomControlLibrary;
+using MyHelper;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -120,9 +122,7 @@ namespace TicketCheckStation
         {
             //ShowCurrentWindow();
         }
-
-
-
+        
         /// <summary>
         /// 创建Notify icon Menu
         /// </summary>
@@ -155,5 +155,171 @@ namespace TicketCheckStation
         }
         #endregion
 
+
+        #region quit event
+
+        /// <summary>
+        /// save the config file's config Item to database 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            // ScannerGunHelper.Close();
+
+            //DateTime start = DateTime.Now;
+            //    try
+            //    {
+            //        insertOrUpdateConnectionStrings();
+            //}
+            //    catch (Exception exception)
+            //    {
+            //        ConsoleHelper.writeLine("save app ConnectionStrings to dabase error: " + exception.Message);
+            //    }
+            //try
+            //{
+            Thread thread = new Thread(new ThreadStart(InsertOrUpdateAppSettings));
+            thread.IsBackground = true;
+            thread.Start();
+            //InsertOrUpdateAppSettings();
+            SaveTempData();
+            CommonFunction.UpdateUsedBaseData();
+            Thread.Sleep(1200);
+            //}
+            //catch (Exception exception)
+            //{
+            //    ConsoleHelper.writeLine("save AppSettings to dabase error: " + exception.Message);
+            //}
+            //double time = DateTimeHelper.DateDifflMilliseconds(start, DateTime.Now);
+
+            //ConsoleHelper.writeLine("suer time :" + time + " ms");
+
+        }
+        /// <summary>
+        /// insert Or Update Connection Strings
+        /// </summary>
+        private void InsertOrUpdateConnectionStrings()
+        {
+            ConnectionStringSettingsCollection conns = ConfigurationManager.ConnectionStrings;
+            string sql = string.Empty;
+            for (int i = 0; i < conns.Count; i++)
+            {
+                Config config = null;
+                if (!conns[i].Name.Contains("Local"))
+                {
+                    sql = DatabaseOPtionHelper.GetInstance().getSelectSql("config", null, "client_id =' " + ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()) + "' and config_name = ' " + conns[i].Name + "'", null, null, null, 1);
+
+                    List<Config> configs = DatabaseOPtionHelper.GetInstance().select<Config>(sql);
+                    if (configs != null && configs.Count > 0)
+                    {
+                        config = JsonHelper.JsonToObject(JsonHelper.ObjectToJson(configs[0]), typeof(Config)) as Config;
+                        if (config != null)
+                        {
+                            if (config.configValue != conns[i].ConnectionString)
+                            {
+                                config.configValue = conns[i].ConnectionString;
+                                config.lastUpdateTime = DateTime.Now;
+                                if (App.currentUser != null)
+                                {
+                                    config.lastUpdateUserId = config.addUserId;
+                                    config.lastUpdateUserName = config.addUserName;
+                                }
+                            }
+                            DatabaseOPtionHelper.GetInstance().update(config);
+                        }
+                        else
+                        {
+                            //conveter error
+                        }
+                    }
+                    else
+                    {
+                        config = new Config();
+                        config.id = Guid.NewGuid().ToString();
+                        config.stationId = ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString());
+                        config.configName = conns[i].Name;
+                        config.configValue = conns[i].ConnectionString;
+                        config.addTime =DateTime.Now;
+                        config.configType = (int)ConfigType.ClientAppConfig;
+                    
+                        if (App.currentUser != null)
+                        {
+                            config.addUserId = App.currentUser.id;
+                            config.addUserName = App.currentUser.name;
+                            config.lastUpdateUserId = config.addUserId;
+                            config.lastUpdateUserName = config.addUserName;
+                        }
+                        DatabaseOPtionHelper.GetInstance().insert(config);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// insert Or Update App Settings
+        /// </summary>
+        private void InsertOrUpdateAppSettings()
+        {
+            SqlDao.DbHelper helper = DatabaseOPtionHelper.GetInstance(); ;
+            string sql = string.Empty;
+            NameValueCollection collection = ConfigurationManager.AppSettings;
+            string[] keys = collection.AllKeys;
+            foreach (string key in keys)
+            {
+                Config config = null;
+                String condition = ConfigColumns.station_id + " ='" + ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()) + "' and " + ConfigColumns.config_name.ToString() + " = '" + key + "'";
+                sql = helper.getSelectSql(TableName.config.ToString(), null, condition, null, null, null, 1);
+                List<Config> configs = helper.select<Config>(sql);
+                if (configs != null && configs.Count > 0)
+                {
+                    if (configs[0] != null)
+                    {
+                        config = configs[0];
+                        if (config.configValue != collection[key].ToString())
+                        {
+                            config.configValue = collection[key].ToString();
+                            config.lastUpdateTime =DateTime.Now;
+                            if (App.currentUser != null)
+                            {
+                                config.lastUpdateUserId = App.currentUser.id;
+                                config.lastUpdateUserName = App.currentUser.name;
+                            }
+                        }
+                        helper.update(config);
+                    }
+                    else
+                    {
+                        //conveter error
+                    }
+                }
+                else
+                {
+                    config = new Config
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        addTime =DateTime.Now,
+                        configName = key,
+                        stationId = ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()),
+                        configValue = collection[key].ToString(),
+                        configType = (int)ConfigType.ClientAppConfig
+                    };
+                    config.lastUpdateTime = config.addTime;
+                    if (App.currentUser != null)
+                    {
+                        config.addUserId = App.currentUser.id;
+                        config.addUserName = App.currentUser.name;
+                        config.lastUpdateUserId = config.addUserId;
+                        config.lastUpdateUserName = config.addUserName;
+                    }
+                    helper.insert(config);
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// 保存本机使用过的基础数据
+        /// </summary>
+        private void SaveTempData() { }
+        #endregion
     }
 }

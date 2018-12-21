@@ -45,4 +45,17 @@ namespace TicketCheckStation
     {
         YPY, SHY, JGY,XTZZ
     }
+
+    /// <summary>
+    ///0  其它配置 1 用户客户端配置 2应用客户端配置 3 用户平台配置 4应用平台配置 5平台配置
+    /// </summary>
+    public enum ConfigType
+    {
+        OtherConfig,
+        clientUserConfig,
+        ClientAppConfig,
+        platformUserConfig,
+        platformAppConfig,
+        platformConfig
+    }
 }
