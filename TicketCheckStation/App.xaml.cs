@@ -24,7 +24,7 @@ namespace TicketCheckStation
         public static Dictionary<String, Material> tempMaterials = new Dictionary<string, Material>();
         public static Dictionary<String, CarInfo> tempCars = new Dictionary<string, CarInfo>();
         public static List<String> inputRemarkList = new List<string>() { };
-        private System.Windows.Forms.NotifyIcon notifyIcon;
+        public static System.Windows.Forms.NotifyIcon notifyIcon;
 
         #endregion
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -74,6 +74,13 @@ namespace TicketCheckStation
             base.OnStartup(e);
         }
 
+      public static void ShowBalloonTip() {
+            notifyIcon.BalloonTipTitle = "更新通知";
+            notifyIcon.BalloonTipText = "软件需要更新的新版本";          
+            notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            notifyIcon.Visible = true;
+            notifyIcon.ShowBalloonTip(1000);
+        }
 
         #region  Notify icon
 
@@ -91,12 +98,17 @@ namespace TicketCheckStation
                 Visible = true,
                 BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
             };
-
+            notifyIcon.BalloonTipClicked += NotifyIcon_BalloonTipClicked;
             notifyIcon.ShowBalloonTip(1000);
             notifyIcon.Text = "煤炭运煤监管系统";
             notifyIcon.MouseDoubleClick += NotifyIcon_MouseDoubleClick;
             notifyIcon.Click += NotifyIcon_Click;
             notifyIcon.ContextMenu = GetNotifyMenu();
+        }
+
+        private void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
+        {
+            MMessageBox.GetInstance().ShowBox("你确定更新程系吗", "提示", MMessageBox.ButtonType.YesNo, MMessageBox.IconType.Info);
         }
 
         private void NotifyIcon_Click(object sender, EventArgs e)

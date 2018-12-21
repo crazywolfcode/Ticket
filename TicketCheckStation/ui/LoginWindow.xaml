@@ -69,6 +69,6 @@
               
             </StackPanel>
         </Border>
-        <Button Grid.Row="2" x:Name="forgotPwaTb" Content="忘记密码" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0,10,4" Foreground="{StaticResource myBlue}" Cursor="Hand" Background="Transparent" BorderThickness="0" Padding="4,2,4,2"/>
+        <Button Grid.Row="2" x:Name="forgotPwaTb" Click="forgotPwaTb_Click" Content="忘记密码" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0,10,4" Foreground="{StaticResource myBlue}" Cursor="Hand" Background="Transparent" BorderThickness="0" Padding="4,2,4,2"/>
     </Grid>
 </Window>

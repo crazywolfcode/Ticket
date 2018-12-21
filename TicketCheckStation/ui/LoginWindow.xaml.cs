@@ -294,6 +294,9 @@ namespace TicketCheckStation
             }
         }
 
-    
+        private void forgotPwaTb_Click(object sender, RoutedEventArgs e)
+        {
+            App.ShowBalloonTip();
+        }
     }
 }
