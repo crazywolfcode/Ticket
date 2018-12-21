@@ -361,7 +361,7 @@ namespace TicketCheckStation
         {
             if (App.currentUser.roleLevel == (int)RoleLevelType.YPY || App.currentUser.roleLevel == (int)RoleLevelType.SHY)
             {
-                new InputWindow() { captureImg = new Action<string>(CaptureJpeg), Owner = this }.ShowDialog();
+                new InputWindow() { CaptureImg = new Action<string>(CaptureJpeg), Owner = this }.ShowDialog();
             }
             else
             {

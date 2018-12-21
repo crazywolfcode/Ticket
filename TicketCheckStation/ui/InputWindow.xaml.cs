@@ -18,7 +18,7 @@ namespace TicketCheckStation
     /// </summary>
     public partial class InputWindow : Window
     {
-        public Action<string> captureImg { get; set; }        
+        public Action<string> CaptureImg { get; set; }        
         private DispatcherTimer ReaderDataDispatcherTimer;
         private WeighingBill mWeighingBill;
         private String currBillNumber;
@@ -174,9 +174,9 @@ namespace TicketCheckStation
         {
             ParameterizedThreadStart threadStart = new ParameterizedThreadStart(delegate
             {
-                if (this.captureImg != null)
+                if (this.CaptureImg != null)
                 {
-                    captureImg(currBillNumber);
+                    CaptureImg(currBillNumber);
                 }
             });
             new Thread(threadStart).Start((object)currBillNumber);
@@ -214,6 +214,9 @@ namespace TicketCheckStation
                     FileHelper.CreateFile(path);
                 }
             }
+            else {
+                SupplyCb.ItemsSource = App.tempSupplyCompanys.Values.ToList();
+            }
         }
         protected void SetCustomerCompanyDefaultSource(ComboBox ReceiverCompanyCb)
         {
@@ -245,6 +248,9 @@ namespace TicketCheckStation
                     FileHelper.CreateFile(path);
                 }
             }
+            else {
+                ReceiverCompanyCb.ItemsSource = App.tempCustomerCompanys.Values.ToList();
+            }
         }
         protected void SetMaterialDefaultSource(ComboBox MaterialNameCb)
         {
@@ -260,7 +266,6 @@ namespace TicketCheckStation
                         MaterialNameCb.ItemsSource = null;
                         return;
                     }
-
                     if (App.tempMaterials.Count <= 0)
                     {
                         List<Material> list = (List<Material>)XmlHelper.Deserialize(typeof(List<Material>), xml);
@@ -276,6 +281,9 @@ namespace TicketCheckStation
                 {
                     FileHelper.CreateFile(path);
                 }
+            }
+            else {
+                MaterialNameCb.ItemsSource = App.tempMaterials.Values.ToList();
             }
         }
         protected void SetCarDefaultSource(ComboBox CarNumberCb)
@@ -309,6 +317,9 @@ namespace TicketCheckStation
                 {
                     FileHelper.CreateFile(path);
                 }
+            }
+            else {
+                CarNumberCb.ItemsSource = App.tempCars.Values.ToList();
             }
         }
         protected void SetRemarkDefaultSource(ComboBox RemardCombox)
