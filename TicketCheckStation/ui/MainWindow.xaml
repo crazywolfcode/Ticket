@@ -137,7 +137,7 @@
             </Setter>
         </Style>     
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="MainBodyGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto"/>
@@ -266,6 +266,13 @@
                     <WrapPanel >
                         <myui:OnePointLoading x:Name="OnePointLoading" Visibility="Hidden" Height="21" local:ControlAttachProperty.IconSize="12" ToolTip="磅称数据读取中..."/>
                         <TextBlock x:Name="AlertBarItemTb" ToolTip="磅称数据读取状态" VerticalAlignment="Center" />
+                    </WrapPanel>
+                </StatusBarItem>
+
+                <StatusBarItem Margin="20,0,0,0">
+                    <WrapPanel >
+                        <myui:GridLoading x:Name="GridLoading" Visibility="Visible" Height="18" local:ControlAttachProperty.IconSize="10" ToolTip="IC卡读取中..."/>
+                        <TextBlock x:Name="ICReaderTb" Text="正常" ToolTip="卡读取中读取状态" VerticalAlignment="Center" Margin="8,0,0,0" />
                     </WrapPanel>
                 </StatusBarItem>
                 <StatusBarItem HorizontalAlignment="Right" Margin="4,0,14,0">

@@ -21,6 +21,24 @@ namespace TicketCheckStation
                 List<Material> list = DatabaseOPtionHelper.GetInstance().select<Material>(sql);
                 return list;
             }
-        }   
+        }
+
+       public  static Material GetByName(string materialName)
+        {
+            string condition = MaterialColumns.name.ToString() + " = '" + materialName + "' ";
+            String sql = DatabaseOPtionHelper.GetInstance().getSelectSql(TableName.material.ToString(), null, condition,null,null,null,1);
+            List<Material> list = DatabaseOPtionHelper.GetInstance().select<Material>(sql);
+            if (list.Count > 0)
+            {
+                return list[0];
+            }
+            else {
+                return null;
+            }
+        }
+
+        public static int Create(Material material) {
+            return DatabaseOPtionHelper.GetInstance().insert(material);
+        }
     }
 }

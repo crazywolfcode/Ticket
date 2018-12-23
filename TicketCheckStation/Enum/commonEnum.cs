@@ -33,6 +33,9 @@ namespace TicketCheckStation
         autoPrint,//是否自动开始打印
         IsUnifeidLimitTone,//统限定的吨位
         limitTone,
+        //读卡器
+        IcCom,
+        IcBaudRate,
     }
 
 

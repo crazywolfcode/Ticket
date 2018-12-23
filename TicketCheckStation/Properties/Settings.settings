@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="WeihgingValue" Type="System.String" Scope="User">
-      <Value Profile="(Default)">-1</Value>
+      <Value Profile="(Default)">63.25</Value>
     </Setting>
   </Settings>
 </SettingsFile>

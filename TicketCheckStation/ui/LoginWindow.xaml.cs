@@ -162,6 +162,7 @@ namespace TicketCheckStation
         private void Animation_Completed(object sender, EventArgs e)
         {
             new MainWindow().Show();
+            App.ShowBalloonTip("登陆成功","在使用过程中需要帮助，联系：陈龙飞 18087467482 ");
             new System.Threading.Thread(new System.Threading.ThreadStart(saveToFile)).Start();
             this.Close();
         }
@@ -293,10 +294,10 @@ namespace TicketCheckStation
                 }
             }
         }
-
+        
         private void forgotPwaTb_Click(object sender, RoutedEventArgs e)
         {
-            App.ShowBalloonTip();
+
         }
     }
 }

@@ -34,6 +34,29 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Themes\Img\Icon\favicon128.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MyCustomControlLibrary">
       <HintPath>D:\WorkSpace\VisualStudio\WPF\IntentConnectWeighing\MyCustomControlLibrary\bin\Debug\MyCustomControlLibrary.dll</HintPath>
@@ -86,7 +109,12 @@
     <Compile Include="Entity\model\UserModel.cs" />
     <Compile Include="Entity\model\WeighingBillModel.cs" />
     <Compile Include="Entity\Visual\HostoryUser.cs" />
+    <Compile Include="Entity\Visual\SendBill.cs" />
+    <Compile Include="factory\BillFactory.cs" />
     <Compile Include="Helper\BitmapHelper.cs" />
+    <Compile Include="IcReaderSdk\common.cs" />
+    <Compile Include="IcReaderSdk\ICReaderHelper.cs" />
+    <Compile Include="IcReaderSdk\mifareone.cs" />
     <Compile Include="ui\AboutW.xaml.cs" />
     <Compile Include="ui\PrintBillW.xaml.cs" />
     <Compile Include="ui\ReportWindow.xaml.cs">

@@ -84,7 +84,9 @@
     <Style x:Key="rowheaderstyle" TargetType="{x:Type DataGridRowHeader}">
         <Setter Property="Padding" Value="3"/>
         <Setter Property="FontWeight"    Value="Bold"/>
-        <Setter Property="Width" Value="20"/>
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
     </Style>
     <local:BillStatusConverter x:Key="billStatusConverter"/>
 

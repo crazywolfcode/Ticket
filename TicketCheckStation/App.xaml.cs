@@ -76,9 +76,9 @@ namespace TicketCheckStation
             base.OnStartup(e);
         }
 
-      public static void ShowBalloonTip() {
-            notifyIcon.BalloonTipTitle = "更新通知";
-            notifyIcon.BalloonTipText = "软件需要更新的新版本";          
+      public static void ShowBalloonTip(String title,String text) {
+            notifyIcon.BalloonTipTitle =title;
+            notifyIcon.BalloonTipText = text;          
             notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             notifyIcon.Visible = true;
             notifyIcon.ShowBalloonTip(1000);
@@ -93,8 +93,8 @@ namespace TicketCheckStation
         {
             notifyIcon = new System.Windows.Forms.NotifyIcon
             {
-                BalloonTipTitle = "BalloonTipTitle",
-                BalloonTipText = "BalloonTipText intel connectation weighing" ,
+                BalloonTipTitle = "煤炭运煤监管系统",
+                BalloonTipText = "正常启动",
                 Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath),
                 //Icon = new System.Drawing.Icon("aislogo_48.ico"),
                 Visible = true,

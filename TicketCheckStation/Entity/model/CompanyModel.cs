@@ -22,5 +22,24 @@ namespace TicketCheckStation
                 return list;
             }
         }
+
+        public static Company GetByName(string sendCompany)
+        {
+            string condition = CompanyColumns.name.ToString() + " = '" + sendCompany + "' ";
+            String sql = DatabaseOPtionHelper.GetInstance().getSelectSql(TableName.company.ToString(), null, condition,null,null,null,1);
+            List<Company> list = DatabaseOPtionHelper.GetInstance().select<Company>(sql);
+            if (list.Count > 0)
+            {
+                return list[0];
+            }
+            else {
+                return null;
+            }
+        }
+
+        public static int Create(Company company) {
+
+            return DatabaseOPtionHelper.GetInstance().insert(company);
+        }
     }
 }

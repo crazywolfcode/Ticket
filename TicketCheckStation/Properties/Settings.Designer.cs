@@ -25,7 +25,7 @@ namespace TicketCheckStation.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("63.25")]
         public string WeihgingValue {
             get {
                 return ((string)(this["WeihgingValue"]));

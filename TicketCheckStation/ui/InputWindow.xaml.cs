@@ -18,45 +18,53 @@ namespace TicketCheckStation
     /// </summary>
     public partial class InputWindow : Window
     {
-        public Action<string> CaptureImg { get; set; }        
+        public Action<string> CaptureImg { get; set; }
+        public Action<Boolean> RefreshParent { get; set; }
         private DispatcherTimer ReaderDataDispatcherTimer;
         private WeighingBill mWeighingBill;
         private String currBillNumber;
         private bool IsInsert = true;
         private bool IsReadCard = true;
-        public InputWindow(WeighingBill bill = null, bool isInsert = true, bool isReadCard = false)
+        public InputWindow(WeighingBill bill = null, bool isInsert = true, bool isReadCard = false,Action<Boolean> action = null, Action<string> zhuaTuAction = null)
         {
             InitializeComponent();
             mWeighingBill = bill;
+            RefreshParent = action ;
+            CaptureImg = zhuaTuAction;
             this.IsInsert = isInsert;
             this.IsReadCard = isReadCard;
+            if (isReadCard) {
+                if (mWeighingBill == null) {
+                    this.Close();
+                }
+                this.Visibility = Visibility.Hidden;
+                //构建磅单信息 并转到打印         
+                int res = WeighingBillModel.Create(mWeighingBill);
+                if (res > 0)
+                {
+                    //截图
+                    //CaptureJpeg                   
+                    ZhuaTu();
+                    MMessageBox.GetInstance().ShowLoading(MMessageBox.LoadType.Three,"保存成功",new Point(0,0),new Size(0,0),null,Orientation.Vertical,"#FFFFFF",3);
+                    CommonFunction.AddBillNumberSort();
+                    if (this.RefreshParent != null) {
+                       RefreshParent(true);
+                    }
+                    new PrintBillW(mWeighingBill).ShowDialog();
+                    this.Close();
+                }
+                else
+                {
+                    MMessageBox.GetInstance().ShowBox("数据保存失败", "错误", MMessageBox.ButtonType.Yes, MMessageBox.IconType.error, Orientation.Vertical, "好");
+                    this.Close();
+                }
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            currBillNumber = CommonFunction.GetWeighingNumber();
-            this.BillNumberTb.Text = currBillNumber;            
-            if (IsReadCard)
-            {
-                if (mWeighingBill == null)
-                {
-                    this.Close();
-                    return;
-                }
-                //构建磅单信息 并转到打印    
-                mWeighingBill.number = currBillNumber;
-                mWeighingBill.id = new Guid().ToString();
-                mWeighingBill.addTime = DateTime.Now;
-                mWeighingBill.addUserId = App.currentUser.id;
-                mWeighingBill.addUserName = App.currentUser.name;
-                mWeighingBill.lastUpdateTime = mWeighingBill.addTime;
-                mWeighingBill.lastUpdateUserId = mWeighingBill.addUserId;
-                mWeighingBill.lastUpdateUserName = mWeighingBill.addUserName;
-                mWeighingBill.operatorId = App.currentUser.id;
-                mWeighingBill.operatorName = App.currentUser.name;
-            }
-            else
-            {
+                currBillNumber = CommonFunction.GetWeighingNumber();
+                this.BillNumberTb.Text = currBillNumber;
                 //将本机使用的基础数据设置默认数据源 下5个方法
                 SetSupplyCompanyDefaultSource(this.SupplyCb);
                 SetCustomerCompanyDefaultSource(this.ReceiverCompanyCb);
@@ -65,8 +73,8 @@ namespace TicketCheckStation
                 SetRemarkDefaultSource(this.RemardCombox);
                 //mWeighing bill is null is Insert New else  is modenfy bill 
                 BuildCurrWeighingBill();
-            }
-        }
+         }
+       
 
         /// <summary>
         /// 构建当前的磅单
@@ -176,10 +184,10 @@ namespace TicketCheckStation
             {
                 if (this.CaptureImg != null)
                 {
-                    CaptureImg(currBillNumber);
+                    CaptureImg(mWeighingBill.number);
                 }
             });
-            new Thread(threadStart).Start((object)currBillNumber);
+            new Thread(threadStart).Start((object)mWeighingBill.number);
         }
 
         #region 将本机使用的基础数据设置默认数据源 最新使用的排在最前面
@@ -383,7 +391,7 @@ namespace TicketCheckStation
                     mWeighingBill.isReceiveMoney = (int)ReceiveMoneyType.NotNeed;
                 }
 
-                int res = DatabaseOPtionHelper.GetInstance().insert(mWeighingBill);
+                int res = WeighingBillModel.Create(mWeighingBill);
 
                 if (res == 1)
                 {

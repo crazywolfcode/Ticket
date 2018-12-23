@@ -26,5 +26,10 @@ namespace TicketCheckStation
             list = DatabaseOPtionHelper.GetInstance().select<WeighingBill>(sql);
             return list;
         }
+
+        public static int Create(WeighingBill mWeighingBill)
+        {
+            return DatabaseOPtionHelper.GetInstance().insert(mWeighingBill);
+        }
     }
 }

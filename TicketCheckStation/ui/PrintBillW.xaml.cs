@@ -1,9 +1,11 @@
-﻿using MyHelper;
+﻿using MyCustomControlLibrary;
+using MyHelper;
 using System;
 using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace TicketCheckStation
 {
@@ -35,13 +37,16 @@ namespace TicketCheckStation
                 this.Close();
             }           
         }
-
+        private Point mPoit = new Point(0,0);
+        private Size mSize =new Size(0,0);
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.PrintTitleTb.Text = ConfigurationHelper.GetConfig(ConfigItemName.PrintTitle.ToString());
             this.StationNametb.Text = "("+App.mStation.name+")";
             this.InGrid.DataContext = mWeighingBill;
             generaterQrCode();
+             mPoit = this.InPanel.PointToScreen(new Point());
+            mSize = new Size(this.InPanel.ActualWidth, this.InPanel.ActualHeight);
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -62,8 +67,10 @@ namespace TicketCheckStation
                 return;
             }
             OutPrintSecend -= 1;
-            this.PrintBtn.Content = OutPrintSecend+"s 打印";
-            if (OutPrintSecend <= 0) {          
+            this.PrintBtn.Content = OutPrintSecend + "s 打印";
+            if (OutPrintSecend <= 0) {
+                this.PrintBtn.Content =  "打印中...";
+                MMessageBox.GetInstance().ShowLoading(MMessageBox.LoadType.Three, "打印中...", mPoit, mSize, "&#xe752;", Orientation.Vertical, "#ffffff", 4);
                 dispatcherTimer.Stop();
                Print();                
             }
@@ -170,7 +177,8 @@ namespace TicketCheckStation
             catch (Exception e)
             {
                 ConsoleHelper.writeLine($"Pint {mWeighingBill.id} failed:{e.Message}");
-                CommonFunction.ShowErrorAlert("打印失败：" + e.Message);
+                // MMessageBox.GetInstance().ShowBox(e.Message,"打印错错误", MMessageBox.ButtonType.Yes, MMessageBox.IconType.error, Orientation.Vertical);         
+                App.ShowBalloonTip("打印错误", e.Message);
                 this.Close();
             }
             finally {
