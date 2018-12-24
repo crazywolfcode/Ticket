@@ -29,6 +29,7 @@ namespace TicketCheckStation
         defaultPrintFrequency,
         BillDescription,//磅单联的介绍
         PrintTitle,//磅单打印的标题
+        CashReportTitle,//磅单打印的标题
         autoPrintSecend,//自动开始打印的秒数
         autoPrint,//是否自动开始打印
         IsUnifeidLimitTone,//统限定的吨位

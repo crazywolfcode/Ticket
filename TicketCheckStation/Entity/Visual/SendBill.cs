@@ -9,7 +9,7 @@ namespace TicketCheckStation
   public  class SendBill
     {
         public SendBill() { }
-        public SendBill(String[] values) {
+        public SendBill(String[] values,String snr) {
             try {
                 driver = values[0];
                 String[] cartemp = values[1].Split(' ');
@@ -31,10 +31,12 @@ namespace TicketCheckStation
                 money = values[13].Trim();
                 status = int.Parse(values[14]);
                 numeber = values[15].Trim();
+                ICNumber = snr;
             } catch { }
             
         }
         public String CarNumber { get; set; }
+        public String ICNumber { get; set; }
         public String driver { get; set; }
         public double carTraeWeight { get; set; }
         public String sendCompany { get; set; }

@@ -1,0 +1,156 @@
+﻿<Window x:Class="TicketCheckStation.CashWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:TicketCheckStation"
+            xmlns:myui="clr-namespace:MyCustomControlLibrary;assembly=MyCustomControlLibrary"
+            ResizeMode="NoResize"
+            Icon="/TicketCheckStation;component/aislogo_48.ico"
+            WindowStartupLocation="CenterScreen" WindowStyle="None"  
+            Title="税费收取" Height="380" Width="600"
+            Loaded="Window_Loaded" KeyUp="Window_KeyUp"
+            ContentRendered="Window_ContentRendered" 
+            Closing="Window_Closing">
+    <Window.Resources>
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#787878"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="1,3,2,2"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style x:Key="ValueStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#727272"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="1,2,2,2"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65"/>
+            <RowDefinition/>
+            <RowDefinition Height="45"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0"  x:Name="headerBorder" MouseMove="headerBorder_MouseMove"  Background="{DynamicResource E4}">
+            <StackPanel Orientation="Horizontal" Background="Transparent" MouseMove="headerBorder_MouseMove">
+                <Image Source="/TicketCheckStation;component/aislogo_48.ico" Width="48" Height="48" HorizontalAlignment="Left" Margin="10"></Image>
+                <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" Text="税费收取" VerticalAlignment="Center" FontSize="20" FontWeight="Black" Foreground="#787972"></TextBlock>
+            </StackPanel>
+        </Border>
+        <!--关闭按钮-->
+        <myui:ImageButton Grid.Row="0"  BorderBrush="{x:Null}" Width="27" Height="22"  Margin="0,4,4,0" Content="" x:Name="CloseBtn" HorizontalAlignment="Right" VerticalAlignment="Top"   Click="CloseBtn_Click">
+            <myui:ImageButton.MyMoverBrush>
+                <ImageBrush ImageSource="/TicketCheckStation;component/Themes/Img/Button/xm.png"/>
+            </myui:ImageButton.MyMoverBrush>
+            <myui:ImageButton.MyEnterBrush>
+                <ImageBrush ImageSource="/TicketCheckStation;component/Themes/Img/Button/xe.png"/>
+            </myui:ImageButton.MyEnterBrush>
+            <myui:ImageButton.Background>
+                <ImageBrush ImageSource="/TicketCheckStation;component/Themes/Img/Button/xn.png" TileMode="FlipXY"/>
+            </myui:ImageButton.Background>
+        </myui:ImageButton>
+
+        <Border  Background="White" Grid.Row="1" BorderThickness="1,0,1,0" BorderBrush="{StaticResource E4}">
+            <StackPanel VerticalAlignment="Top" >
+                <StackPanel x:Name="InPanel" Background="White">
+                    <Grid x:Name="InGrid" Margin="20,20,20,0">
+                        <Grid.RowDefinitions>                          
+                            <RowDefinition/>
+                            <RowDefinition/>                            
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0">
+                            <DockPanel LastChildFill="True" >
+                                <WrapPanel DockPanel.Dock="Left">
+                                    <Label Content="编号:" FontSize="12" Foreground="#797978"/>
+                                    <Label Content="{Binding number}" FontSize="12" Foreground="#676767"/>
+                                    <Label Content="单位(吨)" FontSize="12" Foreground="#797978" Margin="20,0,0,0"/>
+                                </WrapPanel>
+                                <WrapPanel DockPanel.Dock="Left">
+                                    <Label Content=" 时间:" FontSize="12" Foreground="#697978"/>
+                                    <Label Content="{Binding Path=addTime,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" Margin="4,0,0,0"/>
+                                </WrapPanel>
+                                <WrapPanel/>
+                            </DockPanel>
+                        </Border>
+                        <Border BorderBrush="#878987" BorderThickness="1" Grid.Row="1" Margin="4,0,4,0">
+                            <StackPanel>
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Padding="4,2,4,0" BorderThickness="0,0,0,1" BorderBrush="#878987">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel >
+                                                <TextBlock Text="发货公司:" Style="{StaticResource LabelStyle}" />
+                                                <TextBlock Text="收货公司:" Style="{StaticResource LabelStyle}" />
+                                                <TextBlock Text="车辆信息:" Style="{StaticResource LabelStyle}"/>
+                                                <TextBlock Text="备注:" Style="{StaticResource LabelStyle}" />
+                                            </StackPanel>
+                                            <StackPanel Margin="4,0,4,0" >
+                                                <TextBlock Text="{Binding sendCompany}" Style="{StaticResource ValueStyle}" Width="200"/>
+                                                <TextBlock Text="{Binding receiveCompany}" Style="{StaticResource ValueStyle}" Width="200"/>
+                                                <WrapPanel>
+                                                    <TextBlock Text="{Binding carNumber}" Style="{StaticResource ValueStyle}" />
+                                                    <TextBlock Text="{Binding driver}" Style="{StaticResource ValueStyle}" />
+                                                    <TextBlock Text="{Binding phone}" Style="{StaticResource ValueStyle}" />
+                                                </WrapPanel>
+                                                <TextBlock Text="{Binding remark}"  Style="{StaticResource ValueStyle}" TextTrimming="CharacterEllipsis" Width="200" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="1" BorderBrush="#878987" BorderThickness="1,0,1,1" Padding="4,2,4,0" Grid.ColumnSpan="2">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel >
+                                                <TextBlock Text="物资名称:" Style="{StaticResource LabelStyle}"/>
+                                                <TextBlock Text="税  价:" Style="{StaticResource LabelStyle}"/>
+                                                <TextBlock Text="超限吨位:" Style="{StaticResource LabelStyle}"/>
+                                                <TextBlock Text="应补税款:" Style="{StaticResource LabelStyle}"/>
+                                               
+
+                                            </StackPanel>
+                                            <StackPanel Margin="4,0,4,0" >
+                                                <TextBlock Text="{Binding materialName}" Style="{StaticResource ValueStyle}"/>
+                                                <TextBlock Text="{Binding overtopWeight}"  Style="{StaticResource ValueStyle}" />
+                                                <TextBlock Text="{Binding materialTaxation}"  Style="{StaticResource ValueStyle}" />
+                                                <TextBlock Text="{Binding overtopMoney ,StringFormat={}{0:c} 元,ConverterCulture=zh-CN}" FontWeight="Black" FontSize="16" Foreground="Red" Style="{StaticResource ValueStyle}"/>
+                                               
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>                                 
+                                </Grid>                             
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" VerticalAlignment="Bottom" Height="50">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                <TextBlock Text="收费方试:" Style="{StaticResource LabelStyle}" Margin="10,4,10,0"/>
+                <ComboBox x:Name="CashTypeCB" Style="{StaticResource ValueCbStyle}" Width="100"  Padding="10,3,0,0">                    
+                    <ComboBoxItem IsSelected="True">现金</ComboBoxItem>
+                    <ComboBoxItem>微信</ComboBoxItem>
+                    <ComboBoxItem>支付宝</ComboBoxItem>
+                    <ComboBoxItem>刷卡</ComboBoxItem>
+                    <ComboBoxItem>其它</ComboBoxItem>
+                </ComboBox>
+                <TextBlock Text="备注:" Style="{StaticResource LabelStyle}" Margin="10,4,10,0"/>
+                <TextBox x:Name="CashRemark" Style="{StaticResource ValueTBoxStyle}"  Width="300" Margin="0,0,10,0"/>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="2" Background="White"  BorderThickness="1,0,1,1" BorderBrush="{StaticResource E4}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <myui:IconButton x:Name="CashBtn" Content="收取" Click="CashBtn_Click"
+                          CornerRadius="4" Cursor="Hand"
+                           Background="{StaticResource E4}"
+                           MouseOverForeground="{DynamicResource myBlue}"
+                           VerticalAlignment="Bottom" 
+                           IsShowIcon="True" Icon="&#xe898;" IconSize="22"
+                           Width="80" Height="30" IconMargin="2,0,4,0"
+                         />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

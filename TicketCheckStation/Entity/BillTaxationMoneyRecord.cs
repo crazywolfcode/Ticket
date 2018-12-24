@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
@@ -7,13 +7,12 @@ namespace TicketCheckStation
 {
 
     /// <summary>
-    /// 车辆信息
-    /// 数据条数:6
+    /// 数据条数:0
     /// 数据大小:16KB
     /// </summary>
 
 
-    public class CarInfo
+    public class BillTaxationMoneyRecord
     {
 
         /// <summary>
@@ -23,45 +22,95 @@ namespace TicketCheckStation
         public String id { get; set; }
 
         /// <summary>
+        /// 注释:金额 
         /// 可空:NO
+        ///默认值:0.000
+        /// </summary>
+
+        public Double money { get; set; }
+
+        /// <summary>
+        /// 注释:0现金 1微信 2 支付定 3刷卡 4其它
+        /// 可空:NO
+        ///默认值:0
+        /// </summary>
+
+        public Int32 receiveType { get; set; }
+
+        /// <summary>
+        /// 注释:编号
+        /// 可空:YES
+        /// </summary>
+
+        public String number { get; set; }
+
+        /// <summary>
+        /// 可空:YES
+        /// </summary>
+
+        public String stationId { get; set; }
+
+        /// <summary>
+        /// 注释:所属验票站点的名称
+        /// 可空:YES
+        /// </summary>
+
+        public String stationName { get; set; }
+
+        /// <summary>
+        /// 可空:YES
+        /// </summary>
+
+        public String sendCompany { get; set; }
+
+        /// <summary>
+        /// 可空:YES
+        /// </summary>
+
+        public String receiveCompany { get; set; }
+
+        /// <summary>
+        /// 可空:YES
+        /// </summary>
+
+        public String materialId { get; set; }
+
+        /// <summary>
+        /// 注释:物质名称
+        /// 可空:YES
+        /// </summary>
+
+        public String materialName { get; set; }
+
+        /// <summary>
+        /// 注释:车牌号
+        /// 可空:YES
         /// </summary>
 
         public String carNumber { get; set; }
+
         /// <summary>
-        /// IC卡的编号
-        /// </summary>
-        public String icNumber { get; set; }
-        
-        /// <summary>
-        /// 可空:NO
+        /// 注释:驾驶员
+        /// 可空:YES
         /// </summary>
 
         public String driver { get; set; }
 
         /// <summary>
+        /// 注释:超限吨位
         /// 可空:NO
+        ///默认值:0.000
         /// </summary>
 
-        public String driverMobile { get; set; }
+        public Double overtopWeight { get; set; }
 
         /// <summary>
-        /// 注释:驾驶员身份证号码
+        /// 注释:税费单价
         /// 可空:NO
+        ///默认值:0
         /// </summary>
 
-        public String driverIdnumber { get; set; }
-
-        /// <summary>
-        /// 可空:YES
-        /// </summary>
-
-        public String ownerId { get; set; }
-
-        /// <summary>
-        /// 可空:YES
-        /// </summary>
-
-        public String ownerName { get; set; }
+        public Double materialTaxation { get; set; }
 
         /// <summary>
         /// 注释:备注信息
@@ -135,10 +184,6 @@ namespace TicketCheckStation
         /// </summary>
 
         public String lastUpdateUserName { get; set; }
-        /// <summary>
-        /// 皮重
-        /// </summary>
-        public double traeWeight { get; set; }
-    }
 
+    }
 }

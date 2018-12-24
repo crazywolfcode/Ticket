@@ -105,6 +105,8 @@
     <Compile Include="Convertor\BillStatusConverter.cs" />
     <Compile Include="Convertor\PrientTimesNowConverter.cs" />
     <Compile Include="Convertor\PrientTimesStringConverter.cs" />
+    <Compile Include="Entity\BillTaxationMoneyRecord.cs" />
+    <Compile Include="Entity\model\BillTaxationMoneyRecordModel.cs" />
     <Compile Include="Entity\model\StationModel.cs" />
     <Compile Include="Entity\model\UserModel.cs" />
     <Compile Include="Entity\model\WeighingBillModel.cs" />
@@ -116,7 +118,13 @@
     <Compile Include="IcReaderSdk\ICReaderHelper.cs" />
     <Compile Include="IcReaderSdk\mifareone.cs" />
     <Compile Include="ui\AboutW.xaml.cs" />
+    <Compile Include="ui\CashWindow.xaml.cs">
+      <DependentUpon>CashWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ui\PrintBillW.xaml.cs" />
+    <Compile Include="ui\CashReportWindow.xaml.cs">
+      <DependentUpon>CashReportWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ui\ReportWindow.xaml.cs">
       <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
@@ -127,6 +135,10 @@
     <Page Include="ui\AboutW.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\CashWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ui\InputWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -201,6 +213,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ui\PrintBillW.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\CashReportWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

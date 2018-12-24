@@ -26,6 +26,7 @@ namespace TicketCheckStation
         table_sync,
         user,
         weighing_bill,
+        bill_taxation_money_record,
     }
 
     public enum BillImageColumns
@@ -58,6 +59,7 @@ namespace TicketCheckStation
     {
         id,
         car_number,
+        ic_number,
         driver,
         driver_mobile,
         driver_idnumber,
@@ -380,5 +382,32 @@ namespace TicketCheckStation
         station_id,
         company_id,
         no_sync,
+    }
+    public enum BillTaxationMoneyRecordColumuns
+    {
+        id,
+        money,
+        receive_type,
+        number,
+        station_id,
+        station_name,
+        send_company,
+        receive_company,
+        material_id,
+        material_name,
+        car_number,
+        driver,
+        overtop_weight,
+        material_taxation,
+        remark,
+        add_time,
+        status,
+        add_user_id,
+        add_user_name,
+        last_update_time,
+        is_delete,
+        delete_time,
+        last_update_user_id,
+        last_update_user_name,
     }
 }

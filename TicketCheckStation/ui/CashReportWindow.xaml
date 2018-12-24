@@ -1,4 +1,4 @@
-﻿<Window x:Class="TicketCheckStation.ReportWindow"
+﻿<Window x:Class="TicketCheckStation.CashReportWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,7 @@
         mc:Ignorable="d" ResizeMode="CanResizeWithGrip"
         Icon="/TicketCheckStation;component/aislogo_48.ico"
         WindowStartupLocation="CenterScreen" 
-        Title="报表" Height="680" Width="960"
+        Title="补税报表" Height="680" Width="960"
         Loaded="Window_Loaded" KeyUp="Window_KeyUp"
         ContentRendered="Window_ContentRendered" 
         Closing="Window_Closing" >
@@ -22,14 +22,7 @@
         <Border Grid.Row="0">
             <StackPanel>
                 <StackPanel Height="34" x:Name="ToolBarPanel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <myui:IconButton                
-                           x:Name="PrintSelectBtn"  Click="PrintSelectBtn_Click"
-                           IsTransparency="True"
-                           MouseOverForeground="{DynamicResource myBlue}"
-                           VerticalAlignment="Bottom" ToolTip="打印选中"
-                           IsShowIcon="True" Icon="&#xe65b;" IconSize="28"
-                           Width="30" Height="30" IconMargin="-2,0,0,0"
-                            Margin="0,0,4,0" />
+                  
                     <myui:IconButton           
                             x:Name="SearchTabBtn"
                             Click="SearchTabBtn_Click"
@@ -94,17 +87,17 @@
 
                 <StackPanel>
                     <TextBlock Style="{StaticResource AlertTbStyle}" Text="结束时间:"/>
-                    <TextBlock Style="{StaticResource AlertTbStyle}" Text="状态:"/>
+                    <TextBlock Style="{StaticResource AlertTbStyle}" Text="支付方试:"/>
                 </StackPanel>
                 <StackPanel>
                     <DatePicker x:Name="EndDatePicker" SelectedDateFormat="Long"  Margin="0,2,0,2" Height="24" VerticalContentAlignment="Center" />
                     <ComboBox x:Name="StatusCb" Style="{StaticResource ValueCbStyle}" Width="120" >                        
-                        <ComboBoxItem>未审核</ComboBoxItem>
-                        <ComboBoxItem>已审核</ComboBoxItem>
-                        <ComboBoxItem>未补税</ComboBoxItem>
-                        <ComboBoxItem>已补税</ComboBoxItem>
-                        <ComboBoxItem>不需补税</ComboBoxItem>
-                        <ComboBoxItem>全部</ComboBoxItem>
+                        <ComboBoxItem >现金</ComboBoxItem>
+                        <ComboBoxItem>微信</ComboBoxItem>
+                        <ComboBoxItem>支付宝</ComboBoxItem>
+                        <ComboBoxItem>刷卡</ComboBoxItem>
+                        <ComboBoxItem>其它</ComboBoxItem>
+                        <ComboBoxItem IsSelected="True"> 全部</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
                 <myui:IconButton 
@@ -145,11 +138,10 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-
                             <StackPanel Grid.Row="0">
                                 <StackPanel HorizontalAlignment="Center" >
-                                    <TextBlock x:Name="PrintTitleTb" Text="云南省曲靖市富源县煤炭管理运煤放行单" FontSize="16"  FontWeight="Bold"/>
-                                    <TextBlock x:Name="StationNametb" Text="(雨汪验票站-验票报表)" FontSize="14" Padding="1,6,1,4" HorizontalAlignment="Center" FontWeight="ExtraBold"/>
+                                    <TextBlock x:Name="PrintTitleTb" Text="云南省曲靖市富源县煤炭管理运补税报表" FontSize="16"  FontWeight="Bold"/>
+                                    <TextBlock x:Name="StationNametb" Text="(雨汪验票站-补税报表)" FontSize="14" Padding="1,6,1,4" HorizontalAlignment="Center" FontWeight="ExtraBold"/>
                                 </StackPanel>
                                 <WrapPanel>
                                     <TextBlock Text="时间："/>
@@ -185,18 +177,10 @@
                                         <DataGridTextColumn Header="车牌号"  Binding="{Binding  carNumber}" ></DataGridTextColumn>
                                         <DataGridTextColumn Header="驾驶员"  Binding="{Binding  driver}" ></DataGridTextColumn>
                                         <DataGridTextColumn Header="电话"  Binding="{Binding  phone}" ></DataGridTextColumn>
-                                        <DataGridTextColumn Header="发货毛重" Binding="{Binding sendGrossWeight}"  />
-                                        <DataGridTextColumn Header="发货皮重" Binding="{Binding sendTraeWeight}"  />
-                                        <DataGridTextColumn Header="发货净重" Binding="{Binding sendNetWeight}"  />
-                                        <DataGridTextColumn Header="验票毛重" Binding="{Binding grossWeight}"  />
-                                        <DataGridTextColumn Header="车辆皮重" Binding="{Binding carTraeWeight}"  />
-                                        <DataGridTextColumn Header="验票净重" Binding="{Binding netWeight}"  />
                                         <DataGridTextColumn Header="超限吨位" Binding="{Binding overtopWeight }"  />
-                                        <DataGridTextColumn Header="应补税款" Binding="{Binding overtopMoney,StringFormat={}{0:c} ,ConverterCulture=zh-CN}"  />
-                                        <DataGridTextColumn Header="总税款" Binding="{Binding totalTaxstionMoney,StringFormat={}{0:c},ConverterCulture=zh-CN}"  />
-                                        <DataGridTextColumn Header="过磅员" Binding="{Binding addUserName}"  />
-                                        <DataGridTextColumn Header="审核员" Binding="{Binding checkUserName}"  />
-                                        <DataGridTextColumn Header="状态" Binding="{Binding Converter={StaticResource billStatusConverter}}"  />
+                                        <DataGridTextColumn Header="税价" Binding="{Binding materialTaxation ,StringFormat={}{0:c} ,ConverterCulture=zh-CN}"/>
+                                        <DataGridTextColumn Header="应补税款" Binding="{Binding money,StringFormat={}{0:c} ,ConverterCulture=zh-CN}"  />                                      
+                                        <DataGridTextColumn Header="收银员" Binding="{Binding addUserName}"  />
                                         <DataGridTextColumn Header="时间" Binding="{Binding addTime,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                                         <DataGridTextColumn Header="备注" Binding="{Binding remark}" />
                                     </DataGrid.Columns>
@@ -205,7 +189,7 @@
                             <Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="1,0,1,1">
                                 <DockPanel VerticalAlignment="Top" Margin="0,4,0,4" LastChildFill="True">
                                     <WrapPanel DockPanel.Dock="Top" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                                        <TextBlock Visibility="Collapsed" x:Name="InSummaryTextBlock" Text="合计:(4) 家公司供应(20) 种物资，共(12)车，原发净重:(吨) 收货毛重:(吨) 收货皮重: (吨) 收货净重: (吨) 扣吨:  (吨) 磅差: " Foreground="#787878" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="SummaryTextBlock" Text="合计:10 次，总金额：￥200.01: " Foreground="#787878" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                     </WrapPanel>
                                     <StackPanel DockPanel.Dock="Top" Height="1" Margin="2,0,0,0" Background="{DynamicResource E4}"></StackPanel>
                                     <StackPanel Orientation="Horizontal" x:Name="parnel" HorizontalAlignment="Left">

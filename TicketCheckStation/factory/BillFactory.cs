@@ -10,9 +10,9 @@ namespace TicketCheckStation
     public class BillFactory
     {
 
-        public static SendBill CreateSendbill(String[] strValues)
+        public static SendBill CreateSendbill(String[] strValues,string snr)
         {
-            SendBill bill = new SendBill(strValues);
+            SendBill bill = new SendBill(strValues,snr);
             return bill;
         }
 
@@ -59,6 +59,7 @@ namespace TicketCheckStation
                     addUserName = App.currentUser.name,
                     carNumber = sendBill.CarNumber,
                     traeWeight = sendBill.carTraeWeight,
+                    icNumber =sendBill.ICNumber,
                 };
                 CarInfoModel.Create(carInfo);
             }

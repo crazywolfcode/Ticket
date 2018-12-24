@@ -1,28 +1,23 @@
-﻿using System;
+﻿using MyCustomControlLibrary;
+using MyHelper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MyCustomControlLibrary;
-using MyHelper;
 
 namespace TicketCheckStation
 {
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
-    public partial class ReportWindow : Window
-    {
-        public ReportWindow()
+    public partial class CashReportWindow : Window
+    {       
+        private double totalWeight = 0;
+        private double totalMoney = 0;
+        public CashReportWindow()
         {
             InitializeComponent();
         }
@@ -35,8 +30,8 @@ namespace TicketCheckStation
             this.EndDatePicker.Text = now.ToString("yyyy年MM月dd日");
             this.EndDatePicker.DisplayDateEnd = now;
             this.StratDatePicker.DisplayDateEnd = now;
-            this.PrintTitleTb.Text = ConfigurationHelper.GetConfig(ConfigItemName.PrintTitle.ToString());
-            this.StationNametb.Text = "(" + App.mStation.name + "-验票报表)";          
+            this.PrintTitleTb.Text = ConfigurationHelper.GetConfig(ConfigItemName.CashReportTitle.ToString());
+            this.StationNametb.Text = "(" + App.mStation.name + "-补税记录)";          
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -48,7 +43,7 @@ namespace TicketCheckStation
         public void LoadData()
         {
             String condition = GetSeachCondition();
-            List<WeighingBill> list = WeighingBillModel.searchData(condition);
+            List<BillTaxationMoneyRecord> list = BillTaxationMoneyRecordModel.searchData(condition);
             this.ReportDataGrid.ItemsSource = list;
         }
 
@@ -124,7 +119,7 @@ namespace TicketCheckStation
                             this.PrintTitleTb.Text,
                             this.StationNametb.Text,
                             this.StationNametb.Text + "导出时间:" + DateTimeHelper.getCurrentDateTime(),
-                            this.InSummaryTextBlock.Text,
+                            this.SummaryTextBlock.Text,
                             GetListStatisticToListString(this.InStatisticListBox)
                     );             
         }
@@ -348,68 +343,68 @@ namespace TicketCheckStation
         private string GetSeachCondition()
         {
             string condition = string.Empty;
-            condition = WeighingBillColumns.add_time.ToString() +">='"+ GetStartDate()+"'";
-            condition = condition + " and " + WeighingBillColumns.add_time.ToString() + "<='" + GetEndDate() + "'";
-            condition = condition + " and " + WeighingBillColumns.station_id.ToString() + "='" + mStation.id+ "'";
+            condition = BillTaxationMoneyRecordColumuns.add_time.ToString() +">='"+ GetStartDate()+"'";
+            condition = condition + " and " + BillTaxationMoneyRecordColumuns.add_time.ToString() + "<='" + GetEndDate() + "'";
+            condition = condition + " and " + BillTaxationMoneyRecordColumuns.station_id.ToString() + "='" + mStation.id+ "'";
             if (sendCompany != null)
             {
                 if (String.IsNullOrEmpty(condition))
                 {
-                    condition += WeighingBillColumns.send_company.ToString() + " = " + Constract.valueSplit + sendCompany.name + Constract.valueSplit;
+                    condition += BillTaxationMoneyRecordColumuns.send_company.ToString() + " = " + Constract.valueSplit + sendCompany.name + Constract.valueSplit;
                 }
                 else
                 {
-                    condition += " and " + WeighingBillColumns.send_company.ToString() + " = " + Constract.valueSplit + sendCompany.name + Constract.valueSplit;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.send_company.ToString() + " = " + Constract.valueSplit + sendCompany.name + Constract.valueSplit;
                 }
             }
             if (receiverCompany != null)
             {
                 if (String.IsNullOrEmpty(condition))
                 {
-                    condition += WeighingBillColumns.receive_company.ToString() + " = " + Constract.valueSplit + receiverCompany.name + Constract.valueSplit;
+                    condition += BillTaxationMoneyRecordColumuns.receive_company.ToString() + " = " + Constract.valueSplit + receiverCompany.name + Constract.valueSplit;
                 }
                 else
                 {
-                    condition += " and " + WeighingBillColumns.receive_company.ToString() + " = " + Constract.valueSplit + receiverCompany.name + Constract.valueSplit;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_company.ToString() + " = " + Constract.valueSplit + receiverCompany.name + Constract.valueSplit;
                 }
             }
             if (carInfo != null)
             {
                 if (String.IsNullOrEmpty(condition))
                 {
-                    condition += WeighingBillColumns.car_number.ToString() + " = " + Constract.valueSplit + carInfo.carNumber + Constract.valueSplit;
+                    condition += BillTaxationMoneyRecordColumuns.car_number.ToString() + " = " + Constract.valueSplit + carInfo.carNumber + Constract.valueSplit;
                 }
                 else
                 {
-                    condition += " and " + WeighingBillColumns.car_number.ToString() + " = " + Constract.valueSplit + carInfo.carNumber + Constract.valueSplit;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.car_number.ToString() + " = " + Constract.valueSplit + carInfo.carNumber + Constract.valueSplit;
                 }
             }
             if (mMaterial != null)
             {
                 if (String.IsNullOrEmpty(condition))
                 {
-                    condition += WeighingBillColumns.material_name.ToString() + " = " + Constract.valueSplit + mMaterial.name + Constract.valueSplit;
+                    condition += BillTaxationMoneyRecordColumuns.material_name.ToString() + " = " + Constract.valueSplit + mMaterial.name + Constract.valueSplit;
                 }
                 else
                 {
-                    condition += " and " + WeighingBillColumns.material_name.ToString() + " = " + Constract.valueSplit + mMaterial.name + Constract.valueSplit;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.material_name.ToString() + " = " + Constract.valueSplit + mMaterial.name + Constract.valueSplit;
                 }
             }
             switch (this.StatusCb.SelectedIndex) {
                 case 0:
-                    condition += " and " + WeighingBillColumns.is_checked.ToString() + " = " +0;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " +0;
                     break;
                 case 1:
-                    condition += " and " + WeighingBillColumns.is_checked.ToString() + " = " +1;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " +1;
                     break;
                 case 2:
-                    condition += " and " + WeighingBillColumns.is_receive_money.ToString() + " = " +0;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " +2;
                     break;
                 case 3:
-                    condition += " and " + WeighingBillColumns.is_receive_money.ToString() + " = " + 1;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " + 3;
                     break;
                 case 4:
-                    condition += " and " + WeighingBillColumns.is_receive_money.ToString() + " = " + 2;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " + 4;
                     break;                   
             }
             return condition;
@@ -456,20 +451,17 @@ namespace TicketCheckStation
         private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             e.Row.Header = e.Row.GetIndex() + 1;
-            WeighingBill bill = (WeighingBill)e.Row.DataContext;
+            BillTaxationMoneyRecord bill = (BillTaxationMoneyRecord)e.Row.DataContext;
+            totalMoney += bill.money;
+            totalWeight += bill.overtopWeight;           
+            if (e.Row.GetIndex().Equals(ReportDataGrid.Items.Count - 1))
+            {
+                Statistic();
+            }
+        }
 
-            if (bill.isReceiveMoney == 0 && bill.overtopMoney > 0)
-            {
-                e.Row.Foreground = Brushes.Red;
-            }
-            else if (bill.isReceiveMoney == 1)
-            {
-                e.Row.Foreground = Brushes.Green;
-            }
-            else
-            {
-                e.Row.Foreground = Brushes.Black;
-            }
+        private void Statistic() {
+            this.SummaryTextBlock.Text = $"合计：{ReportDataGrid.Items.Count} 次，超出 {totalWeight} 吨,补税：￥{totalMoney} 元";   
         }
 
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -477,15 +469,6 @@ namespace TicketCheckStation
             //TODO
         }
 
-        private void PrintSelectBtn_Click(object sender, RoutedEventArgs e)
-        {
-            WeighingBill bill = (WeighingBill)this.ReportDataGrid.SelectedItem;
-            if (bill == null)
-            {
-                return;
-            }
-            new PrintBillW(bill).ShowDialog();
-        }
         private Station mStation;
         private void StationCb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

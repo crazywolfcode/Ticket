@@ -138,7 +138,19 @@ namespace TicketCheckStation
             return App.mStation.nameFirstCase.ToUpper() + date.Replace("-","") + oldSort;
         }
 
-        public static void AddBillNumberSort() {
+
+        /// <summary>
+        /// Get Cash Number 
+        /// </summary>
+        /// <param name="BillNmber"> 磅单编号</param>     
+        /// <returns></returns>
+        public static String GetCashNumber(String BillNmber)
+        {
+            String date = MyHelper.DateTimeHelper.getCurrentDateTime(MyHelper.DateTimeHelper.DateFormat);
+            return "BJXK" + date.Replace("-", "") + BillNmber.Substring(BillNmber.Length -4,4);
+        }
+
+            public static void AddBillNumberSort() {
             int Sort = Convert.ToInt32(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.BillNumberSort.ToString()));
             MyHelper.ConfigurationHelper.SetConfig(ConfigItemName.BillNumberSort.ToString(), (Sort + 1).ToString());
         }

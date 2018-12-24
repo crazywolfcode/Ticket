@@ -358,7 +358,6 @@ namespace TicketCheckStation
             {
                 byte[] status = new byte[30];
                 st = common.rf_get_status(icdev, status);
-
                 ICReaderTb.Text = "打开读写器成功！硬件版本：" + Encoding.ASCII.GetString(status).Substring(5,10);
                 common.rf_beep(icdev, 5);
                 ICReaderDispatcherTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(3000) };
@@ -374,11 +373,7 @@ namespace TicketCheckStation
         private bool isChecking = false;
         private void ICReaderDispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if (this.WindowState == WindowState.Minimized) {
-                this.WindowState = WindowState.Maximized;
-                this.ShowActivated = true;
-            }
-
+          
             if (isChecking == true)
             {
                 ICReaderDispatcherTimer.Stop();
@@ -388,6 +383,17 @@ namespace TicketCheckStation
             st = common.rf_card(icdev, 1, out snr);
             if (st == 0)
             {
+                foreach (Window item in Application.Current.Windows)
+                {
+                    if (item.Title == "") continue;
+                    if (item.Title != this.Title)
+                        item.Close();
+                }
+                if (this.WindowState == WindowState.Minimized)
+                {
+                    this.WindowState = WindowState.Maximized;
+                    this.ShowActivated = true;
+                }
                 isChecking = true;
                 ICReaderDispatcherTimer.Stop();
                 common.rf_beep(icdev, 2);
@@ -402,7 +408,98 @@ namespace TicketCheckStation
             }
          
         }
+        private void readerCard()
+        {
+            Size size = new Size(MainBodyGrid.ActualWidth, MainBodyGrid.ActualHeight);
+            Point point = MainBodyGrid.PointToScreen(new Point());
+            MMessageBox.GetInstance().ShowLoading(MMessageBox.LoadType.Three, "验票中...卡号:" + snr, point, size, "&#xe752;", Orientation.Vertical, "#ffffff", 12);
 
+            System.Threading.Thread thread = new System.Threading.Thread(new System.Threading.ThreadStart(
+                delegate
+                {
+                    Mifareone.rf_reset(icdev, 3);
+                    common.rf_card(icdev, 1, out snr);
+                    Console.WriteLine("卡的序列号：" + snr);
+                    byte[] key1 = Encoding.ASCII.GetBytes("FFFFFFFFFFFF");
+                    byte[] key2 = new byte[6];
+                    common.a_hex(key1, key2, 12);
+                    String[] HexValues = new string[16];
+                    for (int i = 0; i < 16; i++)
+                    {
+                        common.rf_load_key(icdev, 0, i, key2);
+                        Mifareone.rf_authentication(icdev, 1, i);
+                        common.rf_beep(icdev, 3);
+                        int j = 0;
+                        if (i == 0)
+                        {
+                            j = 1;
+                        }
+                        for (; j < 3; j++)
+                        {
+                            byte[] data = new byte[16];
+                            byte[] buff = new byte[32];
+                            st = Mifareone.rf_read(icdev, i * 4 + j, data);
+                            if (st == 0)
+                            {
+                                common.hex_a(data, buff, 16);
+                                string vastr = Encoding.ASCII.GetString(buff);
+                                if (!vastr.StartsWith("0000"))
+                                {
+                                    if (vastr.Contains("0000"))
+                                    {
+                                        vastr = vastr.Substring(0, vastr.IndexOf("0000"));
+                                        if (vastr.Length % 2 == 0)
+                                        {
+                                            HexValues[i] += vastr + "20";
+                                        }
+                                        else
+                                        {
+                                            HexValues[i] += vastr + "020";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        HexValues[i] += vastr;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    String[] strValues = new string[HexValues.Length];
+                    for (int k = 0; k < HexValues.Length; k++)
+                    {
+                        String res = ICReaderHelper.HexToStr(HexValues[k]);
+                        strValues[k] = res;
+                        Console.WriteLine("=====" + k + " 区：" + res);
+                    }
+                    SendBill sendBill = BillFactory.CreateSendbill(strValues,snr.ToString());                    
+                    WeighingBill weighingBill = BillFactory.CreateWeightBill(sendBill);
+                    this.Dispatcher.Invoke(new Action(delegate {
+                        MMessageBox.GetInstance().Close();
+                        this.IsEnabled = true;
+                        if (String.IsNullOrEmpty(sendBill.numeber))
+                        {
+                            MMessageBox.GetInstance().ShowLoading(MMessageBox.LoadType.Two, "数据没有读完", new Point(0, 0), new Size(0, 0), null, Orientation.Vertical, Brushes.Red, 3);
+                            ICReaderDispatcherTimer.Start();
+                            return;
+                        }
+                        if (double.Parse(Properties.Settings.Default.WeihgingValue) <= 0)
+                        {
+                            MMessageBox.GetInstance().ShowBox("磅称可能没有读取到数据,不能验票！", "错误", MMessageBox.ButtonType.Yes, MMessageBox.IconType.error, Orientation.Vertical, "好");
+                        }
+                        else
+                        {
+                            new InputWindow(weighingBill, true, true,
+                                new Action<bool>(RefreshData),
+                                new Action<string>(CaptureJpeg));
+                        }
+                        ICReaderDispatcherTimer.Start();
+                    }));
+                }
+                ));
+
+            thread.Start();
+        }
         #endregion
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -506,11 +603,21 @@ namespace TicketCheckStation
         }
         private void cashBtn_Click(object sender, RoutedEventArgs e)
         {
-            MyCustomControlLibrary.IconButton button = sender as MyCustomControlLibrary.IconButton;
-            WeighingBill bill = button.Tag as WeighingBill;
-            MessageBox.Show(bill.carNumber + bill.overtopMoney.ToString());
+            IconButton button = sender as IconButton;
+            if (button.Tag is WeighingBill bill)
+            {
+                isChecking = true;
+                new CashWindow(bill) { RefreshParent = new Action<bool>(RefreshData) }.ShowDialog();
+                isChecking = false;
+                try
+                {
+                    this.ICReaderDispatcherTimer.Start();
+                }
+                catch { }
+            }
         }
         #endregion
+
         private void RefreshDataBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadData();
@@ -539,6 +646,7 @@ namespace TicketCheckStation
             WeighingBill bill = (WeighingBill)this.TodayDataGrid.SelectedItem;
             if (bill == null)
             {
+                MMessageBox.Result result = MMessageBox.GetInstance().ShowBox("未选择要打印的数据", "提示", MMessageBox.ButtonType.YesNo, MMessageBox.IconType.Info, Orientation.Vertical, "是");
                 return;
             }
             new PrintBillW(bill).ShowDialog();
@@ -629,107 +737,17 @@ namespace TicketCheckStation
 
         #endregion
         
-        private void readerCard() {
-            Size size = new Size(MainBodyGrid.ActualWidth, MainBodyGrid.ActualHeight);
-            Point point = MainBodyGrid.PointToScreen(new Point());
-            MMessageBox.GetInstance().ShowLoading(MMessageBox.LoadType.Three, "验票中...卡号:" + snr, point, size, "&#xe752;", Orientation.Vertical, "#ffffff", 12);
-
-            System.Threading.Thread thread = new System.Threading.Thread(new System.Threading.ThreadStart(
-                delegate
-                {
-                    Mifareone.rf_reset(icdev, 3);
-                    common.rf_card(icdev, 1, out snr);
-                    Console.WriteLine("卡的序列号：" + snr);
-                    byte[] key1 = Encoding.ASCII.GetBytes("FFFFFFFFFFFF");
-                    byte[] key2 = new byte[6];
-                    common.a_hex(key1, key2, 12);
-                    String[] HexValues = new string[16];
-                    for (int i = 0; i < 16; i++)
-                    {
-                      common.rf_load_key(icdev, 0, i, key2);                      
-                      Mifareone.rf_authentication(icdev, 1, i);                      
-                      common.rf_beep(icdev, 3);
-                        int j = 0;
-                        if (i == 0)
-                        {
-                            j = 1;
-                        }                       
-                        for (; j < 3; j++)
-                        {
-                            byte[] data = new byte[16];
-                            byte[] buff = new byte[32];
-                            st = Mifareone.rf_read(icdev, i * 4 + j, data);
-                            if (st == 0)
-                            {
-                                common.hex_a(data, buff, 16);
-                                string vastr = Encoding.ASCII.GetString(buff);                           
-                                if (!vastr.StartsWith("0000"))
-                                {
-                                    if (vastr.Contains("0000"))
-                                    {                                       
-                                        vastr = vastr.Substring(0, vastr.IndexOf("0000"));
-                                        if (vastr.Length % 2 == 0)
-                                        {
-                                            HexValues[i] += vastr + "20";
-                                        }
-                                        else
-                                        {
-                                            HexValues[i] += vastr + "020";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        HexValues[i] += vastr;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    String[] strValues = new string[HexValues.Length];
-                    for (int k = 0; k < HexValues.Length; k++)
-                    {
-                        String res = ICReaderHelper.HexToStr(HexValues[k]);
-                        strValues[k] = res;
-                        Console.WriteLine("=====" + k + " 区：" + res);
-                    }
-
-                    SendBill sendBill = BillFactory.CreateSendbill(strValues);
-
-
-
-                    WeighingBill weighingBill = BillFactory.CreateWeightBill(sendBill);
-                    
-                    this.Dispatcher.Invoke(new Action(delegate {
-                        MMessageBox.GetInstance().Close();
-                        this.IsEnabled = true;
-                        if (String.IsNullOrEmpty(sendBill.numeber))
-                        {
-                            MMessageBox.GetInstance().ShowLoading(MMessageBox.LoadType.Two, "数据没有读完", new Point(0, 0), new Size(0, 0), null, Orientation.Vertical, Brushes.Red, 3);
-                            ICReaderDispatcherTimer.Start();
-                            return;
-                        }
-                        if (double.Parse(Properties.Settings.Default.WeihgingValue) <= 0)
-                        {
-                            MMessageBox.GetInstance().ShowBox("磅称可能没有读取到数据,不能验票！", "错误",MMessageBox.ButtonType.Yes,MMessageBox.IconType.error,Orientation.Vertical,"好");
-                        }
-                        else {
-                            new InputWindow(weighingBill,true,true,
-                                new Action<bool>(RefreshData),
-                                new Action<string>(CaptureJpeg));
-                        }                                        
-                        ICReaderDispatcherTimer.Start();
-                    }));
-                }
-                ));
-
-            thread.Start();
-        }
-
+       
         private void RefreshData(bool obj)
         {
             if (obj == true) {
                 LoadData();
         }
+        }
+
+        private void TaxationBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new CashReportWindow().Show();
         }
     }
 }

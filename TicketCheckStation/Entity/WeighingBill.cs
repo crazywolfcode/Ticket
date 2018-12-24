@@ -108,7 +108,7 @@ namespace TicketCheckStation
         /// <summary>
         /// 注释:税费单价
         /// 可空:NO
-        ///默认值:0
+        ///默认值
         /// </summary>
 
         public Double materialTaxation { get; set; }
