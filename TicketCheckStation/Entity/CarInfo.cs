@@ -31,7 +31,11 @@ namespace TicketCheckStation
         /// IC卡的编号
         /// </summary>
         public String icNumber { get; set; }
-        
+        /// <summary>
+        /// 注释:所属省份
+        /// 可空:YES
+        /// </summary>
+        public String affiliatedProvince { get; set; }
         /// <summary>
         /// 可空:NO
         /// </summary>

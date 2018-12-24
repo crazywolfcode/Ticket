@@ -60,6 +60,7 @@ namespace TicketCheckStation
                     carNumber = sendBill.CarNumber,
                     traeWeight = sendBill.carTraeWeight,
                     icNumber =sendBill.ICNumber,
+                    affiliatedProvince = sendBill.carArea,
                     remark ="读卡验票时系统自动添加"
                 };
                 CarInfoModel.Create(carInfo);

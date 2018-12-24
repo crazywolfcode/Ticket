@@ -6,38 +6,37 @@ using System.Threading.Tasks;
 
 namespace TicketCheckStation
 {
-  public  class CompanyModel
+    public class CompanyModel
     {
         public static List<Company> IndistinctSearchByNameOrNameFirstCase(String nameOrCase)
         {
-            if (String.IsNullOrEmpty(nameOrCase))
+            string condition = null;
+            if (!String.IsNullOrEmpty(nameOrCase))
             {
-                return null;
+                condition = CompanyColumns.name.ToString() + " like '%" + nameOrCase + "%' " + " OR " + CompanyColumns.name_first_case.ToString() + " like '%" + nameOrCase.ToUpper() + "%'";
             }
-            else
-            {
-                string condition =CompanyColumns.name.ToString() + " like '%" + nameOrCase + "%' " + " OR " + CompanyColumns.name_first_case.ToString() + " like '%" + nameOrCase.ToUpper() + "%'";
-                String sql = DatabaseOPtionHelper.GetInstance().getSelectSql(TableName.company.ToString(), null, condition);
-                List<Company> list = DatabaseOPtionHelper.GetInstance().select<Company>(sql);
-                return list;
-            }
+            String sql = DatabaseOPtionHelper.GetInstance().getSelectSql(TableName.company.ToString(), null, condition);
+            List<Company> list = DatabaseOPtionHelper.GetInstance().select<Company>(sql);
+            return list;
         }
 
         public static Company GetByName(string sendCompany)
         {
             string condition = CompanyColumns.name.ToString() + " = '" + sendCompany + "' ";
-            String sql = DatabaseOPtionHelper.GetInstance().getSelectSql(TableName.company.ToString(), null, condition,null,null,null,1);
+            String sql = DatabaseOPtionHelper.GetInstance().getSelectSql(TableName.company.ToString(), null, condition, null, null, null, 1);
             List<Company> list = DatabaseOPtionHelper.GetInstance().select<Company>(sql);
             if (list.Count > 0)
             {
                 return list[0];
             }
-            else {
+            else
+            {
                 return null;
             }
         }
 
-        public static int Create(Company company) {
+        public static int Create(Company company)
+        {
 
             return DatabaseOPtionHelper.GetInstance().insert(company);
         }

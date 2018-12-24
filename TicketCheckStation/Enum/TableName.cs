@@ -63,6 +63,7 @@ namespace TicketCheckStation
         driver,
         driver_mobile,
         driver_idnumber,
+        affiliated_province,
         owner_id,
         owner_name,
         remark,

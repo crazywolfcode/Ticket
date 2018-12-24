@@ -703,6 +703,7 @@ namespace TicketCheckStation
                     new MaterialManageWindow().ShowDialog();
                     break;
                 case "CompanyManageMI":
+                    new CompanyManageWindow().ShowDialog();
                     break;
                 case "AboutMI":
                     new AboutW().ShowDialog();

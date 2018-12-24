@@ -35,6 +35,7 @@ namespace TicketCheckStation
             } catch { }
             
         }
+        
         public String CarNumber { get; set; }
         public String ICNumber { get; set; }
         public String driver { get; set; }

@@ -118,6 +118,9 @@
     <Compile Include="IcReaderSdk\ICReaderHelper.cs" />
     <Compile Include="IcReaderSdk\mifareone.cs" />
     <Compile Include="ui\AboutW.xaml.cs" />
+    <Compile Include="ui\CompanyManageWindow.xaml.cs">
+      <DependentUpon>CompanyManageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ui\MaterialManageWindow.xaml.cs">
       <DependentUpon>MaterialManageWindow.xaml</DependentUpon>
     </Compile>
@@ -139,6 +142,10 @@
     </Compile>
     <Compile Include="ui\ConnectionWindow.xaml.cs" />
     <Page Include="ui\AboutW.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\CompanyManageWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
