@@ -29,7 +29,6 @@ namespace TicketCheckStation
         private int NoUpDataCount = 0;
         #endregion
 
-
         public MainWindow()
         {
             App.Current.MainWindow = this;
@@ -358,11 +357,11 @@ namespace TicketCheckStation
             {
                 byte[] status = new byte[30];
                 st = common.rf_get_status(icdev, status);
-                ICReaderTb.Text = "打开读写器成功！硬件版本：" + Encoding.ASCII.GetString(status).Substring(5,10);
+                ICReaderTb.Text = "打开读写器成功！硬件版本：" + Encoding.ASCII.GetString(status).Substring(5, 10);
                 common.rf_beep(icdev, 5);
                 ICReaderDispatcherTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(3000) };
                 ICReaderDispatcherTimer.Tick += ICReaderDispatcherTimer_Tick;
-               ICReaderDispatcherTimer.Start();
+                ICReaderDispatcherTimer.Start();
             }
             else
             {
@@ -373,7 +372,7 @@ namespace TicketCheckStation
         private bool isChecking = false;
         private void ICReaderDispatcherTimer_Tick(object sender, EventArgs e)
         {
-          
+
             if (isChecking == true)
             {
                 ICReaderDispatcherTimer.Stop();
@@ -398,15 +397,15 @@ namespace TicketCheckStation
                 ICReaderDispatcherTimer.Stop();
                 common.rf_beep(icdev, 2);
                 common.rf_beep(icdev, 2);
-                this.IsEnabled = false;                
+                this.IsEnabled = false;
                 readerCard();
-                isChecking = false;              
+                isChecking = false;
             }
             else
             {
                 ConsoleHelper.writeLine("寻卡失败！:" + st);
             }
-         
+
         }
         private void readerCard()
         {
@@ -472,9 +471,10 @@ namespace TicketCheckStation
                         strValues[k] = res;
                         Console.WriteLine("=====" + k + " 区：" + res);
                     }
-                    SendBill sendBill = BillFactory.CreateSendbill(strValues,snr.ToString());                    
+                    SendBill sendBill = BillFactory.CreateSendbill(strValues, snr.ToString());
                     WeighingBill weighingBill = BillFactory.CreateWeightBill(sendBill);
-                    this.Dispatcher.Invoke(new Action(delegate {
+                    this.Dispatcher.Invoke(new Action(delegate
+                    {
                         MMessageBox.GetInstance().Close();
                         this.IsEnabled = true;
                         if (String.IsNullOrEmpty(sendBill.numeber))
@@ -508,7 +508,7 @@ namespace TicketCheckStation
             this.WindowState = WindowState.Minimized;
             String title = "煤炭运煤监管系统 ";
             String text = "最小化在到这里";
-            App.ShowBalloonTip(title,text);
+            App.ShowBalloonTip(title, text);
             return;
             if (mDispatcherTimer != null)
             {
@@ -549,7 +549,7 @@ namespace TicketCheckStation
                 {
                     this.ICReaderDispatcherTimer.Start();
                 }
-                catch { }               
+                catch { }
             }
             else
             {
@@ -568,7 +568,7 @@ namespace TicketCheckStation
         }
         private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
-            e.Row.Header = e.Row.GetIndex() + 1;            
+            e.Row.Header = e.Row.GetIndex() + 1;
             WeighingBill bill = (WeighingBill)e.Row.DataContext;
             if (bill.isUp == 0)
             {
@@ -678,6 +678,7 @@ namespace TicketCheckStation
             {
                 return;
             }
+            //CarManageMI AddMaterialMI MaterialManageMI CompanyManageMI
             switch (item.Name)
             {
                 case "BaseSettingMI":
@@ -691,6 +692,17 @@ namespace TicketCheckStation
                     break;
                 case "UserManagerMI":
 
+                    break;
+                case "CarManageMI":
+                    new CarManageWindow().ShowDialog();
+                    break;
+                case "AddMaterialMI":
+
+                    break;
+                case "MaterialManageMI":
+
+                    break;
+                case "CompanyManageMI":
                     break;
                 case "AboutMI":
                     new AboutW().ShowDialog();
@@ -736,13 +748,14 @@ namespace TicketCheckStation
         }
 
         #endregion
-        
-       
+
+
         private void RefreshData(bool obj)
         {
-            if (obj == true) {
+            if (obj == true)
+            {
                 LoadData();
-        }
+            }
         }
 
         private void TaxationBtn_Click(object sender, RoutedEventArgs e)

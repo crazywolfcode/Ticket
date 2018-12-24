@@ -118,6 +118,9 @@
     <Compile Include="IcReaderSdk\ICReaderHelper.cs" />
     <Compile Include="IcReaderSdk\mifareone.cs" />
     <Compile Include="ui\AboutW.xaml.cs" />
+    <Compile Include="ui\CarManageWindow.xaml.cs">
+      <DependentUpon>CarManageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ui\CashWindow.xaml.cs">
       <DependentUpon>CashWindow.xaml</DependentUpon>
     </Compile>
@@ -133,6 +136,10 @@
     </Compile>
     <Compile Include="ui\ConnectionWindow.xaml.cs" />
     <Page Include="ui\AboutW.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\CarManageWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

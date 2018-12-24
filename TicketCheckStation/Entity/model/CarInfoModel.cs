@@ -10,7 +10,10 @@ namespace TicketCheckStation
     {
         public static List<CarInfo> FuzzySearch(String palteNumberPart)
         {
-            string condition = CarInfoColumns.car_number.ToString() + " like '%" + palteNumberPart + "%' ";
+            string condition = null;
+            if (!string.IsNullOrEmpty(palteNumberPart)) {
+                 condition = CarInfoColumns.car_number.ToString() + " like '%" + palteNumberPart + "%' ";
+            } 
             String sql = DatabaseOPtionHelper.GetInstance().getSelectSql(TableName.car_info.ToString(), null, condition);
             List<CarInfo> list = DatabaseOPtionHelper.GetInstance().select<CarInfo>(sql);
             return list;
