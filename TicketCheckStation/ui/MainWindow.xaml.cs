@@ -700,7 +700,7 @@ namespace TicketCheckStation
 
                     break;
                 case "MaterialManageMI":
-
+                    new MaterialManageWindow().ShowDialog();
                     break;
                 case "CompanyManageMI":
                     break;

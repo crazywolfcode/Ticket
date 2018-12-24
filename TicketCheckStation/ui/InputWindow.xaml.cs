@@ -565,7 +565,7 @@ namespace TicketCheckStation
             String tempStr = this.MaterialNameCb.Text.Trim();
             if (String.IsNullOrEmpty(tempStr))
             {
-                this.SupplyCb.SelectedIndex = -1;
+                this.MaterialNameCb.SelectedIndex = -1;
             }
             //最少要输入一位字符
             if (tempStr.Length < 1)

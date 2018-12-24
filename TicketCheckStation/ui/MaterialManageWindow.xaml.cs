@@ -13,9 +13,11 @@ namespace TicketCheckStation
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
-    public partial class CarManageWindow : Window
+    public partial class MaterialManageWindow : Window
     {       
-        public CarManageWindow()
+        private double totalWeight = 0;
+        private double totalMoney = 0;
+        public MaterialManageWindow()
         {
             InitializeComponent();
         }
@@ -30,7 +32,7 @@ namespace TicketCheckStation
         }
         public void LoadData()
         {            
-            List<CarInfo> list = CarInfoModel.FuzzySearch(this.CarNumberCb.Text);
+            List<Material> list =MaterialModel.IndistinctSearchByNameOrNameFirstCase(this.MaterialNameCb.Text);
             this.ReportDataGrid.ItemsSource = list;
         }
 
@@ -100,7 +102,7 @@ namespace TicketCheckStation
         #region EXport EXCL，
         private void ExportExcelBtn_Click(object sender, RoutedEventArgs e)
         {
-            ExclHelper.ExclExprotToExcelWitchStatisticInfo(this.ReportDataGrid, "车辆信息"+DateTimeHelper.getCurrentDateTime(DateTimeHelper.DateFormat),"车辆信息","","","",null);             
+            ExclHelper.ExclExprotToExcelWitchStatisticInfo(this.ReportDataGrid, "物料信息"+DateTimeHelper.getCurrentDateTime(DateTimeHelper.DateFormat),"物料信息","","","",null);             
         }
 
         private List<String> GetListStatisticToListString(ListBox listBox)
@@ -128,49 +130,47 @@ namespace TicketCheckStation
         #endregion
 
 
-
-        #region Car info
-        private CarInfo carInfo;
-        private void CarNumberCb_TextChanged(object sender, TextChangedEventArgs e)
+        #region material
+        private Material mMaterial;
+        private void MaterialNameCb_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (this.CarNumberCb.SelectedIndex > -1)
+            if (this.MaterialNameCb.SelectedIndex >= 0)
             {
                 return;
             }
-            String tempStr = this.CarNumberCb.Text.Trim();
+            String tempStr = this.MaterialNameCb.Text.Trim();
             if (String.IsNullOrEmpty(tempStr))
             {
-                this.CarNumberCb.SelectedIndex = -1;
+                this.MaterialNameCb.SelectedIndex = -1;
             }
-            //最少要输入2位字符
-            if (tempStr.Length < 2)
+            //最少要输入一位字符
+            if (tempStr.Length < 1)
             {
-                this.CarNumberCb.ItemsSource = App.tempCars.Values.ToList();
+                this.MaterialNameCb.ItemsSource = App.tempMaterials.Values.ToList();
                 return;
             }
-            List<CarInfo> tempList = CarInfoModel.FuzzySearch(tempStr);
-            this.CarNumberCb.ItemsSource = tempList;
-            if (this.CarNumberCb.ItemsSource != null)
+            List<Material> tempList = MaterialModel.IndistinctSearchByNameOrNameFirstCase(tempStr);
+            this.MaterialNameCb.ItemsSource = tempList;
+            if (this.MaterialNameCb.ItemsSource != null)
             {
-                this.CarNumberCb.IsDropDownOpen = true;
+                this.MaterialNameCb.IsDropDownOpen = true;
             }
         }
 
-        private void CarNumberCb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MaterialNameCb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (this.CarNumberCb.SelectedIndex == -1)
+            if (this.MaterialNameCb.SelectedIndex < 0)
             {
-                carInfo = null;
-       
+                mMaterial = null;
             }
             else
             {
-                carInfo = this.CarNumberCb.SelectedItem as CarInfo;           
+                mMaterial = this.MaterialNameCb.SelectedItem as Material;
             }
         }
         #endregion
-      
-   
+
+
         #region Search btn click
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -194,7 +194,7 @@ namespace TicketCheckStation
 
         private void ResetTraeBtn_Click(object sender, RoutedEventArgs e)
         {
-            MMessageBox.Result result = MMessageBox.GetInstance().ShowBox("车辆重置皮重，请使用原来的发卡软件操作", "提示", MMessageBox.ButtonType.Yes, MMessageBox.IconType.Info, Orientation.Vertical, "好");
+            MMessageBox.Result result = MMessageBox.GetInstance().ShowBox("无权限操作", "提示", MMessageBox.ButtonType.Yes, MMessageBox.IconType.Info, Orientation.Vertical, "好");
             return;
         }
     }
