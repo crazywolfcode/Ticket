@@ -8,7 +8,7 @@ namespace TicketCheckStation
 {
    public class CameralInfoModel
     {
-        public List<CameraInfo> GetList(String stationId) {
+        public  List<CameraInfo> GetList(String stationId) {
             List<CameraInfo> list = new List<CameraInfo>();
             String order = CameraInfoColumuns.position.ToString() + " asc";
             String condition = CameraInfoColumuns.station_id.ToString() + " = '" + stationId + "'";

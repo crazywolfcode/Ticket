@@ -381,6 +381,7 @@ namespace TicketCheckStation
         password,
         position,
         station_id,
+        station_name,
         company_id,
         no_sync,
     }

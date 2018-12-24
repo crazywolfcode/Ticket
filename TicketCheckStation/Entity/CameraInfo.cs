@@ -108,6 +108,13 @@ using System.Text;
 
         public String addUserName { get; set; }
 
+
+        /// <summary>
+        /// 注释:所属验票站点的名称
+        /// 可空:YES
+        /// </summary>
+
+        public String stationName { get; set; }
         /// <summary>
         /// 注释:最后变动时间
         /// 可空:YES

@@ -690,9 +690,14 @@ namespace TicketCheckStation
                 case "SystemSettintMI":
 
                     break;
+
+                case "VideoManagerMI":
+                    new CameralManageWindow().ShowDialog();
+                    break;
                 case "UserManagerMI":
 
                     break;
+
                 case "CarManageMI":
                     new CarManageWindow().ShowDialog();
                     break;

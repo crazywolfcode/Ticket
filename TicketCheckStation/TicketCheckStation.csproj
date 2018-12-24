@@ -118,6 +118,10 @@
     <Compile Include="IcReaderSdk\ICReaderHelper.cs" />
     <Compile Include="IcReaderSdk\mifareone.cs" />
     <Compile Include="ui\AboutW.xaml.cs" />
+    <Compile Include="ui\CameraAddW.xaml.cs" />
+    <Compile Include="ui\CameralManageWindow.xaml.cs">
+      <DependentUpon>CameralManageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ui\CompanyManageWindow.xaml.cs">
       <DependentUpon>CompanyManageWindow.xaml</DependentUpon>
     </Compile>
@@ -142,6 +146,14 @@
     </Compile>
     <Compile Include="ui\ConnectionWindow.xaml.cs" />
     <Page Include="ui\AboutW.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\CameraAddW.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\CameralManageWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
