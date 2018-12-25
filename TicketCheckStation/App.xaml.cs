@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,24 +32,22 @@ namespace TicketCheckStation
         #endregion
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+           int initstep = Convert.ToInt32(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.InitStep.ToString()));
 
-            String stationId = MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString());
-            if (string.IsNullOrEmpty(stationId)) {
-                //没有初始化
-            } else {
-                GetCurrStatin(stationId);
+            if (initstep < 3) {
+                if (initstep == 1) {
+                    new ConnDbWwindow().ShowDialog();                    
+                }
+                if (initstep == 2) {
+                    new SetStationWindow().ShowDialog();
+                } 
             }
-
-            if (mStation == null) {
-                //没有初始化
-                return;
-            }
-
-            CreateNotifyIcon();
-
+            
+          CreateNotifyIcon();
+          mStation = StationModel.SelectById(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()));
           Window loginWindow =  new LoginWindow();
-            Current.MainWindow = loginWindow;
-            Current.MainWindow.Show();
+           Current.MainWindow = loginWindow;
+           Current.MainWindow.Show();
            // currentUser = new User() { id = "ea2cd14c-35f0-450894cb-7f126ed8e5a1", name = "陈龙飞" };
         }
 
@@ -63,9 +62,7 @@ namespace TicketCheckStation
             String assimblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name.ToString();
  
             bool createNew=true;
-            EventWaitHandle ProgramStarted = new EventWaitHandle(false, EventResetMode.AutoReset, assimblyName,out createNew);
-
-
+            EventWaitHandle ProgramStarted = new EventWaitHandle(false, EventResetMode.AutoReset, assimblyName,out createNew);           
             if (!createNew)
             {
                 MMessageBox.GetInstance().ShowBox("该程序已经在运行中，不能重复创建！", "提示", MMessageBox.ButtonType.Yes, MMessageBox.IconType.warring,System.Windows.Controls.Orientation.Vertical, "好");
@@ -330,5 +327,22 @@ namespace TicketCheckStation
         /// </summary>
         private void SaveTempData() { }
         #endregion
+
+        public static String getAssemblyName() {
+          return  System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+        }
+
+        public static String GetVersion()
+        {
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
+        public static void Restart() {
+            Process p = new Process();
+            p.StartInfo.FileName = System.AppDomain.CurrentDomain.BaseDirectory + getAssemblyName()+".exe";
+            p.StartInfo.UseShellExecute = false;            
+            p.Start();           
+            Application.Current.Shutdown();
+        }
     }
 }

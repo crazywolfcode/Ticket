@@ -8,6 +8,8 @@ namespace TicketCheckStation
 {
     public enum ConfigItemName
     {
+        //1 连接数据库 2 设置当站点名称
+        InitStep,
         CurrStationId,
          //1耀华系 2 宁波柯力 3   托利多 4赛多利斯 0其它
         ScaleBrandType,
@@ -34,7 +36,7 @@ namespace TicketCheckStation
         autoPrint,//是否自动开始打印
         IsUnifeidLimitTone,//统限定的吨位
         limitTone,
-        //读卡器
+       // 读卡器,
         IcCom,
         IcBaudRate,
     }
