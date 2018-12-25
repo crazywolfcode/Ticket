@@ -74,6 +74,7 @@ namespace TicketCheckStation
                    if (IsReSet)
                     {
                         CommonFunction.ShowSuccessAlert("保存成功！");
+                    MyHelper.ConfigurationHelper.SetConfig(ConfigItemName.SoftSrartDate.ToString(), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     }
                     else
                     {

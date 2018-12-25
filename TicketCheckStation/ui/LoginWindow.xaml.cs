@@ -107,7 +107,6 @@ namespace TicketCheckStation
             string pwdStr = this.pwdPb.Password.Trim();
             if (String.IsNullOrEmpty(pwdStr) || pwdStr.Length < 6)
             {
-
                 MMessageBox.GetInstance().ShowModalAlert("密码长度至少6位", point, size, Orientation.Vertical, null, "#ffffff", true, false);
                 this.AlertPanel.Visibility = Visibility;
                 this.AlertTb.Text = "密码长度至少6位;";
@@ -117,9 +116,8 @@ namespace TicketCheckStation
 
             System.Threading.Thread thread = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
             {
-
                 String password = pwdStr;
-                if (hostoryUser ==null || hostoryUser.isRemberPwd == false)
+                if ((hostoryUser ==null || hostoryUser.isRemberPwd == false) && this.IsRemberPwd == false)
                 {
                     password = EncryptHelper.MD5Encrypt(pwdStr, false);
                 }
@@ -163,6 +161,7 @@ namespace TicketCheckStation
         {
             new MainWindow().Show();
             App.ShowBalloonTip("登陆成功","在使用过程中需要帮助，联系：陈龙飞 18087467482 ");
+            
             new System.Threading.Thread(new System.Threading.ThreadStart(saveToFile)).Start();
             this.Close();
         }
@@ -270,6 +269,7 @@ namespace TicketCheckStation
                     this.RemberPwdCBox.IsChecked = false;
                     this.AutoLoginCbox.IsChecked = false;
                     this.pwdPb.Password = String.Empty;
+                    hostoryUser = null;
             }
             }
         }

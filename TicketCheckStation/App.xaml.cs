@@ -15,6 +15,7 @@ namespace TicketCheckStation
 {
     /// <summary>
     /// App.xaml 的交互逻辑
+    /// code@890216
     /// </summary>
     public partial class App : Application
     {

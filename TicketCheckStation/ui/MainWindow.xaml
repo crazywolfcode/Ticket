@@ -150,7 +150,7 @@
         <!--菜单-->
         <DockPanel Background="#3ca9fe" >
             <Menu Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" >
-                <MenuItem Header="设置" VerticalContentAlignment="Center"  Background="#3ca9fe">
+                <MenuItem Header=" 设置 " VerticalContentAlignment="Center"  Background="#3ca9fe">
                     <MenuItem Header="基本设置" Icon="&#xe650;" x:Name="BaseSettingMI"  Click="MenuItem_Click"/>
                     <MenuItem Header="高级设置" Icon="&#xe688;" x:Name="HeithtSettintMI"  Click="MenuItem_Click"/>
                     <MenuItem Header="系统设置" Icon="&#xe668;" x:Name="SystemSettintMI"  Click="MenuItem_Click"/>
@@ -277,6 +277,12 @@
                     <WrapPanel >
                         <myui:GridLoading x:Name="GridLoading" Visibility="Visible" Height="18" local:ControlAttachProperty.IconSize="10" ToolTip="IC卡读取中..."/>
                         <TextBlock x:Name="ICReaderTb" Text="正常" ToolTip="卡读取中读取状态" VerticalAlignment="Center" Margin="8,0,0,0" />
+                    </WrapPanel>
+                </StatusBarItem>
+                <StatusBarItem x:Name="SoftExpiredSBI" Visibility="Collapsed">
+                    <WrapPanel Margin="20,0,20,0">
+                        <myui:IconTextBlock Text="&#xe668;" FontSize="18" Foreground="White" />
+                        <TextBlock x:Name="SoftExpiredAlertTB" Text="系统将在 30 天后服务到期" Margin="10,4,0,0"/>
                     </WrapPanel>
                 </StatusBarItem>
                 <StatusBarItem HorizontalAlignment="Right" Margin="4,0,14,0">

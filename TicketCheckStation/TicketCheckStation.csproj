@@ -149,6 +149,7 @@
     <Compile Include="ui\SetStationWindow.xaml.cs">
       <DependentUpon>SetStationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ui\SettingW.xaml.cs" />
     <Page Include="ui\AboutW.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -276,6 +277,10 @@
     <Page Include="ui\SetStationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ui\SettingW.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

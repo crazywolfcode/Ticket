@@ -28,6 +28,7 @@ namespace TicketCheckStation
         private bool isLogout = false;
         private int NomalDataCount = 0;
         private int NoUpDataCount = 0;
+        private bool softExpird = false;
         #endregion
 
         public MainWindow()
@@ -52,6 +53,8 @@ namespace TicketCheckStation
             LoadData();
 
             ReaderIcCard();
+
+            CheckSoftExpiredTime();
         }
         #region 读取磅称数据
         /// <summary>
@@ -343,6 +346,8 @@ namespace TicketCheckStation
         public uint snr;
         private void ReaderIcCard()
         {
+            if (softExpird == true) { return; }
+
             string IcCom = ConfigurationHelper.GetConfig(ConfigItemName.IcCom.ToString());
             int IcBaudRate = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.IcBaudRate.ToString()));
             byte[] ver = new byte[30];
@@ -544,6 +549,9 @@ namespace TicketCheckStation
         private void HandleCheckBtn_Click(object sender, RoutedEventArgs e)
         {
             isChecking = true;
+            if (softExpird == true) {
+                MMessageBox.GetInstance().ShowBox("系统服务到期，请谨慎操作！", "提示", MMessageBox.ButtonType.Yes, MMessageBox.IconType.warring, Orientation.Horizontal, "好");
+            }
             if (App.currentUser.roleLevel == (int)RoleLevelType.YPY || App.currentUser.roleLevel == (int)RoleLevelType.SHY)
             {
                 new InputWindow() { CaptureImg = new Action<string>(CaptureJpeg), Owner = this }.ShowDialog();
@@ -686,15 +694,20 @@ namespace TicketCheckStation
             switch (item.Name)
             {
                 case "BaseSettingMI":
-
+                    new SettingW().ShowDialog();
                     break;
                 case "HeithtSettintMI":
-
+                    new SettingW(1).ShowDialog();
                     break;
                 case "SystemSettintMI":
-
+                    if (App.currentUser.roleLevel == (int)RoleLevelType.XTZZ)
+                    {
+                        new SettingW(2).ShowDialog();
+                    }
+                    else {
+                        CommonFunction.ShowAlert("无权操作");
+                    }                   
                     break;
-
                 case "VideoManagerMI":
                     new CameralManageWindow().ShowDialog();
                     break;
@@ -771,6 +784,39 @@ namespace TicketCheckStation
         private void TaxationBtn_Click(object sender, RoutedEventArgs e)
         {
             new CashReportWindow().Show();
+        }
+
+        private void CheckSoftExpiredTime() {
+            System.Threading.Thread thread = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
+            {
+                try {
+                    long end = Convert.ToInt64(ConfigurationHelper.GetConfig(ConfigItemName.SoftEndDate.ToString()));
+                    end = end / 1000;
+
+                    long now = DateTimeHelper.GetTimeStamp() / 1000;
+                    decimal day =Math.Floor( Convert.ToDecimal((end - now) / 86400));
+                   
+                    if (day<=30) {
+                        this.Dispatcher.Invoke(new Action(delegate {
+                            if (day <= 0)
+                            {
+                                softExpird = true;
+                                this.SoftExpiredAlertTB.Text = $"系统服务到期";
+                            }
+                            else {
+                                this.SoftExpiredAlertTB.Text = $" {day} 天后系统服务到期";
+                            }
+                          
+                            this.SoftExpiredSBI.Visibility = Visibility.Visible;
+                        }));
+                    }
+                } catch { }       
+            }))
+            {
+                IsBackground = true,
+            };
+            thread.Start();
+
         }
     }
 }
