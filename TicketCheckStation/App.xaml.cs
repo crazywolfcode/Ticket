@@ -103,10 +103,11 @@ namespace TicketCheckStation
             notifyIcon.BalloonTipClicked += NotifyIcon_BalloonTipClicked;
             notifyIcon.ShowBalloonTip(1000);
             notifyIcon.Text = "煤炭运煤监管系统";
-            notifyIcon.MouseDoubleClick += NotifyIcon_MouseDoubleClick;
+            notifyIcon.MouseDoubleClick += NotifyIcon_MouseDoubleClick;           
             notifyIcon.Click += NotifyIcon_Click;
             notifyIcon.ContextMenu = GetNotifyMenu();
         }
+
 
         private void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
@@ -115,7 +116,15 @@ namespace TicketCheckStation
 
         private void NotifyIcon_Click(object sender, EventArgs e)
         {
-            Current.MainWindow.ShowActivated = true;
+            if (App.Current.MainWindow.WindowState == WindowState.Minimized)
+            {
+                App.Current.MainWindow.WindowState = WindowState.Normal;
+                Current.MainWindow.ShowActivated = true;
+            }
+            else {
+                App.Current.MainWindow.WindowState = WindowState.Minimized;
+            }
+            
         }
 
         private void NotifyIcon_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)

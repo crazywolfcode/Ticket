@@ -106,16 +106,13 @@
                                                 <TextBlock Text="物资名称:" Style="{StaticResource LabelStyle}"/>
                                                 <TextBlock Text="税  价:" Style="{StaticResource LabelStyle}"/>
                                                 <TextBlock Text="超限吨位:" Style="{StaticResource LabelStyle}"/>
-                                                <TextBlock Text="应补税款:" Style="{StaticResource LabelStyle}"/>
-                                               
-
+                                                <TextBlock Text="应补税款:" Style="{StaticResource LabelStyle}"/>                                              
                                             </StackPanel>
                                             <StackPanel Margin="4,0,4,0" >
                                                 <TextBlock Text="{Binding materialName}" Style="{StaticResource ValueStyle}"/>
+                                                <TextBlock Text="{Binding materialTaxation ,StringFormat={}{0:c} 元/吨,ConverterCulture=zh-CN}"  Style="{StaticResource ValueStyle}" />
                                                 <TextBlock Text="{Binding overtopWeight}"  Style="{StaticResource ValueStyle}" />
-                                                <TextBlock Text="{Binding materialTaxation}"  Style="{StaticResource ValueStyle}" />
-                                                <TextBlock Text="{Binding overtopMoney ,StringFormat={}{0:c} 元,ConverterCulture=zh-CN}" FontWeight="Black" FontSize="16" Foreground="Red" Style="{StaticResource ValueStyle}"/>
-                                               
+                                                <TextBlock Text="{Binding overtopMoney ,StringFormat={}{0:c} 元,ConverterCulture=zh-CN}" FontWeight="Black" FontSize="16" Foreground="Red" Style="{StaticResource ValueStyle}"/>                                               
                                             </StackPanel>
                                         </StackPanel>
                                     </Border>                                 

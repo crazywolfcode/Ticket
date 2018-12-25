@@ -25,6 +25,7 @@ namespace TicketCheckStation
         protected IScaleDataInterpreter mScaleDataInterpreter;
         private System.IO.Ports.SerialPort mSerialPort;
         private int NoCashCount = 0;
+        private bool isLogout = false;
         private int NomalDataCount = 0;
         private int NoUpDataCount = 0;
         #endregion
@@ -504,12 +505,14 @@ namespace TicketCheckStation
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            e.Cancel = true;
-            this.WindowState = WindowState.Minimized;
-            String title = "煤炭运煤监管系统 ";
-            String text = "最小化在到这里";
-            App.ShowBalloonTip(title, text);
-            return;
+            if (isLogout == false) {
+                e.Cancel = true;
+                this.WindowState = WindowState.Minimized;
+                String title = "煤炭运煤监管系统 ";
+                String text = "最小化在到这里";
+                App.ShowBalloonTip(title, text);
+                return;
+            }          
             if (mDispatcherTimer != null)
             {
                 mDispatcherTimer.Stop();
@@ -663,6 +666,7 @@ namespace TicketCheckStation
 
         private void LogoutBtn_Click(object sender, RoutedEventArgs e)
         {
+            isLogout = true;
             new LoginWindow() { IsChangeAccount = true }.Show();
             this.Close();
         }
