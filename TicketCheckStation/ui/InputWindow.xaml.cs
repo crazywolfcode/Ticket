@@ -747,6 +747,8 @@ namespace TicketCheckStation
                 totalMoney = Math.Round(sendNet + taxationPrice);
                 this.differenceWeightTbox.Text = "0";
                 this.TaxationMoneyTbox.Text ="0";
+                mWeighingBill.overtopWeight = 0.0;
+                mWeighingBill.overtopMoney = 0.0;
             }          
             mWeighingBill.materialTaxation = taxationPrice;
             mWeighingBill.limitWeight = limitTone;

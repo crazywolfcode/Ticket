@@ -107,6 +107,7 @@
     <Compile Include="Convertor\PrientTimesStringConverter.cs" />
     <Compile Include="Entity\BillTaxationMoneyRecord.cs" />
     <Compile Include="Entity\model\BillTaxationMoneyRecordModel.cs" />
+    <Compile Include="Entity\model\ConfigModel.cs" />
     <Compile Include="Entity\model\StationModel.cs" />
     <Compile Include="Entity\model\UserModel.cs" />
     <Compile Include="Entity\model\WeighingBillModel.cs" />

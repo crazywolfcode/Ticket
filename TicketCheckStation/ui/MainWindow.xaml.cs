@@ -330,9 +330,9 @@ namespace TicketCheckStation
                         addUserName = App.currentUser.name,
                         addTime = DateTime.Now,
                         billNumber = currBillNumber,
-                        address = filePath + "/" + fileName,
+                        address = fileNamePath.Replace("\\","\\\\"),
                         positon = i,
-                    };
+                    };                    
                     DatabaseOPtionHelper.GetInstance().insert(im);
                 }
             }

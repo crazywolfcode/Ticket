@@ -18,8 +18,7 @@ namespace TicketCheckStation
     /// code@890216
     /// </summary>
     public partial class App : Application
-    {
-
+    {                
         public static Station mStation;
         internal static User currentUser;
         #region 本机使用的临时基础数据
@@ -136,7 +135,6 @@ namespace TicketCheckStation
         /// <returns></returns>
         public System.Windows.Forms.ContextMenu GetNotifyMenu()
         {
-
             System.Windows.Forms.MenuItem[] notifyMenu;
             System.Windows.Forms.MenuItem quitMenuItem = new System.Windows.Forms.MenuItem();
             quitMenuItem.Text ="退出";

@@ -33,7 +33,16 @@ namespace TicketCheckStation
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            SetConfig();
+        }
 
+        private void SetConfig() {
+
+            List<Config> configs = ConfigModel.GetCurrStationConfigs();
+            foreach (var item in configs)
+            {
+                ConfigurationHelper.SetConfig(item.configName, item.configValue);
+            }
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
