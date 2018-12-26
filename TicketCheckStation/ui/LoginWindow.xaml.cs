@@ -135,13 +135,16 @@ namespace TicketCheckStation
                 {
                     if (user != null)
                     {
-                        if (user.stationId != App.mStation.id)
+                        if (user.roleLevel != (int)RoleLevelType.XTZZ)
                         {
-                            MMessageBox.GetInstance().ShowBox("你不属于该验票站 ，禁止登陆", "提示", MMessageBox.ButtonType.Yes, MMessageBox.IconType.warring, Orientation.Horizontal, "好");
-                            this.AlertPanel.Visibility = Visibility;
-                            this.AlertTb.Text = "你不属于该验票站 ，禁止登陆";
-                            return;
-                        }
+                            if (user.stationId != App.mStation.id)
+                            {
+                                MMessageBox.GetInstance().ShowBox("你不属于该验票站 ，禁止登陆", "提示", MMessageBox.ButtonType.Yes, MMessageBox.IconType.warring, Orientation.Horizontal, "好");
+                                this.AlertPanel.Visibility = Visibility;
+                                this.AlertTb.Text = "你不属于该验票站 ，禁止登陆";
+                                return;
+                            }
+                        }                      
                         App.currentUser = user;
                         DoubleAnimation animation = new DoubleAnimation
                         {

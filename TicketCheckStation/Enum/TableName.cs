@@ -232,6 +232,7 @@ namespace TicketCheckStation
     {
         id,
         name,
+        role_level,
         remark,
         add_time,
         last_update_time,
