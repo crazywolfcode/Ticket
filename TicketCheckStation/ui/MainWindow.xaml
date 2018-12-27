@@ -250,10 +250,16 @@
                 <DataGridTemplateColumn Header="操作" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
+                            <WrapPanel>
                             <myui:IconButton Icon="&#xe898;" IsTransparency="False" IsShowIcon="True" IconSize="22" ToolTip="收税" Width="30"  x:Name="CashBtn"
-                                             Background="White" IconMargin="0,-11,0,0" Margin="2,0,0,0" Visibility="{Binding ElementName=CashBtn, Path=Tag, Converter={StaticResource cashBtnVisbilityConvetter}}"
+                                             Background="White" IconMargin="0,-11,0,0" Margin="2,0,2,0" Visibility="{Binding ElementName=CashBtn, Path=Tag, Converter={StaticResource cashBtnVisbilityConvetter}}"
                                              MouseOverBackground="#3ca9fe" Foreground="#3ca9fe" MouseOverForeground="White"
                                              Tag="{Binding}" Click="cashBtn_Click"/>
+                                <myui:IconButton Icon="&#xe898;" IsTransparency="False" IsShowIcon="True" IconSize="22" ToolTip="查看截图" Width="30"  x:Name="LookPcBtn"
+                                             Background="White" IconMargin="0,-11,0,0" Margin="2,0,0,0" Visibility="{Binding ElementName=CashBtn, Path=Tag, Converter={StaticResource cashBtnVisbilityConvetter}}"
+                                             MouseOverBackground="#3ca9fe" Foreground="#xe877" MouseOverForeground="White"
+                                             Tag="{Binding}" Click="LookPcBtn_Click"/>
+                            </WrapPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

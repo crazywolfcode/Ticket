@@ -173,11 +173,11 @@
                                 <TextBlock Text="驾驶员签字: " DockPanel.Dock="Right" FontSize="14" Foreground="#787879" Margin="0,3,20,0" Width="160"/>
                                 <WrapPanel DockPanel.Dock="Right" Margin="0,3,0,0">
                                     <TextBlock Text="过磅员: "   FontSize="14" Foreground="#787879" />
-                                    <TextBlock Text="{Binding receiveUserName}"   FontSize="12" Foreground="#787879"  Width="130"/>
+                                    <TextBlock Text="{Binding addUserName}"   FontSize="12" Foreground="#787879"  Width="130" Padding="0,2,0,0"/>
                                 </WrapPanel>
                                 <WrapPanel>
-                                    <TextBlock Text="审核员：" FontSize="14" Foreground="#787879" Margin="10,3,10,0" Width="50"/>
-                                    <TextBlock Text="{Binding checkUserName}" Style="{StaticResource ValueStyle}" Margin="3,3,0,0"/>
+                                    <TextBlock Text="审核员：" FontSize="14" Foreground="#787879" Margin="10,3,1,0" Width="50"/>
+                                    <TextBlock Text="{Binding checkUserName}"   FontSize="12"  Style="{StaticResource ValueStyle}" Padding="1,4,0,0"/>
                                 </WrapPanel>
                             </DockPanel>
                         </Border>

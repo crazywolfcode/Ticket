@@ -106,6 +106,7 @@
     <Compile Include="Convertor\PrientTimesNowConverter.cs" />
     <Compile Include="Convertor\PrientTimesStringConverter.cs" />
     <Compile Include="Entity\BillTaxationMoneyRecord.cs" />
+    <Compile Include="Entity\model\BillIamgeModel.cs" />
     <Compile Include="Entity\model\BillTaxationMoneyRecordModel.cs" />
     <Compile Include="Entity\model\ConfigModel.cs" />
     <Compile Include="Entity\model\StationModel.cs" />
@@ -135,6 +136,9 @@
     </Compile>
     <Compile Include="ui\CashWindow.xaml.cs">
       <DependentUpon>CashWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ui\PicWindow.xaml.cs">
+      <DependentUpon>PicWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ui\PrintBillW.xaml.cs" />
     <Compile Include="ui\CashReportWindow.xaml.cs">
@@ -254,6 +258,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\PicWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ui\PrintBillW.xaml">
       <Generator>MSBuild:Compile</Generator>

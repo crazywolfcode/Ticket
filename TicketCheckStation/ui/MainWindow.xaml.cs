@@ -610,7 +610,8 @@ namespace TicketCheckStation
 
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //TODO
+            WeighingBill bill = this.TodayDataGrid.SelectedItem as WeighingBill;
+            new PicWindow(bill).ShowDialog();
         }
         private void cashBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -817,6 +818,13 @@ namespace TicketCheckStation
             };
             thread.Start();
 
+        }
+
+        private void LookPcBtn_Click(object sender, RoutedEventArgs e)
+        {
+            IconButton b = sender as IconButton;
+            WeighingBill weighing = b.Tag as WeighingBill;
+            new PicWindow(weighing).ShowDialog();
         }
     }
 }

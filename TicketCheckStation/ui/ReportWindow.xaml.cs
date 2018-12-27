@@ -474,7 +474,8 @@ namespace TicketCheckStation
 
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //TODO
+            WeighingBill bill = this.ReportDataGrid.SelectedItem as WeighingBill;
+            new PicWindow(bill).ShowDialog();
         }
 
         private void PrintSelectBtn_Click(object sender, RoutedEventArgs e)

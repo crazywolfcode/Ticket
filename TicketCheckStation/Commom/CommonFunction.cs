@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using MyCustomControlLibrary;
 
 namespace TicketCheckStation
@@ -15,6 +16,23 @@ namespace TicketCheckStation
     /// </summary>
     public class CommonFunction
     {
+
+        public static BitmapImage getImageSource(String uri)
+        {
+
+            BitmapImage bmp = new BitmapImage();
+            try
+            {
+                bmp.BeginInit();//初始化
+                bmp.UriSource = new Uri(uri);//设置图片路径
+                bmp.EndInit();//结束初始化
+            }
+            catch
+            {
+
+            }
+            return bmp;
+        }
         /// <summary>
         /// Update Used Base Data run in the app exiting
         /// </summary>
