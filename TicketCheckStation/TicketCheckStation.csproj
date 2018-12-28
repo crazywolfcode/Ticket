@@ -137,6 +137,9 @@
     <Compile Include="ui\CashWindow.xaml.cs">
       <DependentUpon>CashWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ui\PasswordWindow.xaml.cs">
+      <DependentUpon>PasswordWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ui\PicWindow.xaml.cs">
       <DependentUpon>PicWindow.xaml</DependentUpon>
     </Compile>
@@ -258,6 +261,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ui\PasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ui\PicWindow.xaml">
       <SubType>Designer</SubType>

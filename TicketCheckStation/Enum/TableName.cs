@@ -255,7 +255,7 @@ namespace TicketCheckStation
         privence,
         city,
         country,
-        detail_address,
+        address,
         remark,
         add_time,
         last_update_time,

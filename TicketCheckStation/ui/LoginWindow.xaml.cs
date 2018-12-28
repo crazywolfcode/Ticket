@@ -52,7 +52,7 @@ namespace TicketCheckStation
             {
                 this.mobileTb.ItemsSource = HostoryUsers;
                 this.mobileTb.SelectedIndex = 0;
-            }
+            }       
         }
 
 
@@ -126,7 +126,7 @@ namespace TicketCheckStation
             System.Threading.Thread thread = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
             {
                 String password = pwdStr;
-                if (hostoryUser ==null || hostoryUser.isRemberPwd == false)
+                if (this.IsRemberPwd == false || hostoryUser == null || hostoryUser.isRemberPwd == false)
                 {
                     password = EncryptHelper.MD5Encrypt(pwdStr, false);
                 }

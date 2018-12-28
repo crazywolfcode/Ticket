@@ -47,8 +47,7 @@ namespace TicketCheckStation
           mStation = StationModel.SelectById(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()));
           Window loginWindow =  new LoginWindow();
            Current.MainWindow = loginWindow;
-           Current.MainWindow.Show();
-           // currentUser = new User() { id = "ea2cd14c-35f0-450894cb-7f126ed8e5a1", name = "陈龙飞" };
+           Current.MainWindow.Show();          
         }
 
         private void GetCurrStatin(String stationId) {

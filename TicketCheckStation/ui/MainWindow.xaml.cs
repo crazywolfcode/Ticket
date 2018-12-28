@@ -41,7 +41,7 @@ namespace TicketCheckStation
         {
             StartClock();
             App.Current.MainWindow = this;
-            this.CurrUserBtn.Content = App.currentUser.name;
+            this.CurrUserBtn.Content = App.currentUser.name ; 
             this.RoleNameTb.Text = App.currentUser.roleName;
         }
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -713,9 +713,11 @@ namespace TicketCheckStation
                     new CameralManageWindow().ShowDialog();
                     break;
                 case "UserManagerMI":
-
+                    CommonFunction.ShowAlert("无权操作");
                     break;
-
+                case "passwordMI":
+                    new PasswordWindow().Show();
+                    break;
                 case "CarManageMI":
                     new CarManageWindow().ShowDialog();
                     break;

@@ -154,6 +154,9 @@
                     <MenuItem Header="基本设置" Icon="&#xe650;" x:Name="BaseSettingMI"  Click="MenuItem_Click"/>
                     <MenuItem Header="高级设置" Icon="&#xe688;" x:Name="HeithtSettintMI"  Click="MenuItem_Click"/>
                     <MenuItem Header="系统设置" Icon="&#xe668;" x:Name="SystemSettintMI"  Click="MenuItem_Click"/>
+                    <MenuItem Header="用户设置" Icon="&#xe61e;">
+                        <MenuItem Header="修改密码"  x:Name="passwordMI"  Click="MenuItem_Click" Icon="&#xe8c4;"/>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem Header="管理" >
                     <MenuItem Header="视频管理" Icon="&#xe66d;" x:Name="VideoManagerMI"   Click="MenuItem_Click"/>
