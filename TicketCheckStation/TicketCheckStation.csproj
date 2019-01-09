@@ -106,16 +106,21 @@
     <Compile Include="Convertor\PrientTimesNowConverter.cs" />
     <Compile Include="Convertor\PrientTimesStringConverter.cs" />
     <Compile Include="Entity\BillTaxationMoneyRecord.cs" />
+    <Compile Include="Entity\model\BaseDataModel.cs" />
     <Compile Include="Entity\model\BillIamgeModel.cs" />
     <Compile Include="Entity\model\BillTaxationMoneyRecordModel.cs" />
     <Compile Include="Entity\model\ConfigModel.cs" />
     <Compile Include="Entity\model\StationModel.cs" />
+    <Compile Include="Entity\model\TableSyncModel.cs" />
     <Compile Include="Entity\model\UserModel.cs" />
     <Compile Include="Entity\model\WeighingBillModel.cs" />
     <Compile Include="Entity\Visual\HostoryUser.cs" />
     <Compile Include="Entity\Visual\SendBill.cs" />
     <Compile Include="factory\BillFactory.cs" />
     <Compile Include="Helper\BitmapHelper.cs" />
+    <Compile Include="Helper\DataAsyncHelper.cs" />
+    <Compile Include="Helper\IcError.cs" />
+    <Compile Include="http\NetHelper.cs" />
     <Compile Include="IcReaderSdk\common.cs" />
     <Compile Include="IcReaderSdk\ICReaderHelper.cs" />
     <Compile Include="IcReaderSdk\mifareone.cs" />
@@ -324,7 +329,9 @@
     <Resource Include="Themes\Font\iconfont.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Command\" />

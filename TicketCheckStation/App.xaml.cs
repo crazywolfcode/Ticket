@@ -32,8 +32,10 @@ namespace TicketCheckStation
         #endregion
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-           int initstep = Convert.ToInt32(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.InitStep.ToString()));
+           int initstep = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.InitStep.ToString()));
 
+            //表示数据初始化成功 ，就可以开始同步 数据
+         
             if (initstep < 3) {
                 if (initstep == 1) {
                     new ConnDbWwindow().ShowDialog();                    
@@ -41,16 +43,23 @@ namespace TicketCheckStation
                 if (initstep == 2) {
                     new SetStationWindow().ShowDialog();
                 } 
-            }
-            
+            }                  
           CreateNotifyIcon();
-          mStation = StationModel.SelectById(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()));
+          mStation = StationModel.SelectById(ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()));
           Window loginWindow =  new LoginWindow();
            Current.MainWindow = loginWindow;
-           Current.MainWindow.Show();          
+           Current.MainWindow.Show();
+           SyncData();
+        }
+        /// <summary>
+        /// 同步数据开始
+        /// </summary>
+        private void SyncData() {
+            Thread thread = new Thread(new ThreadStart(delegate{DataAsyncHelper.Start(); })) { IsBackground = true };            
+            thread.Start();
         }
 
-        private void GetCurrStatin(String stationId) {
+       private void GetCurrStatin(String stationId) {
 
             mStation = StationModel.SelectById(stationId);
 

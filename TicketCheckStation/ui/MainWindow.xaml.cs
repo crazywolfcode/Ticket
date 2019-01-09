@@ -153,11 +153,7 @@ namespace TicketCheckStation
         private List<System.Windows.Forms.PictureBox> mPictureBoxs;
         private void Showcameral()
         {
-            cameraInfoList = new CameralInfoModel().GetList(App.mStation.id);
-            double width = this.ActualWidth;
-            double singleWidth = Math.Floor(width / cameraInfoList.Count);
-            int camerialWidth = Convert.ToInt32(singleWidth);
-            int camerialHeight = 300;
+            cameraInfoList = CameralInfoModel.GetList(App.mStation.id);
             VideoPenal.Children.Clear();
             if (cameraInfoList.Count <= 0)
             {
@@ -173,7 +169,11 @@ namespace TicketCheckStation
                 };
                 VideoPenal.Children.Add(textBlock);
                 return;
-            }
+            }          
+            double width = this.ActualWidth;
+            double singleWidth = Math.Floor(width / cameraInfoList.Count);
+            int camerialWidth = Convert.ToInt32(singleWidth);
+            int camerialHeight = 300;
             if (!CameraHelper.InitSDK())
             {
                 if (VideoPenal.FindName("videotAlertTb") is TextBlock textBlock)
@@ -371,7 +371,8 @@ namespace TicketCheckStation
             }
             else
             {
-                ICReaderTb.Text = "打开读写器失败！";
+                ICReaderTb.Text = $"打开读写器失败{icdev}:" + IcError.GetErrorMsg(icdev);
+            
             }
         }
         //是否在验票中

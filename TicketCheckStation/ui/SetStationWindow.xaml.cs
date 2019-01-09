@@ -29,8 +29,22 @@ namespace TicketCheckStation
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            List<Station> list = StationModel.GetList();
-            this.StationCb.ItemsSource = list;
+            List<Station> list;         
+            NetResult result = NetHelper.Get(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.remoteUrl.ToString()),TableName.station.ToString(),"","");
+            if (result.errCode == 0)
+            {
+                list = (List<Station>)MyHelper.JsonHelper.JsonToObject(result.Data.ToString(), typeof(List<Station>));
+                if (list.Count > 0)
+                {
+                    this.StationCb.ItemsSource = list;
+                }
+                else {
+                    CommonFunction.ShowErrorAlert("系统未能与监管中心连接");
+                }               
+            }
+            else {
+                CommonFunction.ShowErrorAlert("系统未能与监管中心连接");
+            }
         }
 
         #region Window Default Event

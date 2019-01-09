@@ -41,6 +41,9 @@ namespace TicketCheckStation
             List<Config> configs = ConfigModel.GetCurrStationConfigs();
             foreach (var item in configs)
             {
+                if (item.configName == "BillNumberSort") {
+                    continue;
+                }
                 ConfigurationHelper.SetConfig(item.configName, item.configValue);
             }
         }
@@ -76,7 +79,7 @@ namespace TicketCheckStation
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
+          
         }
 
         private void Window_KeyUp(object sender, KeyEventArgs e)
@@ -100,7 +103,7 @@ namespace TicketCheckStation
                 "&#xe752;",
                 Orientation.Vertical,
                 "#ffffff",
-                5);
+                4);
             string mobile = this.mobileTb.Text.Trim();
             if (this.mobileTb.SelectedIndex >= 0) {
                 mobile = hostoryUser.phone;
@@ -126,7 +129,7 @@ namespace TicketCheckStation
             System.Threading.Thread thread = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
             {
                 String password = pwdStr;
-                if (this.IsRemberPwd == false || hostoryUser == null || hostoryUser.isRemberPwd == false)
+                if (hostoryUser == null || hostoryUser.isRemberPwd == false)
                 {
                     password = EncryptHelper.MD5Encrypt(pwdStr, false);
                 }
@@ -173,8 +176,7 @@ namespace TicketCheckStation
         {
             this.Close();
             new MainWindow().Show();
-            App.ShowBalloonTip("登陆成功","在使用过程中需要帮助，联系：陈龙飞 18087467482 ");
-            
+            App.ShowBalloonTip("登陆成功","在使用过程中需要帮助，联系：陈龙飞 18087467482 ");            
             new System.Threading.Thread(new System.Threading.ThreadStart(saveToFile)).Start();            
         }
 
@@ -277,6 +279,7 @@ namespace TicketCheckStation
             if (this.IsLoaded) {
                 String str = this.mobileTb.Text.Trim();
                 if (str.Length <= 0) {
+                    this.mobileTb.SelectedIndex = -1;
                     hostoryUser = null;
                     this.RemberPwdCBox.IsChecked = false;
                     this.AutoLoginCbox.IsChecked = false;
@@ -287,12 +290,15 @@ namespace TicketCheckStation
         }
         private void mobileTb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (mobileTb.SelectedIndex < 0) {
+                hostoryUser = null;
+                return;
+            }
             hostoryUser = this.mobileTb.SelectedItem as HostoryUser;
             if (hostoryUser == null)
             {
                 return;
-            }
-          
+            }          
             this.RemberPwdCBox.IsChecked = hostoryUser.isRemberPwd;
             this.AutoLoginCbox.IsChecked = hostoryUser.isAutoLogin;
             this.IsAutoLogin = hostoryUser.isAutoLogin;

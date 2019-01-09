@@ -15,12 +15,16 @@ namespace TicketCheckStation
 
         public static DbHelper GetInstance()
         {
-            if (Instance == null)
-            {
-                string conn = ConfigurationHelper.GetConnectionConfig(ConfigItemName.mysqlConn.ToString());
-                    Instance = new SqlDao.MySqlHelper(conn);              
-            }
+            string conn = ConfigurationHelper.GetConnectionConfig(ConfigItemName.mysqlConn.ToString());
+            Instance = new MySqlHelper(conn);       
+        App.Current.Dispatcher.BeginInvoke(new Action(delegate{
+                if (Instance == null)
+                {                   
+                    Instance = new MySqlHelper(conn);
+                }
+            }));      
             return Instance;
         }
+
     }
 }

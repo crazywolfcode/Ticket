@@ -41,6 +41,7 @@ namespace TicketCheckStation
         IcBaudRate,
         SoftSrartDate,
         SoftEndDate,
+        remoteUrl,
     }
 
 

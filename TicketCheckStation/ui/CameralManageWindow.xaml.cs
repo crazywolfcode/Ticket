@@ -30,7 +30,7 @@ namespace TicketCheckStation
         }
         public void LoadData()
         {            
-            List<CameraInfo> list = new CameralInfoModel().GetList(App.mStation.id);
+            List<CameraInfo> list = CameralInfoModel.GetList(App.mStation.id);
             this.ReportDataGrid.ItemsSource = list;
         }
 

@@ -189,7 +189,7 @@
                             <Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="1,0,1,1">
                                 <DockPanel VerticalAlignment="Top" Margin="0,4,0,4" LastChildFill="True">
                                     <WrapPanel DockPanel.Dock="Top" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                                        <TextBlock x:Name="SummaryTextBlock" Text="合计:10 次，总金额：￥200.01: " Foreground="#787878" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="SummaryTextBlock" Text="合计:0次，总金额：￥0: " Foreground="#787878" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                     </WrapPanel>
                                     <StackPanel DockPanel.Dock="Top" Height="1" Margin="2,0,0,0" Background="{DynamicResource E4}"></StackPanel>
                                     <StackPanel Orientation="Horizontal" x:Name="parnel" HorizontalAlignment="Left">
