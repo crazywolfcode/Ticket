@@ -10,9 +10,9 @@ namespace TicketCheckStation
     public class BillFactory
     {
 
-        public static SendBill CreateSendbill(String[] strValues,string snr)
+        public static SendBill CreateSendbill(String[] strValues, string snr)
         {
-            SendBill bill = new SendBill(strValues,snr);
+            SendBill bill = new SendBill(strValues, snr);
             return bill;
         }
 
@@ -32,8 +32,8 @@ namespace TicketCheckStation
                 addUserId = App.currentUser.id,
                 addUserName = App.currentUser.name,
                 number = CommonFunction.GetWeighingNumber(),
-                status = 1,               
-        };
+                status = 1,
+            };
             Double taxationPrice = 0.0;
             Double limitTone = 0;
             Double overStopWeight = 0.0;
@@ -59,11 +59,12 @@ namespace TicketCheckStation
                     addUserName = App.currentUser.name,
                     carNumber = sendBill.CarNumber,
                     traeWeight = sendBill.carTraeWeight,
-                    icNumber =sendBill.ICNumber,
+                    icNumber = sendBill.ICNumber,
                     affiliatedProvince = sendBill.carArea,
-                    remark ="读卡验票时系统自动添加"
+                    remark = "读卡验票时系统自动添加"
                 };
-                CarInfoModel.Create(carInfo);
+                if (carInfo.carNumber != null)
+                    CarInfoModel.Create(carInfo);
             }
             weighingBill.carNumber = sendBill.CarNumber;
             weighingBill.driver = sendBill.driver;
@@ -82,9 +83,10 @@ namespace TicketCheckStation
                     name = sendBill.materialName,
                     nameFirstCase = StringHelper.GetFirstPinyin(sendBill.materialName),
                     currTaxation = 0,
-                    limitTone = 0,                   
+                    limitTone = 0,
                 };
-                MaterialModel.Create(material);                
+                if (material.name != null)
+                    MaterialModel.Create(material);
             }
             weighingBill.materialId = material.id;
             weighingBill.materialName = material.name;
@@ -92,9 +94,11 @@ namespace TicketCheckStation
             taxationPrice = material.currTaxation;
             weighingBill.materialTaxation = taxationPrice;
 
-            Company sendCompany =   CompanyModel.GetByName(sendBill.sendCompany);
-            if (sendCompany == null) {
-                sendCompany = new Company() {
+            Company sendCompany = CompanyModel.GetByName(sendBill.sendCompany);
+            if (sendCompany == null)
+            {
+                sendCompany = new Company()
+                {
                     id = Guid.NewGuid().ToString(),
                     addTime = DateTime.Now,
                     addUserId = App.currentUser.id,
@@ -102,11 +106,14 @@ namespace TicketCheckStation
                     name = sendBill.sendCompany,
                     nameFirstCase = StringHelper.GetFirstPinyin(sendBill.sendCompany).ToUpper(),
                 };
-                CompanyModel.Create(sendCompany);
+                if (sendCompany.name != null)
+                {
+                    CompanyModel.Create(sendCompany);
+                }
             }
             weighingBill.sendCompany = sendCompany.name;
             weighingBill.sendCompanyCase = sendCompany.nameFirstCase;
-           
+
             Company receiveCompany = CompanyModel.GetByName(sendBill.receiveCompany);
             if (receiveCompany == null)
             {
@@ -119,13 +126,17 @@ namespace TicketCheckStation
                     name = sendBill.receiveCompany,
                     nameFirstCase = StringHelper.GetFirstPinyin(sendBill.receiveCompany).ToUpper(),
                 };
-                CompanyModel.Create(receiveCompany);
+                if (receiveCompany.name != null)
+                {
+                    CompanyModel.Create(receiveCompany);
+                }
+
             }
             weighingBill.receiveCompany = receiveCompany.name;
             weighingBill.receiveCompanyCase = receiveCompany.nameFirstCase;
 
 
-           
+
             if (ConfigurationHelper.GetConfig(ConfigItemName.IsUnifeidLimitTone.ToString()).Equals("1"))
             {
                 limitTone = Convert.ToDouble(ConfigurationHelper.GetConfig(ConfigItemName.limitTone.ToString()));
@@ -146,9 +157,10 @@ namespace TicketCheckStation
                 {
                     totalMoney = Math.Round(weighingBill.netWeight * taxationPrice);
                     weighingBill.overtopWeight = overStopWeight;
-                    weighingBill.overtopMoney = Math.Round((weighingBill.netWeight - weighingBill.sendNetWeight) * taxationPrice, 2);                 
+                    weighingBill.overtopMoney = Math.Round((weighingBill.netWeight - weighingBill.sendNetWeight) * taxationPrice, 2);
                 }
-                else {
+                else
+                {
                     totalMoney = Math.Round(sendBill.netWeight * taxationPrice);
                 }
             }
@@ -165,7 +177,7 @@ namespace TicketCheckStation
             {
                 weighingBill.isReceiveMoney = (int)ReceiveMoneyType.NotNeed;
             }
-      
+
             return weighingBill;
         }
     }

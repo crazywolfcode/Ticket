@@ -18,7 +18,7 @@ namespace TicketCheckStation
     /// code@890216
     /// </summary>
     public partial class App : Application
-    {                
+    {
         public static Station mStation;
         internal static User currentUser;
         #region 本机使用的临时基础数据
@@ -32,34 +32,39 @@ namespace TicketCheckStation
         #endregion
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-           int initstep = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.InitStep.ToString()));
+            int initstep = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.InitStep.ToString()));
 
             //表示数据初始化成功 ，就可以开始同步 数据
-         
-            if (initstep < 3) {
-                if (initstep == 1) {
-                    new ConnDbWwindow().ShowDialog();                    
+
+            if (initstep < 3)
+            {
+                if (initstep == 1)
+                {
+                    new ConnDbWwindow().ShowDialog();
                 }
-                if (initstep == 2) {
+                if (initstep == 2)
+                {
                     new SetStationWindow().ShowDialog();
-                } 
-            }                  
-          CreateNotifyIcon();
-          mStation = StationModel.SelectById(ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()));
-          Window loginWindow =  new LoginWindow();
-           Current.MainWindow = loginWindow;
-           Current.MainWindow.Show();
-           SyncData();
+                }
+            }
+            CreateNotifyIcon();
+            mStation = StationModel.SelectById(ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()));
+            Window loginWindow = new LoginWindow();
+            Current.MainWindow = loginWindow;
+            Current.MainWindow.Show();
+            SyncData();
         }
         /// <summary>
         /// 同步数据开始
         /// </summary>
-        private void SyncData() {
-            Thread thread = new Thread(new ThreadStart(delegate{DataAsyncHelper.Start(); })) { IsBackground = true };            
+        private void SyncData()
+        {
+            Thread thread = new Thread(new ThreadStart(delegate { DataAsyncHelper.Start(); })) { IsBackground = true };
             thread.Start();
         }
 
-       private void GetCurrStatin(String stationId) {
+        private void GetCurrStatin(String stationId)
+        {
 
             mStation = StationModel.SelectById(stationId);
 
@@ -68,22 +73,23 @@ namespace TicketCheckStation
         protected override void OnStartup(StartupEventArgs e)
         {
             String assimblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name.ToString();
- 
-            bool createNew=true;
-            EventWaitHandle ProgramStarted = new EventWaitHandle(false, EventResetMode.AutoReset, assimblyName,out createNew);           
+
+            bool createNew = true;
+            EventWaitHandle ProgramStarted = new EventWaitHandle(false, EventResetMode.AutoReset, assimblyName, out createNew);
             if (!createNew)
             {
-                MMessageBox.GetInstance().ShowBox("该程序已经在运行中，不能重复创建！", "提示", MMessageBox.ButtonType.Yes, MMessageBox.IconType.warring,System.Windows.Controls.Orientation.Vertical, "好");
+                MMessageBox.GetInstance().ShowBox("该程序已经在运行中，不能重复创建！", "提示", MMessageBox.ButtonType.Yes, MMessageBox.IconType.warring, System.Windows.Controls.Orientation.Vertical, "好");
                 App.Current.Shutdown();
                 Environment.Exit(0);
             }
-  
+
             base.OnStartup(e);
         }
 
-      public static void ShowBalloonTip(String title,String text) {
-            notifyIcon.BalloonTipTitle =title;
-            notifyIcon.BalloonTipText = text;          
+        public static void ShowBalloonTip(String title, String text)
+        {
+            notifyIcon.BalloonTipTitle = title;
+            notifyIcon.BalloonTipText = text;
             notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             notifyIcon.Visible = true;
             notifyIcon.ShowBalloonTip(1000);
@@ -108,7 +114,7 @@ namespace TicketCheckStation
             notifyIcon.BalloonTipClicked += NotifyIcon_BalloonTipClicked;
             notifyIcon.ShowBalloonTip(1000);
             notifyIcon.Text = "煤炭运煤监管系统";
-            notifyIcon.MouseDoubleClick += NotifyIcon_MouseDoubleClick;           
+            notifyIcon.MouseDoubleClick += NotifyIcon_MouseDoubleClick;
             notifyIcon.Click += NotifyIcon_Click;
             notifyIcon.ContextMenu = GetNotifyMenu();
         }
@@ -126,17 +132,18 @@ namespace TicketCheckStation
                 App.Current.MainWindow.WindowState = WindowState.Normal;
                 Current.MainWindow.ShowActivated = true;
             }
-            else {
+            else
+            {
                 App.Current.MainWindow.WindowState = WindowState.Minimized;
             }
-            
+
         }
 
         private void NotifyIcon_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             //ShowCurrentWindow();
         }
-        
+
         /// <summary>
         /// 创建Notify icon Menu
         /// </summary>
@@ -145,7 +152,7 @@ namespace TicketCheckStation
         {
             System.Windows.Forms.MenuItem[] notifyMenu;
             System.Windows.Forms.MenuItem quitMenuItem = new System.Windows.Forms.MenuItem();
-            quitMenuItem.Text ="退出";
+            quitMenuItem.Text = "退出";
             quitMenuItem.DefaultItem = true;
             quitMenuItem.Click += QuitMenuItem_Click;
             notifyMenu = new System.Windows.Forms.MenuItem[] { quitMenuItem };
@@ -159,7 +166,7 @@ namespace TicketCheckStation
             MMessageBox.Result result = MMessageBox.GetInstance().ShowBox("你确定退出程系吗", "提示", MMessageBox.ButtonType.YesNo, MMessageBox.IconType.Info);
             if (result == MMessageBox.Result.Yes)
             {
-              Current.Shutdown();
+                Current.Shutdown();
             }
             else
             {
@@ -193,8 +200,7 @@ namespace TicketCheckStation
             //{
             Thread thread = new Thread(new ThreadStart(InsertOrUpdateAppSettings));
             thread.IsBackground = true;
-            thread.Start();
-            //InsertOrUpdateAppSettings();
+            thread.Start();          
             SaveTempData();
             CommonFunction.UpdateUsedBaseData();
             Thread.Sleep(1200);
@@ -250,11 +256,12 @@ namespace TicketCheckStation
                         config = new Config();
                         config.id = Guid.NewGuid().ToString();
                         config.stationId = ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString());
+                        config.stationName = mStation.name;
                         config.configName = conns[i].Name;
                         config.configValue = conns[i].ConnectionString;
-                        config.addTime =DateTime.Now;
+                        config.addTime = DateTime.Now;
                         config.configType = (int)ConfigType.ClientAppConfig;
-                    
+
                         if (App.currentUser != null)
                         {
                             config.addUserId = App.currentUser.id;
@@ -314,6 +321,7 @@ namespace TicketCheckStation
                             addTime = DateTime.Now,
                             configName = key,
                             stationId = ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()),
+                            stationName = mStation.name,
                             configValue = collection[key].ToString(),
                             configType = (int)ConfigType.ClientAppConfig
                         };
@@ -342,8 +350,9 @@ namespace TicketCheckStation
         private void SaveTempData() { }
         #endregion
 
-        public static String getAssemblyName() {
-          return  System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+        public static String getAssemblyName()
+        {
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
         }
 
         public static String GetVersion()
@@ -351,11 +360,12 @@ namespace TicketCheckStation
             return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
-        public static void Restart() {
+        public static void Restart()
+        {
             Process p = new Process();
-            p.StartInfo.FileName = System.AppDomain.CurrentDomain.BaseDirectory + getAssemblyName()+".exe";
-            p.StartInfo.UseShellExecute = false;            
-            p.Start();           
+            p.StartInfo.FileName = System.AppDomain.CurrentDomain.BaseDirectory + getAssemblyName() + ".exe";
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
             Application.Current.Shutdown();
         }
     }

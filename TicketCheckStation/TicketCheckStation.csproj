@@ -335,7 +335,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Command\" />
-    <Folder Include="dll\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Themes\Img\Background\background_main.png" />
@@ -386,6 +385,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dll\WPFVisifire.Charts.dll" />
+    <Content Include="dll\WPFVisifire.Gauges.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

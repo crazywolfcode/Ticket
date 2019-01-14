@@ -403,7 +403,6 @@ namespace TicketCheckStation
                 isChecking = true;
                 ICReaderDispatcherTimer.Stop();
                 common.rf_beep(icdev, 2);
-                common.rf_beep(icdev, 2);
                 this.IsEnabled = false;
                 readerCard();
                 isChecking = false;
