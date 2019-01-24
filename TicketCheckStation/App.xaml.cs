@@ -48,7 +48,8 @@ namespace TicketCheckStation
                 }
             }
             CreateNotifyIcon();
-            mStation = StationModel.SelectById(ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()));
+            string id = ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString());
+            mStation = StationModel.SelectById(id);
             Window loginWindow = new LoginWindow();
             Current.MainWindow = loginWindow;
             Current.MainWindow.Show();

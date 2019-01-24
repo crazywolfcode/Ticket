@@ -103,7 +103,7 @@ namespace TicketCheckStation
             switch (table.tableName)
             {
                 case "bill_image":
-                    Put_bill_image(table);
+                    Put_bill_imageAsync(table);
                     break;
                 case "bill_taxation_money_record":
                     Put_bill_taxation_money_record(table);
@@ -561,7 +561,7 @@ namespace TicketCheckStation
         #endregion 更新数据
 
         #region PutData 上传数据
-        public static void Put_bill_image(TableSync table)
+        public static async void Put_bill_imageAsync(TableSync table)
         {
             Console.WriteLine($"上传=={table.tableName}==");
             String sql = BaseDataModel.GetSql(table);
@@ -575,7 +575,7 @@ namespace TicketCheckStation
             {
                 for (; i < datas.Count; i++)
                 {
-                    var item = datas[i];
+                    var item = datas[i];                    
                     NetResult result = NetHelper.Post(GetUrl(), item, table.tableName);
                     if (result == null)
                     {
@@ -583,8 +583,19 @@ namespace TicketCheckStation
                     }
                     if (result.errCode == 0)
                     {
-                        //TODO　上传图片文件
-                        table.syncCount += 1;
+                        //上传图片文件
+                        if (string.IsNullOrEmpty(item.remoteAddress))
+                        {
+                            NetResult netResult = await NetHelper.UpFileAsync(GetUrl(), item.address);
+                            Console.WriteLine("上传图片文件=======" + netResult.msg + "====path:" + netResult.Data);
+                            table.syncCount += 1;
+                            if (!String.IsNullOrEmpty(netResult.Data.ToString()))
+                            {
+                                item.remoteAddress = netResult.Data.ToString().Replace("\\", "\\\\");
+                                item.lastUpdateTime = DateTime.Now;
+                                DatabaseOPtionHelper.GetInstance().update(item);
+                            }
+                        }
                         if (item.addTime > item.lastUpdateTime)
                         {
                             table.syncTime = item.addTime;

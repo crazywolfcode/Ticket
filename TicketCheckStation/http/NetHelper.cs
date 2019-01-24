@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -26,8 +27,7 @@ namespace TicketCheckStation
         }
 
         public static NetResult Post(String url, Object data, string table)
-        {
-          
+        {          
             String josn = MyHelper.JsonHelper.ObjectToJson(data);                 
             WebClient client = new WebClient();
             var qs = new System.Collections.Specialized.NameValueCollection
@@ -41,9 +41,17 @@ namespace TicketCheckStation
             return result;
         }
 
-        public static NetResult UpFile(String table,string filePath) {
+        public static async Task<NetResult> UpFileAsync(String url,string filePath) {
 
-            return null;
+            WebClient client = new WebClient();
+            var qs = new System.Collections.Specialized.NameValueCollection
+            {
+                { "table", "image" },{"fileName",Path.GetFileName(filePath)}
+            };
+            byte[] res = await client.UploadFileTaskAsync(url, filePath);
+            
+           NetResult result = (NetResult)MyHelper.JsonHelper.JsonToObject(res.ToString(), typeof(NetResult));
+           return result;
         }
     }
     
