@@ -31,7 +31,7 @@ namespace TicketCheckStation
 
         #endregion
         private void Application_Startup(object sender, StartupEventArgs e)
-        {
+        {          
             int initstep = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.InitStep.ToString()));
 
             //表示数据初始化成功 ，就可以开始同步 数据
@@ -55,6 +55,7 @@ namespace TicketCheckStation
             Current.MainWindow.Show();
             SyncData();
         }
+
         /// <summary>
         /// 同步数据开始
         /// </summary>

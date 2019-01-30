@@ -29,28 +29,43 @@ using System.Text;
 
 	 public String tableName{ get; set; }
 
-	 /// <summary>
-	 /// 注释:上一次同步时间
-	 /// 可空:YES
-	 /// </summary>
+        /// <summary>
+        /// 注释:上一次上传同步时间
+        /// 可空:YES
+        /// </summary>
 
-	 public DateTime syncTime{ get; set; }
+        public DateTime syncUpTime{ get; set; }
 
 	 /// <summary>
-	 /// 注释:影响记录数
+	 /// 注释:上传影响记录数
 	 /// 可空:NO
 	 ///默认值:0
 	 /// </summary>
 
-	 public Int32 syncCount{ get; set; }
+	    public Int32 syncUpCount{ get; set; }
 
-	 /// <summary>
-	 /// 注释:是否有上传状态 1 是 0否
-	 /// 可空:NO
-	 ///默认值:0
-	 /// </summary>
+        /// <summary>
+        /// 注释:上一次下载同步时间
+        /// 可空:YES
+        /// </summary>
 
-	 public Int32 hasUpStatus{ get; set; }
+        public DateTime syncDownTime { get; set; }
+
+        /// <summary>
+        /// 注释:下载影响记录数
+        /// 可空:NO
+        ///默认值:0
+        /// </summary>
+
+        public Int32 syncDownCount { get; set; }
+
+        /// <summary>
+        /// 注释:是否有上传状态 1 是 0否
+        /// 可空:NO
+        ///默认值:0
+        /// </summary>
+
+        public Int32 hasUpStatus{ get; set; }
 
 	 /// <summary>
 	 /// 注释:0 不需要同步 1要同步 

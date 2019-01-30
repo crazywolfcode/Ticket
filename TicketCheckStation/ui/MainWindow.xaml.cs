@@ -303,8 +303,9 @@ namespace TicketCheckStation
             string filePath = ConfigurationHelper.GetConfig(ConfigItemName.CameraCaptureFilePath.ToString());
             if (String.IsNullOrEmpty(filePath))
             {
-                filePath = System.IO.Path.Combine(FileHelper.GetRunTimeRootPath(), "capture");
+                filePath = System.IO.Path.Combine(FileHelper.GetRunTimeRootPath(), "capture",DateTime.Now.ToShortDateString());
             }
+            FileHelper.FolderExistsCreater(filePath);
             String fileName = String.Empty;
             //根据登陆成功的通过截图
             for (int i = 0; i < CameraIds.Count; i++)
@@ -315,9 +316,10 @@ namespace TicketCheckStation
                 }
                 else
                 {
-                    fileName = currBillNumber + "_" + i + "_" + Constract.CaputureSuffix;
+                    fileName = currBillNumber + "_" + i + Constract.CaputureSuffix;
                 }
-                String fileNamePath = System.IO.Path.Combine(filePath, fileName);
+                //String fileNamePath = System.IO.Path.Combine(filePath, fileName);
+                String fileNamePath = filePath+"/"+ fileName;
                 bool res = CameraHelper.CaptureJpeg(fileNamePath, CameraIds[i], mDeviceInfors[i].byChanNum);
                 if (res)
                 {
@@ -330,7 +332,7 @@ namespace TicketCheckStation
                         addUserName = App.currentUser.name,
                         addTime = DateTime.Now,
                         billNumber = currBillNumber,
-                        address = fileNamePath.Replace("\\","\\\\"),
+                        address = fileNamePath.Replace("\\","\\\\").Replace("/","\\\\"),
                         positon = i,
                     };                    
                     DatabaseOPtionHelper.GetInstance().insert(im);
@@ -722,7 +724,7 @@ namespace TicketCheckStation
                     new CarManageWindow().ShowDialog();
                     break;
                 case "AddMaterialMI":
-
+                    CommonFunction.ShowAlert("无权操作");
                     break;
                 case "MaterialManageMI":
                     new MaterialManageWindow().ShowDialog();

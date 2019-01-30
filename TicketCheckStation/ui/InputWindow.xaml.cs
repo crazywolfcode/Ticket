@@ -695,14 +695,13 @@ namespace TicketCheckStation
                 try
                 {
                     Convert.ToDouble(tb.Text.Trim());
-
+                    CalcWeight();
                 }
                 catch (Exception exc)
                 {
                     MMessageBox.GetInstance().ShowBox("只能输入数字：" + tb.Name, Title, MMessageBox.ButtonType.No, MMessageBox.IconType.error);
                     Console.WriteLine("===========只能输入数字:" + exc.Message);
-                }
-                CalcWeight();
+                }               
             }
         }
         private void CalcWeight()

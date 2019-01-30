@@ -29,7 +29,7 @@ namespace TicketCheckStation
             }
             catch
             {
-
+                bmp = null;
             }
             return bmp;
         }
@@ -61,7 +61,7 @@ namespace TicketCheckStation
                 MyHelper.FileHelper.Write(System.IO.Path.Combine(Constract.tempPath, Constract.tempCarFileName), xml);
             }
         }
-        
+
         internal static void UpdateInputReamak(object remark)
         {
             if (remark != null && !String.IsNullOrEmpty(remark.ToString()))
@@ -72,7 +72,7 @@ namespace TicketCheckStation
                 }
             }
         }
-        
+
         /// <summary>
         /// Update Used Base Data run in the save success
         /// </summary>
@@ -85,7 +85,7 @@ namespace TicketCheckStation
             CarInfo carInfo = baseDataClassV.carInfo;
             if (supply != null)
             {
-                supply.lastUpdateTime =DateTime.Now;
+                supply.lastUpdateTime = DateTime.Now;
                 if (App.tempSupplyCompanys.ContainsKey(supply.id))
                 {
                     App.tempSupplyCompanys.Remove(supply.id);
@@ -132,17 +132,18 @@ namespace TicketCheckStation
         /// <param name="ExtStr"> BL OR WL</param>
         /// <param name="noaml">true 正常过磅 false WeightingBillType + CurrentDateTime</param>
         /// <returns></returns>
-        public static String GetWeighingNumber( bool noaml = true, String ExtStr = null)
+        public static String GetWeighingNumber(bool noaml = true, String ExtStr = null)
         {
             String date = MyHelper.DateTimeHelper.getCurrentDateTime(MyHelper.DateTimeHelper.DateFormat);
             String oldDate = MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.BillNumberDate.ToString());
             if (!date.Equals(oldDate))
-            {            
+            {
                 MyHelper.ConfigurationHelper.SetConfig(ConfigItemName.BillNumberDate.ToString(), date);
                 MyHelper.ConfigurationHelper.SetConfig(ConfigItemName.BillNumberSort.ToString(), "1");
             }
             string oldSort = MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.BillNumberSort.ToString());
-            switch (oldSort.Length) {
+            switch (oldSort.Length)
+            {
                 case 1:
                     oldSort = "000" + oldSort;
                     break;
@@ -153,7 +154,7 @@ namespace TicketCheckStation
                     oldSort = "0" + oldSort;
                     break;
             }
-            return App.mStation.nameFirstCase.ToUpper() + date.Replace("-","") + oldSort;
+            return App.mStation.nameFirstCase.ToUpper() + date.Replace("-", "") + oldSort;
         }
 
 
@@ -165,10 +166,11 @@ namespace TicketCheckStation
         public static String GetCashNumber(String BillNmber)
         {
             String date = MyHelper.DateTimeHelper.getCurrentDateTime(MyHelper.DateTimeHelper.DateFormat);
-            return "BJXK" + date.Replace("-", "") + BillNmber.Substring(BillNmber.Length -4,4);
+            return "BJXK" + date.Replace("-", "") + BillNmber.Substring(BillNmber.Length - 4, 4);
         }
 
-            public static void AddBillNumberSort() {
+        public static void AddBillNumberSort()
+        {
             int Sort = Convert.ToInt32(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.BillNumberSort.ToString()));
             MyHelper.ConfigurationHelper.SetConfig(ConfigItemName.BillNumberSort.ToString(), (Sort + 1).ToString());
         }
@@ -183,12 +185,12 @@ namespace TicketCheckStation
         ///   /// <param name="orientation">方向</param>
         public static void ShowAlert(String content, String Title = "提示", Orientation orientation = Orientation.Horizontal)
         {
-            MMessageBox.GetInstance().ShowBox(content, Title, MMessageBox.ButtonType.Yes, MMessageBox.IconType.Info, orientation,"好");
+            MMessageBox.GetInstance().ShowBox(content, Title, MMessageBox.ButtonType.Yes, MMessageBox.IconType.Info, orientation, "好");
         }
 
         public static void ShowSuccessAlert(String content, String Title = "提示", Orientation orientation = Orientation.Horizontal)
         {
-            MMessageBox.GetInstance().ShowBox(content, Title, MMessageBox.ButtonType.Yes, MMessageBox.IconType.success, orientation,"好");
+            MMessageBox.GetInstance().ShowBox(content, Title, MMessageBox.ButtonType.Yes, MMessageBox.IconType.success, orientation, "好");
         }
 
         public static void ShowErrorAlert(String content, String Title = "错误", Orientation orientation = Orientation.Horizontal)
@@ -203,7 +205,8 @@ namespace TicketCheckStation
         #endregion
 
         //角色级别 0 验票员 1 审核员 2 监管员 3系统作者
-        public static string GetRoleName(RoleLevelType type) {
+        public static string GetRoleName(RoleLevelType type)
+        {
             int temp = (int)type;
             String res = "";
             switch (temp)
@@ -219,14 +222,15 @@ namespace TicketCheckStation
                     break;
                 case 3:
                     res = "系统作者";
-                    break;         
+                    break;
             }
             return res;
         }
         public static readonly string connectionStringTemplate = "Database={0};Data Source={1};User Id={2};Password={3};pooling=false;CharSet=utf8;port={4};";
-          
 
-        public static string BuildMyqlconn(String db, string ip, String user, String pwd, String port) {
+
+        public static string BuildMyqlconn(String db, string ip, String user, String pwd, String port)
+        {
             return string.Format(connectionStringTemplate, db, ip, user, pwd, port);
         }
     }

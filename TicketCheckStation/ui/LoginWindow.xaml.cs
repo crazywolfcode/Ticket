@@ -36,12 +36,14 @@ namespace TicketCheckStation
             SetConfig();
         }
 
-        private void SetConfig() {
+        private void SetConfig()
+        {
 
             List<Config> configs = ConfigModel.GetCurrStationConfigs();
             foreach (var item in configs)
             {
-                if (item.configName == "BillNumberSort") {
+                if (item.configName == "BillNumberSort")
+                {
                     continue;
                 }
                 ConfigurationHelper.SetConfig(item.configName, item.configValue);
@@ -55,7 +57,7 @@ namespace TicketCheckStation
             {
                 this.mobileTb.ItemsSource = HostoryUsers;
                 this.mobileTb.SelectedIndex = 0;
-            }       
+            }
         }
 
 
@@ -79,7 +81,7 @@ namespace TicketCheckStation
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-          
+
         }
 
         private void Window_KeyUp(object sender, KeyEventArgs e)
@@ -105,7 +107,8 @@ namespace TicketCheckStation
                 "#ffffff",
                 4);
             string mobile = this.mobileTb.Text.Trim();
-            if (this.mobileTb.SelectedIndex >= 0) {
+            if (this.mobileTb.SelectedIndex >= 0)
+            {
                 mobile = hostoryUser.phone;
             }
             if (!RegexHelper.IsMobilePhoneNumber(mobile))
@@ -147,7 +150,7 @@ namespace TicketCheckStation
                                 this.AlertTb.Text = "你不属于该验票站 ，禁止登陆";
                                 return;
                             }
-                        }                      
+                        }
                         App.currentUser = user;
                         DoubleAnimation animation = new DoubleAnimation
                         {
@@ -176,8 +179,8 @@ namespace TicketCheckStation
         {
             this.Close();
             new MainWindow().Show();
-            App.ShowBalloonTip("登陆成功","在使用过程中需要帮助，联系：陈龙飞 18087467482 ");            
-            new System.Threading.Thread(new System.Threading.ThreadStart(saveToFile)).Start();            
+            App.ShowBalloonTip("登陆成功", "在使用过程中需要帮助，联系：陈龙飞 18087467482 ");
+            new System.Threading.Thread(new System.Threading.ThreadStart(saveToFile)).Start();
         }
 
         private void RemberPwdCBox_Checked(object sender, RoutedEventArgs e)
@@ -276,21 +279,24 @@ namespace TicketCheckStation
         }
         private void mobileTb_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (this.IsLoaded) {
+            if (this.IsLoaded)
+            {
                 String str = this.mobileTb.Text.Trim();
-                if (str.Length <= 0) {
+                if (str.Length <= 0)
+                {
                     this.mobileTb.SelectedIndex = -1;
                     hostoryUser = null;
                     this.RemberPwdCBox.IsChecked = false;
                     this.AutoLoginCbox.IsChecked = false;
                     this.pwdPb.Password = String.Empty;
                     hostoryUser = null;
-            }
+                }
             }
         }
         private void mobileTb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (mobileTb.SelectedIndex < 0) {
+            if (mobileTb.SelectedIndex < 0)
+            {
                 hostoryUser = null;
                 return;
             }
@@ -298,21 +304,23 @@ namespace TicketCheckStation
             if (hostoryUser == null)
             {
                 return;
-            }          
+            }
             this.RemberPwdCBox.IsChecked = hostoryUser.isRemberPwd;
             this.AutoLoginCbox.IsChecked = hostoryUser.isAutoLogin;
             this.IsAutoLogin = hostoryUser.isAutoLogin;
-            if (hostoryUser.isRemberPwd) {
+            if (hostoryUser.isRemberPwd)
+            {
                 this.pwdPb.Password = hostoryUser.pwd;
             }
             if (hostoryUser.isRemberPwd == true && hostoryUser.isAutoLogin == true)
             {
-                if (IsChangeAccount == false) {
+                if (IsChangeAccount == false)
+                {
                     LoginBtn_Click(null, null);
                 }
             }
         }
-        
+
         private void forgotPwaTb_Click(object sender, RoutedEventArgs e)
         {
 

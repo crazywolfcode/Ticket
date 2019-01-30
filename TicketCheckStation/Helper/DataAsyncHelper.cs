@@ -10,32 +10,69 @@ namespace TicketCheckStation
 {
     class DataAsyncHelper
     {
+        private static String Url;
+        private static String GetUrl()
+        {
+            if (String.IsNullOrEmpty(Url))
+            {
+                Url = MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.remoteUrl.ToString());
+            }
+            return Url;
+        }
+        private static String GetStationID()
+        {
+            if (App.mStation != null)
+            {
+                return App.mStation.id;
+            }
+            return "";
+        }
 
         //开始同步数据 先下载，后上传 
         public static void Start()
-        {          
-            while (true) {
+        {
+            //TestUpimageAsync();
+
+            while (true)
+            {
                 System.Threading.Thread.Sleep(4000);
                 List<TableSync> tablseList = TableSyncModel.GetList();
                 for (int i = 0; i < tablseList.Count; i++)
                 {
                     TableSync table = tablseList[i];
+                    TableSync putTable = table;
                     if (table.noSync == 0)
                     {
                         try
                         {
-                           UpdateData(table);
+                            UpdateData(table);
 
-                            PutData(table);
+                            PutData(putTable);
                         }
                         catch (Exception e)
                         {
                             Console.WriteLine("----" + e.Message);
                         }
                     }
+                    System.Threading.Thread.Sleep(1000);
                 }
                 System.Threading.Thread.Sleep(1500);
-            }            
+            }
+        }
+
+        private static void TestUpimageAsync()
+        {
+            Console.WriteLine($"上传图片==");
+            String address = "capture/2019/1/24/DXYPZ201901240001_22.jpg";
+            try
+            {
+                NetHelper.UpFile(GetUrl(), address);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("------ " + e.Message);
+
+            }
         }
 
         /// <summary>
@@ -62,7 +99,7 @@ namespace TicketCheckStation
                     Updatecar_trae_recod(table);
                     break;
                 case "company":
-                    Updatecompany(table);
+                    UpdateCompany(table);
                     break;
                 case "config":
                     Updateconfig(table);
@@ -103,7 +140,7 @@ namespace TicketCheckStation
             switch (table.tableName)
             {
                 case "bill_image":
-                    Put_bill_imageAsync(table);
+                    Put_bill_image(table);
                     break;
                 case "bill_taxation_money_record":
                     Put_bill_taxation_money_record(table);
@@ -152,8 +189,8 @@ namespace TicketCheckStation
         #region update 更新数据
         public static void UpdateBillImage(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -165,15 +202,20 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             UpdateBillImage(table);
                         }
                     }
@@ -186,8 +228,8 @@ namespace TicketCheckStation
         }
         public static void Updatebill_taxation_money_record(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -199,15 +241,20 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             Updatebill_taxation_money_record(table);
                         }
                     }
@@ -220,8 +267,8 @@ namespace TicketCheckStation
         }
         public static void Updatecar_info(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -233,15 +280,20 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             Updatecar_info(table);
                         }
                     }
@@ -254,8 +306,8 @@ namespace TicketCheckStation
         }
         public static void Updatecamera_info(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -265,14 +317,22 @@ namespace TicketCheckStation
                         foreach (var item in datas)
                         {
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
-                            if (item.lastUpdateTime > item.addTime) {
-                                table.syncTime = item.lastUpdateTime;
-                            } else {
-                                table.syncTime = item.addTime;
+                            if (item.lastUpdateTime > item.addTime)
+                            {
+                                table.syncDownTime = item.lastUpdateTime;
+                            }
+                            else
+                            {
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             Updatecamera_info(table);
                         }
                     }
@@ -285,8 +345,8 @@ namespace TicketCheckStation
         }
         public static void Updatecar_trae_recod(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -298,17 +358,22 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             Updatecar_trae_recod(table);
-                        }
+                        }  
                     }
                     catch (Exception e)
                     {
@@ -317,10 +382,10 @@ namespace TicketCheckStation
                 }
             }
         }
-        public static void Updatecompany(TableSync table)
+        public static void UpdateCompany(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -332,16 +397,21 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
-                            }
+                                table.syncDownTime = item.addTime;
+                            }                            
                         }
                         if (datas != null && datas.Count >= 10)
                         {
-                            Updatecompany(table);
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
+                            UpdateCompany(table);
                         }
                     }
                     catch (Exception e)
@@ -353,8 +423,8 @@ namespace TicketCheckStation
         }
         public static void Updateconfig(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -366,15 +436,20 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             Updateconfig(table);
                         }
                     }
@@ -387,8 +462,8 @@ namespace TicketCheckStation
         }
         public static void Updatematerial(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -400,11 +475,11 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
@@ -423,8 +498,8 @@ namespace TicketCheckStation
         public static void Updatematerial_taxation_recod(TableSync table) { }
         public static void Updateroles(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -436,15 +511,20 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             Updateroles(table);
                         }
                     }
@@ -457,8 +537,8 @@ namespace TicketCheckStation
         }
         public static void Updatestation(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -470,15 +550,20 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             Updatestation(table);
                         }
                     }
@@ -491,8 +576,8 @@ namespace TicketCheckStation
         }
         public static void Updateuser(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -504,15 +589,20 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
                         if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             Updateuser(table);
                         }
                     }
@@ -525,8 +615,8 @@ namespace TicketCheckStation
         }
         public static void Updateweighing_bill(TableSync table)
         {
-            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
-            if (result.errCode == 0)
+            NetResult result = NetHelper.Get(GetUrl(), table.tableName, table.syncDownTime.ToString("yyyy-MM-dd HH:mm:ss"), GetStationID());
+            if (result.ErrCode == 0)
             {
                 if (!String.IsNullOrEmpty(result.Data.ToString()))
                 {
@@ -538,15 +628,20 @@ namespace TicketCheckStation
                             DatabaseOPtionHelper.GetInstance().insertOrUpdate(item);
                             if (item.lastUpdateTime > item.addTime)
                             {
-                                table.syncTime = item.lastUpdateTime;
+                                table.syncDownTime = item.lastUpdateTime;
                             }
                             else
                             {
-                                table.syncTime = item.addTime;
+                                table.syncDownTime = item.addTime;
                             }
                         }
-                        if (datas != null && datas.Count >=10)
+                        if (datas != null && datas.Count >= 10)
                         {
+                            if (datas.Count > 0)
+                            {
+                                table.syncDownCount += datas.Count;
+                                TableSyncModel.Update(table);
+                            }
                             Updateweighing_bill(table);
                         }
                     }
@@ -561,7 +656,7 @@ namespace TicketCheckStation
         #endregion 更新数据
 
         #region PutData 上传数据
-        public static async void Put_bill_imageAsync(TableSync table)
+        public static void Put_bill_image(TableSync table)
         {
             Console.WriteLine($"上传=={table.tableName}==");
             String sql = BaseDataModel.GetSql(table);
@@ -575,20 +670,22 @@ namespace TicketCheckStation
             {
                 for (; i < datas.Count; i++)
                 {
-                    var item = datas[i];                    
+                    var item = datas[i];
+                    item.address.Replace("\\", "\\\\");
                     NetResult result = NetHelper.Post(GetUrl(), item, table.tableName);
                     if (result == null)
                     {
                         return;
                     }
-                    if (result.errCode == 0)
+                    if (result.ErrCode == 0)
                     {
+                        table.syncUpCount += 1;
                         //上传图片文件
                         if (string.IsNullOrEmpty(item.remoteAddress))
-                        {
-                            NetResult netResult = await NetHelper.UpFileAsync(GetUrl(), item.address);
-                            Console.WriteLine("上传图片文件=======" + netResult.msg + "====path:" + netResult.Data);
-                            table.syncCount += 1;
+                        {                                                     
+                            NetResult netResult =  NetHelper.UpFile(GetUrl(), item.address);
+                            Console.WriteLine("上传图片文件------ "+ netResult.Msg + "====path:" + netResult.Data);
+                            
                             if (!String.IsNullOrEmpty(netResult.Data.ToString()))
                             {
                                 item.remoteAddress = netResult.Data.ToString().Replace("\\", "\\\\");
@@ -598,11 +695,11 @@ namespace TicketCheckStation
                         }
                         if (item.addTime > item.lastUpdateTime)
                         {
-                            table.syncTime = item.addTime;
+                            table.syncUpTime = item.addTime;
                         }
                         else
                         {
-                            table.syncTime = item.lastUpdateTime;
+                            table.syncUpTime = item.lastUpdateTime;
                         }
                     }
                 }
@@ -624,11 +721,11 @@ namespace TicketCheckStation
         {
             Console.WriteLine($"上传=={table.tableName}==");
             String sql = BaseDataModel.GetSql(table);
-            List<BillTaxationMoneyRecord> datas = DatabaseOPtionHelper.GetInstance().select<BillTaxationMoneyRecord>(sql);
+            List<BillTaxationMoneyRecord> datas = DatabaseOPtionHelper.GetInstance().select<BillTaxationMoneyRecord>(sql);            
             if (datas == null)
             {
                 return;
-            }
+            }           
             int i = 0;
             try
             {
@@ -640,17 +737,17 @@ namespace TicketCheckStation
                     {
                         return;
                     }
-                    if (result.errCode == 0)
+                    if (result.ErrCode == 0)
                     {
-                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.msg);
-                        table.syncCount += 1;
+                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.Msg);
+                        table.syncUpCount += 1;
                         if (item.addTime > item.lastUpdateTime)
                         {
-                            table.syncTime = item.addTime;
+                            table.syncUpTime = item.addTime;
                         }
                         else
                         {
-                            table.syncTime = item.lastUpdateTime;
+                            table.syncUpTime = item.lastUpdateTime;
                         }
                     }
                 }
@@ -667,6 +764,7 @@ namespace TicketCheckStation
                     TableSyncModel.Update(table);
                 }
             }
+
         }
         public static void Put_car_info(TableSync table)
         {
@@ -688,17 +786,17 @@ namespace TicketCheckStation
                     {
                         return;
                     }
-                    if (result.errCode == 0)
+                    if (result.ErrCode == 0)
                     {
-                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.msg);
-                        table.syncCount += 1;
+                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.Msg);
+                        table.syncUpCount += 1;
                         if (item.addTime > item.lastUpdateTime)
                         {
-                            table.syncTime = item.addTime;
+                            table.syncUpTime = item.addTime;
                         }
                         else
                         {
-                            table.syncTime = item.lastUpdateTime;
+                            table.syncUpTime = item.lastUpdateTime;
                         }
                     }
                 }
@@ -736,17 +834,17 @@ namespace TicketCheckStation
                     {
                         return;
                     }
-                    if (result.errCode == 0)
+                    if (result.ErrCode == 0)
                     {
-                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.msg);
-                        table.syncCount += 1;
+                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.Msg);
+                        table.syncUpCount += 1;
                         if (item.addTime > item.lastUpdateTime)
                         {
-                            table.syncTime = item.addTime;
+                            table.syncUpTime = item.addTime;
                         }
                         else
                         {
-                            table.syncTime = item.lastUpdateTime;
+                            table.syncUpTime = item.lastUpdateTime;
                         }
                     }
                 }
@@ -785,17 +883,17 @@ namespace TicketCheckStation
                     {
                         return;
                     }
-                    if (result.errCode == 0)
+                    if (result.ErrCode == 0)
                     {
-                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.msg);
-                        table.syncCount += 1;
+                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.Msg);
+                        table.syncUpCount += 1;
                         if (item.addTime > item.lastUpdateTime)
                         {
-                            table.syncTime = item.addTime;
+                            table.syncUpTime = item.addTime;
                         }
                         else
                         {
-                            table.syncTime = item.lastUpdateTime;
+                            table.syncUpTime = item.lastUpdateTime;
                         }
                     }
                 }
@@ -833,17 +931,17 @@ namespace TicketCheckStation
                     {
                         return;
                     }
-                    if (result.errCode == 0)
+                    if (result.ErrCode == 0)
                     {
-                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.msg);
-                        table.syncCount += 1;
+                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.Msg);
+                        table.syncUpCount += 1;
                         if (item.addTime > item.lastUpdateTime)
                         {
-                            table.syncTime = item.addTime;
+                            table.syncUpTime = item.addTime;
                         }
                         else
                         {
-                            table.syncTime = item.lastUpdateTime;
+                            table.syncUpTime = item.lastUpdateTime;
                         }
                     }
                 }
@@ -881,17 +979,17 @@ namespace TicketCheckStation
                     {
                         return;
                     }
-                    if (result.errCode == 0)
+                    if (result.ErrCode == 0)
                     {
-                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.msg);
-                        table.syncCount += 1;
+                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.Msg);
+                        table.syncUpCount += 1;
                         if (item.addTime > item.lastUpdateTime)
                         {
-                            table.syncTime = item.addTime;
+                            table.syncUpTime = item.addTime;
                         }
                         else
                         {
-                            table.syncTime = item.lastUpdateTime;
+                            table.syncUpTime = item.lastUpdateTime;
                         }
                     }
                 }
@@ -933,17 +1031,17 @@ namespace TicketCheckStation
                     {
                         return;
                     }
-                    if (result.errCode == 0)
+                    if (result.ErrCode == 0)
                     {
-                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.msg);
-                        table.syncCount += 1;
+                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.Msg);
+                        table.syncUpCount += 1;
                         if (item.addTime > item.lastUpdateTime)
                         {
-                            table.syncTime = item.addTime;
+                            table.syncUpTime = item.addTime;
                         }
                         else
                         {
-                            table.syncTime = item.lastUpdateTime;
+                            table.syncUpTime = item.lastUpdateTime;
                         }
                     }
                 }
@@ -981,20 +1079,20 @@ namespace TicketCheckStation
                     {
                         return;
                     }
-                    if (result.errCode == 0)
+                    if (result.ErrCode == 0)
                     {
-                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.msg);
+                        Console.WriteLine($"上传=={table.tableName}={i}：" + result.Msg);
                         item.isUp = 1;
                         item.upDatetime = DateTime.Now;
                         DatabaseOPtionHelper.GetInstance().update(item);
-                        table.syncCount += 1;
+                        table.syncUpCount += 1;
                         if (item.addTime > item.lastUpdateTime)
                         {
-                            table.syncTime = item.addTime;
+                            table.syncUpTime = item.addTime;
                         }
                         else
                         {
-                            table.syncTime = item.lastUpdateTime;
+                            table.syncUpTime = item.lastUpdateTime;
                         }
                     }
                 }
@@ -1015,23 +1113,6 @@ namespace TicketCheckStation
 
         #endregion 上传数据
 
-        private static String Url;
-
-        private static String GetUrl()
-        {
-            if (String.IsNullOrEmpty(Url))
-            {
-                Url = MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.remoteUrl.ToString());
-            }
-            return Url;
-        }
-        private static String GetStationID()
-        {
-            if (App.mStation != null)
-            {
-                return App.mStation.id;
-            }
-            return "";
-        }
+  
     }
 }

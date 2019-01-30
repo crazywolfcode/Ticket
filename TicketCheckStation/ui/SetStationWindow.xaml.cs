@@ -31,7 +31,7 @@ namespace TicketCheckStation
         {
             List<Station> list;         
             NetResult result = NetHelper.Get(MyHelper.ConfigurationHelper.GetConfig(ConfigItemName.remoteUrl.ToString()),TableName.station.ToString(),"","");
-            if (result.errCode == 0)
+            if (result.ErrCode == 0)
             {
                 list = (List<Station>)MyHelper.JsonHelper.JsonToObject(result.Data.ToString(), typeof(List<Station>));
                 if (list.Count > 0)
