@@ -239,7 +239,6 @@ namespace TicketCheckStation
                             if (config.configValue != conns[i].ConnectionString)
                             {
                                 config.configValue = conns[i].ConnectionString;
-                                config.lastUpdateTime = DateTime.Now;
                                 if (App.currentUser != null)
                                 {
                                     config.lastUpdateUserId = config.addUserId;
@@ -261,7 +260,6 @@ namespace TicketCheckStation
                         config.stationName = mStation.name;
                         config.configName = conns[i].Name;
                         config.configValue = conns[i].ConnectionString;
-                        config.addTime = DateTime.Now;
                         config.configType = (int)ConfigType.ClientAppConfig;
 
                         if (App.currentUser != null)
@@ -301,7 +299,6 @@ namespace TicketCheckStation
                             if (config.configValue != collection[key].ToString())
                             {
                                 config.configValue = collection[key].ToString();
-                                config.lastUpdateTime = DateTime.Now;
                                 if (App.currentUser != null)
                                 {
                                     config.lastUpdateUserId = App.currentUser.id;
@@ -320,14 +317,12 @@ namespace TicketCheckStation
                         config = new Config
                         {
                             id = Guid.NewGuid().ToString(),
-                            addTime = DateTime.Now,
                             configName = key,
                             stationId = ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString()),
                             stationName = mStation.name,
                             configValue = collection[key].ToString(),
                             configType = (int)ConfigType.ClientAppConfig
                         };
-                        config.lastUpdateTime = config.addTime;
                         if (App.currentUser != null)
                         {
                             config.addUserId = App.currentUser.id;

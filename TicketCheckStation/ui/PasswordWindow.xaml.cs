@@ -82,8 +82,7 @@ namespace TicketCheckStation
                 return;
             }
 
-            App.currentUser.pwd = MyHelper.EncryptHelper.MD5Encrypt(newpwd, false);
-            App.currentUser.lastUpdateTime = DateTime.Now;
+            App.currentUser.pwd = MyHelper.EncryptHelper.MD5Encrypt(newpwd, false);           
             App.currentUser.lastUpdateUserId = App.currentUser.id;
             App.currentUser.lastUpdateUserName = App.currentUser.name;
             int res =DatabaseOPtionHelper.GetInstance().update(App.currentUser);
