@@ -58,7 +58,6 @@ namespace TicketCheckStation
         private void Connbtn_Click(object sender, RoutedEventArgs e)
         {
           
-
             string ip = this.IpTb.Text.Trim();
             if (string.IsNullOrEmpty(ip))
             {

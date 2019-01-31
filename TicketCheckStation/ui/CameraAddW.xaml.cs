@@ -91,8 +91,7 @@ namespace TicketCheckStation
                 String condition = String.Empty;
                 String sql = string.Empty;
                 if (!String.IsNullOrEmpty(mId)) {
-                    //update
-                    mCameraInfo.lastUpdateTime =DateTime.Now;
+                    //update                  
                     mCameraInfo.ip = this.IpTB.Text.Trim();
                     mCameraInfo.port = this.portTB.Text.Trim();
                     mCameraInfo.userName = this.userNameTB.Text.Trim();
@@ -125,16 +124,15 @@ namespace TicketCheckStation
                     }
                     else
                     {
+                        camera.id = Guid.NewGuid().ToString();
                         camera.stationId = cid;
                         camera.companyId = ConfigurationHelper.GetConfig(ConfigItemName.CurrStationId.ToString());
                         camera.status = 0;
                         camera.isDelete = 0;
-                        camera.lastUpdateTime =DateTime.Now;
                         camera.ip = this.IpTB.Text.Trim();
                         camera.port = this.portTB.Text.Trim();
                         camera.userName = this.userNameTB.Text.Trim();
-                        camera.password = this.pwdTB.Text.Trim();
-                        camera.id = Guid.NewGuid().ToString();
+                        camera.password = this.pwdTB.Text.Trim();                        
                         camera.stationName = App.mStation.name;
                         int res = optionHelper.insert(camera);
                         if (res > 0)

@@ -32,7 +32,6 @@ namespace TicketCheckStation
         public static void Start()
         {
             //TestUpimageAsync();
-
             while (true)
             {
                 System.Threading.Thread.Sleep(4000);
@@ -1085,7 +1084,7 @@ namespace TicketCheckStation
                         item.isUp = 1;
                         item.upDatetime = DateTime.Now;
                         DatabaseOPtionHelper.GetInstance().update(item);
-                        table.syncUpCount += 1;
+                        table.syncUpCount += 1;                       
                         if (item.addTime > item.lastUpdateTime)
                         {
                             table.syncUpTime = item.addTime;
