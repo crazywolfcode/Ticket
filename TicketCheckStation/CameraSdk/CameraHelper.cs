@@ -8,7 +8,6 @@ namespace TicketCheckStation
 {
     public class CameraHelper
     {
-
         public string message = string.Empty;
         public Int32 m_lPort = -1;
         public Int32 currCameraId = -1;

@@ -81,14 +81,14 @@ namespace TicketCheckStation
         {
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = 0;
-            animation.To = 60;
+            animation.To = 40;
             animation.Duration = TimeSpan.FromSeconds(0.8);
             this.searchAreaPanel.BeginAnimation(HeightProperty, animation);
         }
         private void SearAreaAnimationToHidden()
         {
             DoubleAnimation animation = new DoubleAnimation();
-            animation.From = 60;
+            animation.From = 40;
             animation.To = 0;
             animation.Duration = TimeSpan.FromSeconds(0.5);
             this.searchAreaPanel.BeginAnimation(HeightProperty, animation);

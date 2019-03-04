@@ -166,7 +166,7 @@ namespace TicketCheckStation
         public static String GetCashNumber(String BillNmber)
         {
             String date = MyHelper.DateTimeHelper.getCurrentDateTime(MyHelper.DateTimeHelper.DateFormat);
-            return "BJXK" + date.Replace("-", "") + BillNmber.Substring(BillNmber.Length - 4, 4);
+            return "BJSK" + date.Replace("-", "") + BillNmber.Substring(BillNmber.Length - 4, 4);
         }
 
         public static void AddBillNumberSort()

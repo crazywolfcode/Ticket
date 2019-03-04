@@ -42,7 +42,7 @@ namespace TicketCheckStation
             List<Config> configs = ConfigModel.GetCurrStationConfigs();
             foreach (var item in configs)
             {
-                if (item.configName == "BillNumberSort")
+                if (item.configName == "BillNumberSort"|| item.configName.Equals("InitStep"))
                 {
                     continue;
                 }
@@ -321,9 +321,9 @@ namespace TicketCheckStation
             }
         }
 
-        private void forgotPwaTb_Click(object sender, RoutedEventArgs e)
+        private void fergotPwdTb_Click(object sender, RoutedEventArgs e)
         {
-
+            MMessageBox.GetInstance().ShowBox("联系管理员进行重置密码", "提示", MMessageBox.ButtonType.Yes, MMessageBox.IconType.Info, Orientation.Vertical, "好");
         }
     }
 }

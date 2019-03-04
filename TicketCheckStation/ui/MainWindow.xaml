@@ -161,7 +161,7 @@
                 <MenuItem Header="管理" >
                     <MenuItem Header="视频管理" Icon="&#xe66d;" x:Name="VideoManagerMI"   Click="MenuItem_Click"/>
                     <MenuItem Header="用户管理" Icon="&#xf031c;" x:Name="UserManagerMI"   Click="MenuItem_Click"/>
-                    <MenuItem Header="公司管理" Icon="&#xe88f;"  x:Name="CompanyManageMI"  Click="MenuItem_Click" InputGestureText="a" ></MenuItem>
+                    <MenuItem Header="公司管理" Icon="&#xe88f;"  x:Name="CompanyManageMI"  Click="MenuItem_Click"/>
                     <MenuItem Header="物料管理" >
                         <MenuItem Header="煤种列表"  x:Name="MaterialManageMI"  Click="MenuItem_Click"></MenuItem>
                         <MenuItem Header="添加煤种" x:Name="AddMaterialMI"  Click="MenuItem_Click"></MenuItem>
@@ -190,8 +190,7 @@
                 <TextBlock x:Name="WeighingDataTb" Text="999.99" FontSize="34" FontWeight="Black" HorizontalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
-        <!--VideoPenal 视频区域-->
-        
+        <!--VideoPenal 视频区域-->        
         <StackPanel Grid.Row="2" Background="LightGray">
             <StackPanel  x:Name="VideoPenal"  Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300">
                 <!--<myui:ThreePoingLoading Foreground="White"/>-->
