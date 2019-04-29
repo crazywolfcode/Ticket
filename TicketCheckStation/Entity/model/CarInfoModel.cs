@@ -42,5 +42,10 @@ namespace TicketCheckStation
         {
             return DatabaseOPtionHelper.GetInstance().insert(carInfo) ;
         }
+
+        public static int Update(CarInfo carInfo)
+        {
+            return DatabaseOPtionHelper.GetInstance().update(carInfo);
+        }
     }
 }

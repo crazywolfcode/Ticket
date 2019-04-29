@@ -36,14 +36,29 @@ namespace TicketCheckStation
             App.Current.MainWindow = this;
             InitializeComponent();
         }
+        public delegate void OnSuccess(string res);
+
+        public OnSuccess success = new OnSuccess(SuccessHandle);
+
+        private static void SuccessHandle(string res)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void Index(OnSuccess success) {
+
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StartClock();
             App.Current.MainWindow = this;
             this.CurrUserBtn.Content = App.currentUser.name ; 
-            this.RoleNameTb.Text = App.currentUser.roleName;
+            this.RoleNameTb.Text = App.currentUser.roleName;            
         }
+
+
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             ReaderWeight();
