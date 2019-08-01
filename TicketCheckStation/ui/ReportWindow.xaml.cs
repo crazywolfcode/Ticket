@@ -22,6 +22,9 @@ namespace TicketCheckStation
     /// </summary>
     public partial class ReportWindow : Window
     {
+        #region variables
+        private Station mStation;
+        #endregion
         public ReportWindow()
         {
             InitializeComponent();
@@ -487,7 +490,7 @@ namespace TicketCheckStation
             }
             new PrintBillW(bill).ShowDialog();
         }
-        private Station mStation;
+        
         private void StationCb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             mStation =(Station) StationCb.SelectedItem;
