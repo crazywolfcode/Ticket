@@ -18,6 +18,7 @@ namespace TicketCheckStation
                 { "table", table }, { "time", lastSyncTime} , { "stationid", stationid}
             };
             client.QueryString = qs;
+            
             //client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
             //client.ResponseHeaders.Add("*/*");
             String res = client.DownloadString(url);
@@ -65,6 +66,7 @@ namespace TicketCheckStation
             {
                 { "table", "image" },{"filename",Path.GetFileName(filePath)}
             };
+         
             client.QueryString = qs;
             byte[] res = client.UploadFile(url, filePath);
             NetResult result = (NetResult)MyHelper.JsonHelper.JsonToObject(res.ToString(), typeof(NetResult));

@@ -148,8 +148,8 @@
             <RowDefinition Height="28"/>
         </Grid.RowDefinitions>
         <!--菜单-->
-        <DockPanel Background="#3ca9fe" >
-            <Menu Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" >
+        <DockPanel Background="{StaticResource myBlue}" Grid.Row="0" >
+            <Menu  VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" >
                 <MenuItem Header=" 设置 " VerticalContentAlignment="Center"  Background="#3ca9fe">
                     <MenuItem Header="基本设置" Icon="&#xe650;" x:Name="BaseSettingMI"  Click="MenuItem_Click"/>
                     <MenuItem Header="高级设置" Icon="&#xe688;" x:Name="HeithtSettintMI"  Click="MenuItem_Click"/>
