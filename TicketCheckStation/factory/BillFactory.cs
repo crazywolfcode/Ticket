@@ -81,12 +81,14 @@ namespace TicketCheckStation
                     addUserId = App.currentUser.id,
                     addUserName = App.currentUser.name,
                     name = sendBill.materialName,
-                    nameFirstCase = StringHelper.GetFirstPinyin(sendBill.materialName),
                     currTaxation = 0,
                     limitTone = 0,
                 };
                 if (material.name != null)
+                {
+                    material.nameFirstCase = StringHelper.GetFirstPinyin(material.name);
                     MaterialModel.Create(material);
+                }
             }
             weighingBill.materialId = material.id;
             weighingBill.materialName = material.name;
@@ -104,10 +106,10 @@ namespace TicketCheckStation
                     addUserId = App.currentUser.id,
                     addUserName = App.currentUser.name,
                     name = sendBill.sendCompany,
-                    nameFirstCase = StringHelper.GetFirstPinyin(sendBill.sendCompany).ToUpper(),
                 };
                 if (sendCompany.name != null)
                 {
+                    sendCompany.nameFirstCase = StringHelper.GetFirstPinyin(sendBill.sendCompany).ToUpper();
                     CompanyModel.Create(sendCompany);
                 }
             }
@@ -124,10 +126,10 @@ namespace TicketCheckStation
                     addUserId = App.currentUser.id,
                     addUserName = App.currentUser.name,
                     name = sendBill.receiveCompany,
-                    nameFirstCase = StringHelper.GetFirstPinyin(sendBill.receiveCompany).ToUpper(),
                 };
                 if (receiveCompany.name != null)
                 {
+                    receiveCompany.nameFirstCase = StringHelper.GetFirstPinyin(sendBill.receiveCompany).ToUpper();
                     CompanyModel.Create(receiveCompany);
                 }
 

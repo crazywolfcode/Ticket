@@ -9,6 +9,7 @@
         Loaded="Window_Loaded"
         Icon="/TicketCheckStation;component/aislogo.ico"
         WindowStartupLocation="CenterScreen"
+        KeyUp="Window_KeyUp"
         Style="{StaticResource WindowStyle}"
         Title="联系方式" Height="550" Width="600">
     <Grid Margin="2">
@@ -53,6 +54,5 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-
     </Grid>
 </Window>

@@ -10,19 +10,23 @@
         WindowStartupLocation="CenterScreen" WindowStyle="None"  
         Title="登陆" Height="480" Width="320">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="97*"/>
+            <ColumnDefinition Width="63*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="65"/>
             <RowDefinition/>
             <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0"  x:Name="headerBorder" MouseMove="headerBorder_MouseMove"  Background="{DynamicResource E4}">
+        <Border Grid.Row="0"  x:Name="headerBorder" MouseMove="headerBorder_MouseMove"  Background="{DynamicResource E4}" Grid.ColumnSpan="2" Margin="0,0,0,379.8" Grid.RowSpan="2">
             <StackPanel Orientation="Horizontal" Background="Transparent" MouseMove="headerBorder_MouseMove">
                 <Image Source="/TicketCheckStation;component/aislogo_48.ico" Width="48" Height="48" HorizontalAlignment="Left" Margin="10"></Image>
                 <TextBlock HorizontalAlignment="Left" Margin="0,0,0,0" Text="登陆" VerticalAlignment="Center" FontSize="20" FontWeight="Black" Foreground="#787972"></TextBlock>
             </StackPanel>
         </Border>
         <!--关闭按钮-->
-        <myui:ImageButton Grid.Row="0"  Width="27" Height="22"  Margin="0,4,4,0" Content="" x:Name="CloseBtn" HorizontalAlignment="Right" VerticalAlignment="Top"   Click="CloseBtn_Click">
+        <myui:ImageButton Grid.Row="0"  Width="27" Height="22"  Margin="0,4,4,0" Content="" x:Name="CloseBtn" HorizontalAlignment="Right" VerticalAlignment="Top"   Click="CloseBtn_Click" Grid.Column="1">
             <myui:ImageButton.MyMoverBrush>
                 <ImageBrush ImageSource="/TicketCheckStation;component/Themes/Img/Button/xm.png"/>
             </myui:ImageButton.MyMoverBrush>
@@ -33,7 +37,7 @@
                 <ImageBrush ImageSource="/TicketCheckStation;component/Themes/Img/Button/xn.png" TileMode="FlipXY"/>
             </myui:ImageButton.Background>
         </myui:ImageButton>
-        <Border  Background="White" Grid.Row="1" BorderThickness="1,0,1,0" BorderBrush="{StaticResource E4}" x:Name="mainborder">
+        <Border  Background="White" Grid.Row="1" BorderThickness="1,0,1,0" BorderBrush="{StaticResource E4}" x:Name="mainborder" Grid.ColumnSpan="2" Margin="0,0.2,0,35" Grid.RowSpan="2">
             <DockPanel>
                 <!--alert-->
                 <StackPanel x:Name="AlertPanel"   DockPanel.Dock="Bottom" Background="#eee" Visibility="Hidden">
@@ -53,9 +57,9 @@
                         <CheckBox x:Name="AutoLoginCbox" Content="自动登陆" Margin="10,0,0,0" Style="{StaticResource DefaultCheckBoxStyle}" Checked="AutoLoginCbox_Checked" Unchecked="AutoLoginCbox_Unchecked" />
                     </WrapPanel>
                 </StackPanel>
-            </DockPanel>            
+            </DockPanel>
         </Border>
-        <Border Grid.Row="2" Background="White"  BorderThickness="1,0,1,1" BorderBrush="{StaticResource E4}">
+        <Border Grid.Row="2" Background="White"  BorderThickness="1,0,1,1" BorderBrush="{StaticResource E4}" Grid.ColumnSpan="2" Margin="0,0.2,0,0">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                 <myui:IconButton x:Name="LoginBtn" Content="登 陆" Click="LoginBtn_Click"
                           CornerRadius="0" Cursor="Hand"
@@ -65,9 +69,9 @@
                            IsShowIcon="False" Icon="&#xe65b;" IconSize="22"
                            Width="80" Height="28" 
                          />
-              
+
             </StackPanel>
         </Border>
-        <Button Grid.Row="2" x:Name="forgotPwaTb" Click="fergotPwdTb_Click" Content="忘记密码" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0,10,4" Foreground="{StaticResource myBlue}" Cursor="Hand" Background="Transparent" BorderThickness="0" Padding="4,2,4,2"/>
+        <Button Grid.Row="2" x:Name="forgotPwaTb" Click="fergotPwdTb_Click" Content="忘记密码" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,4" Foreground="{StaticResource myBlue}" Cursor="Hand" Background="Transparent" BorderThickness="0" Padding="4,2,4,2" Grid.Column="1"/>
     </Grid>
 </Window>

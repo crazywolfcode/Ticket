@@ -4,17 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TicketCheckStation" ResizeMode="CanResizeWithGrip"
-        WindowStartupLocation="CenterScreen" WindowState="Maximized" ContentRendered="Window_ContentRendered"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized" 
+        ContentRendered="Window_ContentRendered"
         xmlns:myui="clr-namespace:MyCustomControlLibrary;assembly=MyCustomControlLibrary"
-        Icon="/TicketCheckStation;component/aislogo_48.ico"
-        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_SizeChanged"
+        Icon="/TicketCheckStation;component/icon.ico"
+        mc:Ignorable="d" 
+        Loaded="Window_Loaded" 
+        Closing="Window_Closing" 
+        SizeChanged="Window_SizeChanged"
         Title="煤炭运煤监管系统 v1.0.1正试版" 
         Height="600" Width="800" MinWidth="900" MinHeight="600">
     <Window.Resources>
         <local:UpStatusConverter x:Key="upStatusConverter"/>
         <local:CashBtnVisbilityConvetter x:Key="cashBtnVisbilityConvetter"/>
         <Style TargetType="MenuItem">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Menu},AncestorLevel=1}}"/>
             <Setter Property="Background" Value="#3ca9fe"/>
             <Setter Property="BorderBrush" Value="#007acc"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -148,9 +152,9 @@
             <RowDefinition Height="28"/>
         </Grid.RowDefinitions>
         <!--菜单-->
-        <DockPanel Background="{StaticResource myBlue}" Grid.Row="0" >
-            <Menu  VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" >
-                <MenuItem Header=" 设置 " VerticalContentAlignment="Center"  Background="#3ca9fe">
+        <DockPanel Background="Transparent" Grid.Row="0" >
+            <Menu  VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="#444444" >
+                <MenuItem Header=" 设置 " VerticalContentAlignment="Center"   Background="#3ca9fe">
                     <MenuItem Header="基本设置" Icon="&#xe650;" x:Name="BaseSettingMI"  Click="MenuItem_Click"/>
                     <MenuItem Header="高级设置" Icon="&#xe688;" x:Name="HeithtSettintMI"  Click="MenuItem_Click"/>
                     <MenuItem Header="系统设置" Icon="&#xe668;" x:Name="SystemSettintMI"  Click="MenuItem_Click"/>

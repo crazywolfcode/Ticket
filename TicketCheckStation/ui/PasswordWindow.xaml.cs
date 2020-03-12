@@ -97,5 +97,13 @@ namespace TicketCheckStation
                 CommonFunction.ShowSuccessAlert("修改失败！");
             }
         }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+           if(this.IsActive == false)
+            {
+                this.Close();
+            }
+        }
     }
 }

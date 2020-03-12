@@ -27,7 +27,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" x:Name="previewStackPanel">
                     <WindowsFormsHost Background="{StaticResource F9}" x:Name="previewFormsHost" ToolTip=" 视频预览"  MouseLeftButtonDown="previewFormsHost_MouseLeftButtonDown">
-                        <form:PictureBox   Name="previewImage" SizeMode="CenterImage"  />                        
+                        <form:PictureBox x:Name="previewImage" SizeMode="CenterImage"  />                        
                     </WindowsFormsHost>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">

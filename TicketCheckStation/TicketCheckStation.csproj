@@ -58,8 +58,9 @@
     <ApplicationIcon>Themes\Img\Icon\favicon128.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MyCustomControlLibrary">
-      <HintPath>D:\WorkSpace\VisualStudio\WPF\IntentConnectWeighing\MyCustomControlLibrary\bin\Debug\MyCustomControlLibrary.dll</HintPath>
+    <Reference Include="MyCustomControlLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IntentConnectWeighing\MyCustomControlLibrary\bin\Debug\MyCustomControlLibrary.dll</HintPath>
     </Reference>
     <Reference Include="MyHelperLibrary">
       <HintPath>D:\WorkSpace\VisualStudio\WPF\IntentConnectWeighing\MyHelperLibrary\bin\Debug\MyHelperLibrary.dll</HintPath>
@@ -395,6 +396,7 @@
   <ItemGroup>
     <Content Include="dll\WPFVisifire.Charts.dll" />
     <Content Include="dll\WPFVisifire.Gauges.dll" />
+    <Resource Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

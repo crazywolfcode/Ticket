@@ -14,7 +14,7 @@ namespace TicketCheckStation
     /// Window1.xaml 的交互逻辑
     /// </summary>
     public partial class CashReportWindow : Window
-    {       
+    {
         private double totalWeight = 0;
         private double totalMoney = 0;
         public CashReportWindow()
@@ -31,7 +31,7 @@ namespace TicketCheckStation
             this.EndDatePicker.DisplayDateEnd = now;
             this.StratDatePicker.DisplayDateEnd = now;
             this.PrintTitleTb.Text = ConfigurationHelper.GetConfig(ConfigItemName.CashReportTitle.ToString());
-            this.StationNametb.Text = "(" + App.mStation.name + "-补税记录)";          
+            this.StationNametb.Text = "(" + App.mStation.name + "-补税记录)";
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -43,8 +43,19 @@ namespace TicketCheckStation
         public void LoadData()
         {
             String condition = GetSeachCondition();
-            List<BillTaxationMoneyRecord> list = BillTaxationMoneyRecordModel.searchData(condition);
-            this.ReportDataGrid.ItemsSource = list;
+            var data = BillTaxationMoneyRecordModel.searchData(condition);
+            if (data.Count == 0)
+            {
+                MMessageBox.Result reault = MMessageBox.GetInstance().ShowBox(
+                  "没有查询到任何数据！",
+                  "提示",
+                  MMessageBox.ButtonType.Yes,
+                  MMessageBox.IconType.Info,
+                   Orientation.Horizontal,
+                   "知道了"
+                  );
+            }
+            this.ReportDataGrid.ItemsSource = data;
         }
 
         #region Window Default Event
@@ -67,7 +78,7 @@ namespace TicketCheckStation
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-          
+
         }
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
@@ -79,7 +90,7 @@ namespace TicketCheckStation
 
         #endregion
 
-  
+
         #region Search Tab Button
         private void SearchTabBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -113,6 +124,29 @@ namespace TicketCheckStation
         #region EXport EXCL，
         private void ExportExcelBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (this.ReportDataGrid.Items.Count <= 0)
+            {
+               MMessageBox.GetInstance().ShowBox(
+                   "没有要导出的数据！",
+                   "错误",
+                   MMessageBox.ButtonType.Yes,
+                   MMessageBox.IconType.error,
+                   Orientation.Vertical,
+                   "知道了");
+                return;
+            }
+
+            this.IsEnabled = false;
+            MMessageBox.GetInstance().ShowLoading(
+                MMessageBox.LoadType.One,
+                "导出中。。。",
+                new Point(),
+                new Size(100, 100),
+                "&#xe752;",
+                Orientation.Vertical,
+                "#ffffff",
+                5);
+            ConsoleHelper.writeLine("110000");
             ExclHelper.ExclExprotToExcelWitchStatisticInfo(
                             this.ReportDataGrid,
                             DateTimeHelper.getCurrentDateTime(DateTimeHelper.DateFormat),
@@ -121,7 +155,8 @@ namespace TicketCheckStation
                             this.StationNametb.Text + "导出时间:" + DateTimeHelper.getCurrentDateTime(),
                             this.SummaryTextBlock.Text,
                             GetListStatisticToListString(this.InStatisticListBox)
-                    );             
+                    );
+            this.IsEnabled = true;
         }
 
         private List<String> GetListStatisticToListString(ListBox listBox)
@@ -295,7 +330,7 @@ namespace TicketCheckStation
             }
             else
             {
-                mMaterial = this.MaterialNameCb.SelectedItem as Material;               
+                mMaterial = this.MaterialNameCb.SelectedItem as Material;
             }
         }
         #endregion
@@ -332,20 +367,20 @@ namespace TicketCheckStation
             if (this.CarNumberCb.SelectedIndex == -1)
             {
                 carInfo = null;
-       
+
             }
             else
             {
-                carInfo = this.CarNumberCb.SelectedItem as CarInfo;           
+                carInfo = this.CarNumberCb.SelectedItem as CarInfo;
             }
         }
         #endregion
         private string GetSeachCondition()
         {
             string condition = string.Empty;
-            condition = BillTaxationMoneyRecordColumuns.add_time.ToString() +">='"+ GetStartDate()+"'";
+            condition = BillTaxationMoneyRecordColumuns.add_time.ToString() + ">='" + GetStartDate() + "'";
             condition = condition + " and " + BillTaxationMoneyRecordColumuns.add_time.ToString() + "<='" + GetEndDate() + "'";
-            condition = condition + " and " + BillTaxationMoneyRecordColumuns.station_id.ToString() + "='" + mStation.id+ "'";
+            condition = condition + " and " + BillTaxationMoneyRecordColumuns.station_id.ToString() + "='" + mStation.id + "'";
             if (sendCompany != null)
             {
                 if (String.IsNullOrEmpty(condition))
@@ -390,22 +425,23 @@ namespace TicketCheckStation
                     condition += " and " + BillTaxationMoneyRecordColumuns.material_name.ToString() + " = " + Constract.valueSplit + mMaterial.name + Constract.valueSplit;
                 }
             }
-            switch (this.StatusCb.SelectedIndex) {
+            switch (this.StatusCb.SelectedIndex)
+            {
                 case 0:
-                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " +0;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " + 0;
                     break;
                 case 1:
-                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " +1;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " + 1;
                     break;
                 case 2:
-                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " +2;
+                    condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " + 2;
                     break;
                 case 3:
                     condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " + 3;
                     break;
                 case 4:
                     condition += " and " + BillTaxationMoneyRecordColumuns.receive_type.ToString() + " = " + 4;
-                    break;                   
+                    break;
             }
             return condition;
         }
@@ -442,8 +478,12 @@ namespace TicketCheckStation
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
             this.SearchBtn.Cursor = Cursors.Wait;
+            Object oldContent = this.SearchBtn.Content;
+            this.SearchBtn.Content = new ThreePoingLoading();
             LoadData();
+
             this.SearchBtn.Cursor = Cursors.Hand;
+            this.SearchBtn.Content = oldContent;
         }
 
         #endregion
@@ -453,15 +493,16 @@ namespace TicketCheckStation
             e.Row.Header = e.Row.GetIndex() + 1;
             BillTaxationMoneyRecord bill = (BillTaxationMoneyRecord)e.Row.DataContext;
             totalMoney += bill.money;
-            totalWeight += bill.overtopWeight;           
+            totalWeight += bill.overtopWeight;
             if (e.Row.GetIndex().Equals(ReportDataGrid.Items.Count - 1))
             {
                 Statistic();
             }
         }
 
-        private void Statistic() {
-            this.SummaryTextBlock.Text = $"合计：{ReportDataGrid.Items.Count} 次，超出 {totalWeight} 吨,补税：￥{totalMoney} 元";   
+        private void Statistic()
+        {
+            this.SummaryTextBlock.Text = $"合计：{ReportDataGrid.Items.Count} 次，超出 {totalWeight} 吨,补税：￥{totalMoney} 元";
         }
 
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -472,7 +513,7 @@ namespace TicketCheckStation
         private Station mStation;
         private void StationCb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            mStation =(Station) StationCb.SelectedItem;
+            mStation = (Station)StationCb.SelectedItem;
         }
     }
 }

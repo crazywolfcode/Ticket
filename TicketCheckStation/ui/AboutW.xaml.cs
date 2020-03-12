@@ -44,5 +44,7 @@ namespace TicketCheckStation
             this.Close();
         }
         #endregion mover
+
+     
     }
 }

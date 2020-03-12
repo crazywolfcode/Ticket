@@ -34,7 +34,7 @@ namespace TicketCheckStation
         public MainWindow()
         {
             App.Current.MainWindow = this;
-            InitializeComponent();
+            InitializeComponent();           
         }
         public delegate void OnSuccess(string res);
 
@@ -43,11 +43,6 @@ namespace TicketCheckStation
         private static void SuccessHandle(string res)
         {
             throw new NotImplementedException();
-        }
-
-
-        public void Index(OnSuccess success) {
-
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -62,12 +57,12 @@ namespace TicketCheckStation
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             ReaderWeight();
-
-            Showcameral();
-
+                      
             LoadData();
 
             ReaderIcCard();
+                       
+            Showcameral();
 
             CheckSoftExpiredTime();
         }

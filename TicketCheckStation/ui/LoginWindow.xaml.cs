@@ -1,19 +1,13 @@
-﻿using System;
+﻿using MyCustomControlLibrary;
+using MyHelper;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MyCustomControlLibrary;
-using MyHelper;
 namespace TicketCheckStation
 {
     /// <summary>
@@ -137,8 +131,11 @@ namespace TicketCheckStation
                     password = EncryptHelper.MD5Encrypt(pwdStr, false);
                 }
                 User user = UserModel.Login(mobile, password);
+                
                 this.Dispatcher.Invoke(new Action(delegate
                 {
+                    // close loading
+                    MMessageBox.CloseInstance();
                     if (user != null)
                     {
                         if (user.roleLevel != (int)RoleLevelType.XTZZ)
@@ -177,9 +174,10 @@ namespace TicketCheckStation
 
         private void Animation_Completed(object sender, EventArgs e)
         {
-            this.Close();
-            new MainWindow().Show();
+            this.Hide();
+            new MainWindow().Show();           
             App.ShowBalloonTip("登陆成功", "在使用过程中需要帮助，联系：陈龙飞 18087467482 ");
+            this.Close();
             new System.Threading.Thread(new System.Threading.ThreadStart(saveToFile)).Start();
         }
 

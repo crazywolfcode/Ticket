@@ -31,11 +31,9 @@ namespace TicketCheckStation
 
         #endregion
         private void Application_Startup(object sender, StartupEventArgs e)
-        {          
-            int initstep = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.InitStep.ToString()));
-
+        {
+            int initstep = Convert.ToInt32(ConfigurationHelper.GetConfig(ConfigItemName.InitStep.ToString()));            
             //表示数据初始化成功 ，就可以开始同步 数据
-
             if (initstep < 3)
             {
                 if (initstep == 1)
@@ -215,6 +213,10 @@ namespace TicketCheckStation
 
             //ConsoleHelper.writeLine("suer time :" + time + " ms");
 
+            if (notifyIcon != null)
+            {
+                notifyIcon.Dispose();
+            }
         }
         /// <summary>
         /// insert Or Update Connection Strings
